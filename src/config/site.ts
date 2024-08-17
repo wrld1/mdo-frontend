@@ -4,7 +4,7 @@ export const siteConfig = {
   name: "Система менеджменту", //change later
   description:
     "Beautifully designed components that you can copy and paste into your apps. Accessible. Customizable. Open Source.", //change later
-  url: "https://ui.shadcn.com", //change later
+  // url: "https://ui.shadcn.com", //change later
   mainNav: [
     {
       title: "Home",
