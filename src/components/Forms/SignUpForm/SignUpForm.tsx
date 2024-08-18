@@ -63,18 +63,16 @@ function SignUpForm() {
         body: JSON.stringify({ email, password }),
       });
 
+      console.log(response);
+
       if (!response.ok) {
         throw new Error("Network response was not ok");
       }
-
-      const result = await response.json();
 
       toast({
         title: "Registration Successful",
         description: "You have successfully signed up.",
       });
-
-      console.log("Success:", result);
     } catch (error) {
       toast({
         title: "Registration Failed",
