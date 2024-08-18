@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { LogIn } from "lucide-react";
 import { Button } from "../ui/button";
+import Link from "next/link";
 
 function AuthDropdown() {
   return (
@@ -19,12 +20,14 @@ function AuthDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuLabel>My Account</DropdownMenuLabel>
+        <DropdownMenuItem>
+          <Link href="/sign-in">Увійти</Link>
+        </DropdownMenuItem>
+
         <DropdownMenuSeparator />
-        <DropdownMenuItem>Profile</DropdownMenuItem>
-        <DropdownMenuItem>Billing</DropdownMenuItem>
-        <DropdownMenuItem>Team</DropdownMenuItem>
-        <DropdownMenuItem>Subscription</DropdownMenuItem>
+        <DropdownMenuItem>
+          <Link href="/sign-up">Реєстрація</Link>
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );

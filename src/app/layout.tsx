@@ -36,12 +36,14 @@ export default function RootLayout({
     <html lang="en">
       <body
         className={cn(
-          "min-h-screen bg-background font-sans antialiased",
+          "min-h-screen bg-background font-sans antialiased w-full",
           fontSans.variable
         )}
       >
-        <Header />
-        <main>{children}</main>
+        <div className="relative flex min-h-screen flex-col bg-background">
+          <Header />
+          <main className="min-w-full flex-1">{children}</main>
+        </div>
         <Toaster />
       </body>
     </html>
