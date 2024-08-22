@@ -15,6 +15,8 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
+import { signInAction } from "@/actions/sign-in-action";
+import { useRouter } from "next/navigation";
 
 const FormSchema = z.object({
   email: z.string().email({
@@ -34,39 +36,23 @@ function SignInForm() {
     },
   });
 
+  const router = useRouter();
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const { email, password } = data;
-    const urlToSend = "http://localhost:3000/auth/sign-in";
+    const result = await signInAction(data);
 
-    try {
-      const response = await fetch(urlToSend, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      if (!response.ok) {
-        // Handle errors based on the response status code
-        const errorText = await response.text();
-        throw new Error(`Network response was not ok: ${errorText}`);
-      }
-
-      const result = await response.json();
-
+    if (result?.error) {
       toast({
-        title: "Sign-In Successful",
-        description: "You have successfully signed in.",
+        variant: "destructive",
+        title: "Не вдалося увійти",
+        description: result.error,
       });
-
-      console.log("Success:", result);
-    } catch (error) {
+    } else {
       toast({
-        title: "Sign-In Failed",
-        description: "An error occurred during the process.",
+        title: "Авторизація успішна",
+        description: "Ви успішно увійшли в систему",
       });
-      console.error("Error:", error);
+      router.push("/");
     }
   }
 

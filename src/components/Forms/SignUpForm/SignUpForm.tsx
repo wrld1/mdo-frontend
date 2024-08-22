@@ -16,10 +16,9 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-
-const passwordValidation = new RegExp(
-  /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/
-);
+import { signUpAction } from "@/actions/sign-up-action";
+import { useRouter } from "next/navigation";
+import { passwordValidation } from "@/lib/constants";
 
 const FormSchema = z
   .object({
@@ -51,40 +50,29 @@ function SignUpForm() {
     },
   });
 
+  const router = useRouter();
+
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const { email, password } = data;
-    const urlToSend = "http://localhost:3000";
-    try {
-      const response = await fetch(`${urlToSend}/auth/sign-up`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+    const result = await signUpAction(data);
 
-      console.log(response);
-
-      if (!response.ok) {
-        throw new Error("Network response was not ok");
-      }
-
+    if (result?.error) {
       toast({
-        title: "Registration Successful",
-        description: "You have successfully signed up.",
+        variant: "destructive",
+        title: "Не вдалося зареєструватись",
+        description: result.error,
       });
-    } catch (error) {
+    } else {
       toast({
-        title: "Registration Failed",
-        description: "An error occurred during sign-up.",
+        title: "Реєстрація успішна",
+        description: "Ви успішно зареєструвались у системі",
       });
-      console.error("Error:", error);
+      router.push("/sign-in");
     }
   }
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6 ">
+      <form className="w-2/3 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="email"
