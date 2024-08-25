@@ -12,15 +12,10 @@ import { LogIn } from "lucide-react";
 import { Button } from "../ui/button";
 import { logout } from "@/actions/logout-action";
 import { toast } from "../ui/use-toast";
+import Link from "next/link";
+import LogoutButton from "../ui/LogoutButton";
 
 function ProfileDropdown() {
-  const handleLogout = async () => {
-    await logout();
-    toast({
-      title: "Ви вийшли з акаунту",
-    });
-  };
-
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="flex items-center gap-2">
@@ -31,13 +26,11 @@ function ProfileDropdown() {
       </DropdownMenuTrigger>
       <DropdownMenuContent>
         <DropdownMenuItem>
-          Профіль
-          {/* <Link href="/sign-in">Профіль</Link> */}
+          <Link href="/profile">Профіль</Link>
         </DropdownMenuItem>
-
         <DropdownMenuSeparator />
         <DropdownMenuItem>
-          <Button onClick={handleLogout}>Вийти з акаунту</Button>
+          <LogoutButton />
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

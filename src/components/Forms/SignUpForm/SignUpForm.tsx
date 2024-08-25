@@ -19,6 +19,8 @@ import { toast } from "@/components/ui/use-toast";
 import { signUpAction } from "@/actions/sign-up-action";
 import { useRouter } from "next/navigation";
 import { passwordValidation } from "@/lib/constants";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { useState } from "react";
 
 const FormSchema = z
   .object({
@@ -41,6 +43,9 @@ const FormSchema = z
   });
 
 function SignUpForm() {
+  const [showPassword, setShowPassword] = useState<boolean>(false);
+  const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -94,7 +99,29 @@ function SignUpForm() {
             <FormItem>
               <FormLabel>Пароль</FormLabel>
               <FormControl>
-                <Input placeholder="Введіть Пароль" {...field} />
+                <div className="relative">
+                  <Input
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Введіть Пароль"
+                    {...field}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowPassword((prev) => !prev)}
+                  >
+                    {showPassword ? (
+                      <EyeIcon className="h-4 w-4" aria-hidden="true" />
+                    ) : (
+                      <EyeOffIcon className="h-4 w-4" aria-hidden="true" />
+                    )}
+                    <span className="sr-only">
+                      {showPassword ? "Hide password" : "Show password"}
+                    </span>
+                  </Button>
+                </div>
               </FormControl>
               <FormDescription>
                 Мінімум 8 символів, 1 велика, 1 мала літера та 1 цифра.
@@ -110,7 +137,29 @@ function SignUpForm() {
             <FormItem>
               <FormLabel>Повторіть пароль</FormLabel>
               <FormControl>
-                <Input placeholder="Введіть Пароль" {...field} />
+                <div className="relative">
+                  <Input
+                    type={showRepeatPassword ? "text" : "password"}
+                    placeholder="Повторіть Пароль"
+                    {...field}
+                  />
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="sm"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
+                    onClick={() => setShowRepeatPassword((prev) => !prev)}
+                  >
+                    {showRepeatPassword ? (
+                      <EyeIcon className="h-4 w-4" aria-hidden="true" />
+                    ) : (
+                      <EyeOffIcon className="h-4 w-4" aria-hidden="true" />
+                    )}
+                    <span className="sr-only">
+                      {showRepeatPassword ? "Hide password" : "Show password"}
+                    </span>
+                  </Button>
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>

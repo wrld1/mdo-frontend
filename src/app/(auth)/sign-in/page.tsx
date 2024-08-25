@@ -1,4 +1,5 @@
 import SignInForm from "@/components/Forms/SignInForm";
+import ForgotPasswordModal from "@/components/ui/ForgotPasswordModal";
 import { MoveRight } from "lucide-react";
 import Link from "next/link";
 
@@ -12,6 +13,9 @@ function SignInPage() {
       <div className="lg:w-1/2 flex items-center justify-center">
         <SignInForm />
       </div>
+
+      <ForgotPasswordModal />
+
       <Link
         href="/sign-up"
         className="mt-2 text-sm hover:underline flex gap-2 items-center"

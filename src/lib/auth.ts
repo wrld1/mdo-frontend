@@ -5,12 +5,16 @@ import { cookies } from "next/headers";
 import { getErrorMessage } from "./utils";
 
 const accessKey = process.env.JWT_ACCESS_TOKEN_SECRET;
+const refreshKey = process.env.JWT_REFRESH_TOKEN_SECRET;
 
 export async function decrypt(
   token: string | undefined = "",
-  key: string | undefined = accessKey
+  refresh?: boolean
 ) {
-  const encodedKey = new TextEncoder().encode(key);
+  const encodedKey = refresh
+    ? new TextEncoder().encode(refreshKey)
+    : new TextEncoder().encode(accessKey);
+
   try {
     const { payload } = await jwtVerify(token, encodedKey, {
       algorithms: ["HS256"],

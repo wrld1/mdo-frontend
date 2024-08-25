@@ -5,5 +5,5 @@ import { redirect } from "next/navigation";
 
 export async function logout() {
   deleteTokens();
-  redirect("/login");
+  redirect("/sign-in");
 }

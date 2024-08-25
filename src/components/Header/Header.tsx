@@ -4,12 +4,11 @@ import { MapPinHouse } from "lucide-react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import AuthDropdown from "./AuthDropdown";
-import { verifyUser } from "@/lib/dal";
+import { getUser } from "@/lib/dal";
 import ProfileDropdown from "./ProfileDropdown";
 
 export default async function Header() {
-  const { isAuth } = await verifyUser();
-  console.log(isAuth);
+  const { isAuth } = await getUser();
 
   return (
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

@@ -21,17 +21,5 @@ export function getErrorMessage(error: unknown): string {
   return message;
 }
 
-export async function fetchWithAutoErrorHandling(
-  url: string,
-  options: RequestInit | undefined
-) {
-  const response = await fetch(url, options);
-
-  if (!response.ok) {
-    const errorResponse = await response.json();
-    const errorMessage = errorResponse.message || "Unknown error occurred";
-    throw new Error(errorMessage);
-  }
-
-  return response;
-}
+export const timestampToDate = (timestamp: number) =>
+  new Date(timestamp * 1000);

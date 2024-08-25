@@ -3,26 +3,21 @@
 import { getErrorMessage } from "@/lib/utils";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
-interface SignUpFormData {
-  email: string;
-  password: string;
-  repeatPassword: string;
-}
-
-export async function signUpAction(signUpFormData: SignUpFormData) {
-  const { email, password } = signUpFormData;
-
+export async function getUserAction(userId: number) {
   try {
     const response = await fetchWithAutoErrorHandling(
-      `${process.env.API_BASE_URL}/auth/sign-up`,
+      `${process.env.API_BASE_URL}/user/${userId}`,
       {
-        method: "POST",
+        method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        credentials: "include",
       }
     );
+
+    const { id, email, isVerified } = await response.json();
+    return { id, email, isVerified };
   } catch (error) {
     return {
       error: getErrorMessage(error),

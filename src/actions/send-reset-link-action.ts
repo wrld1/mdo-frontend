@@ -3,24 +3,20 @@
 import { getErrorMessage } from "@/lib/utils";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
-interface SignUpFormData {
+interface ResetLinkData {
   email: string;
-  password: string;
-  repeatPassword: string;
 }
 
-export async function signUpAction(signUpFormData: SignUpFormData) {
-  const { email, password } = signUpFormData;
-
+export async function sendResetLinkAction(resetLinkData: ResetLinkData) {
   try {
     const response = await fetchWithAutoErrorHandling(
-      `${process.env.API_BASE_URL}/auth/sign-up`,
+      `${process.env.API_BASE_URL}/email/send-reset-password`,
       {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify(resetLinkData),
       }
     );
   } catch (error) {

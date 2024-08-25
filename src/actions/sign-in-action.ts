@@ -1,6 +1,8 @@
 "use server";
 
-import { fetchWithAutoErrorHandling, getErrorMessage } from "@/lib/utils";
+import { decrypt } from "@/lib/auth";
+import { getErrorMessage, timestampToDate } from "@/lib/utils";
+import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 import { cookies } from "next/headers";
 
 interface SignInFormData {
@@ -23,8 +25,18 @@ export async function signInAction(signInFormData: SignInFormData) {
 
     const { accessToken, refreshToken } = await response.json();
 
-    cookies().set("refreshToken", refreshToken, { httpOnly: true });
-    cookies().set("accessToken", accessToken, { httpOnly: true });
+    const accessPayload = await decrypt(accessToken);
+    const refreshPayload = await decrypt(refreshToken, true);
+
+    cookies().set("accessToken", accessToken, {
+      httpOnly: true,
+      expires: timestampToDate(accessPayload?.exp as number),
+    });
+
+    cookies().set("refreshToken", refreshToken, {
+      httpOnly: true,
+      expires: timestampToDate(refreshPayload?.exp as number),
+    });
   } catch (error) {
     return {
       error: getErrorMessage(error),
