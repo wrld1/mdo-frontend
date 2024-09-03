@@ -1,5 +1,5 @@
 import { getUserAction } from "@/actions/get-user-action";
-import { getUser } from "@/lib/dal";
+import { getUser } from "@/utils/functions.server";
 
 export default async function ProfilePage() {
   const { userId } = await getUser();
@@ -7,6 +7,8 @@ export default async function ProfilePage() {
   if (userId) {
     user = await getUserAction(userId);
   }
+
+  console.log(user);
 
   return (
     <div className="space-y-8">

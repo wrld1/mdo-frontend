@@ -1,6 +1,10 @@
 "use server";
 
+import { decrypt, updateAccessToken } from "@/lib/auth";
+import { getErrorMessage } from "@/lib/utils";
 import { cookies } from "next/headers";
+
+import { cache } from "react";
 
 export async function fetchWithAutoErrorHandling(
   url: string,
@@ -26,3 +30,28 @@ export async function fetchWithAutoErrorHandling(
 
   return response;
 }
+
+export const getUser = cache(async () => {
+  try {
+    let cookie = cookies().get("accessToken")?.value;
+    let token = await decrypt(cookie);
+
+    if (!token) {
+      const newAccessToken = await updateAccessToken();
+
+      if (newAccessToken) {
+        token = await decrypt(newAccessToken);
+      }
+    }
+    const userId = (token?.uId as number) ?? null;
+
+    if (!userId) {
+      return { isAuth: false, userId: null };
+    }
+
+    return { isAuth: true, userId };
+  } catch (error) {
+    getErrorMessage(error);
+    return { isAuth: false, userId: null };
+  }
+});

@@ -46,6 +46,8 @@ function ForgotPasswordForm() {
         description: "Перейдіть за ним щоб змінити пароль",
       });
     }
+
+    form.reset();
   }
 
   return (

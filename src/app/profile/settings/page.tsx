@@ -1,7 +1,7 @@
 import { getUserAction } from "@/actions/get-user-action";
 import { Button } from "@/components/ui/button";
 import LogoutButton from "@/components/ui/LogoutButton";
-import { getUser } from "@/lib/dal";
+import { getUser } from "@/utils/functions.server";
 
 export default async function ProfileSettings() {
   const { userId } = await getUser();

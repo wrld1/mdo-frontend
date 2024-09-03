@@ -10,7 +10,7 @@ interface ResetLinkData {
 export async function sendResetLinkAction(resetLinkData: ResetLinkData) {
   try {
     const response = await fetchWithAutoErrorHandling(
-      `${process.env.API_BASE_URL}/email/send-reset-password`,
+      `${process.env.API_BASE_URL}/auth/forgot-password`,
       {
         method: "POST",
         headers: {

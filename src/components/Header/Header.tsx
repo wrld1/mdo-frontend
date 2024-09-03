@@ -4,8 +4,8 @@ import { MapPinHouse } from "lucide-react";
 import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import AuthDropdown from "./AuthDropdown";
-import { getUser } from "@/lib/dal";
 import ProfileDropdown from "./ProfileDropdown";
+import { getUser } from "@/utils/functions.server";
 
 export default async function Header() {
   const { isAuth } = await getUser();
