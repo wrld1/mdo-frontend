@@ -2,6 +2,7 @@ import { getUserAction } from "@/actions/get-user-action";
 import { Button } from "@/components/ui/button";
 import LogoutButton from "@/components/ui/LogoutButton";
 import { getUser } from "@/utils/functions.server";
+import ChangePasswordModal from "../_components/ChangePasswordModal";
 
 export default async function ProfileSettings() {
   const { userId } = await getUser();
@@ -16,13 +17,10 @@ export default async function ProfileSettings() {
       <div className="grid gap-2 text-sm text-muted-foreground">
         <div className="flex items-center justify-between">
           <span>Password</span>
-          <Button variant="outline" size="sm">
-            Change Password
-          </Button>
+          <ChangePasswordModal />
         </div>
         <div className="flex items-center justify-between">
           <span>Email</span>
-
           <Button variant="outline" size="sm" disabled={user?.isVerified}>
             {user?.isVerified ? "Пошту підтверджено" : "Підтвердіть пошту"}
           </Button>

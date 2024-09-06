@@ -20,13 +20,17 @@ function AuthDropdown() {
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <DropdownMenuItem>
-          <Link href="/sign-in">Увійти</Link>
+        <DropdownMenuItem asChild>
+          <Link href="/sign-in" className="cursor-pointer">
+            Увійти
+          </Link>
         </DropdownMenuItem>
 
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
-          <Link href="/sign-up">Реєстрація</Link>
+        <DropdownMenuItem asChild>
+          <Link href="/sign-up" className="cursor-pointer">
+            Реєстрація
+          </Link>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
