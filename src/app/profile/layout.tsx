@@ -33,7 +33,7 @@ export default function ProfileLayout({
               className="flex items-center gap-2 rounded-md bg-muted px-3 py-2 text-sm font-medium transition-colors hover:bg-muted/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring"
             >
               <ContactRound />
-              Overview
+              Інформація
             </ActiveLink>
             <ActiveLink
               href="/profile/settings"
@@ -41,7 +41,7 @@ export default function ProfileLayout({
               prefetch={false}
             >
               <Settings />
-              Settings
+              Налаштування
             </ActiveLink>
 
             <Link
@@ -50,7 +50,7 @@ export default function ProfileLayout({
               prefetch={false}
             >
               <ReceiptText />
-              Billing
+              Тариф
             </Link>
           </nav>
           {children}

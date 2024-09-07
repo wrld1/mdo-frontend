@@ -3,25 +3,22 @@
 import { getErrorMessage } from "@/lib/utils";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
-interface ResetPasswordData {
-  newPassword: string;
-  resetToken: string | null;
+interface VerifyAccountData {
+  token: string | null;
 }
 
-export async function resetPasswordAction(
-  resetPasswordData: ResetPasswordData
+export async function verifyAccountAction(
+  verifyAccountData: VerifyAccountData
 ) {
-  const { newPassword, resetToken } = resetPasswordData;
-
   try {
     const response = await fetchWithAutoErrorHandling(
-      `${process.env.API_BASE_URL}/auth/reset-password`,
+      `${process.env.API_BASE_URL}/auth/verify`,
       {
         method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ resetToken, newPassword }),
+        body: JSON.stringify(verifyAccountData),
       }
     );
   } catch (error) {
