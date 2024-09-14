@@ -31,7 +31,7 @@ export async function fetchWithAutoErrorHandling(
   return response;
 }
 
-export const getUser = cache(async () => {
+export const getUser = async () => {
   try {
     let cookie = cookies().get("accessToken")?.value;
     let token = await decrypt(cookie);
@@ -54,4 +54,4 @@ export const getUser = cache(async () => {
     getErrorMessage(error);
     return { isAuth: false, userId: null };
   }
-});
+};

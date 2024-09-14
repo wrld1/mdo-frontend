@@ -45,6 +45,8 @@ export async function updateAccessToken() {
 
     const { accessToken } = await response.json();
 
+    console.log(accessToken);
+
     const payload = await decrypt(accessToken);
 
     cookies().set("accessToken", accessToken, {

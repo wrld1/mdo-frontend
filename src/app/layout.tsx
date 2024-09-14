@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import Header from "@/components/Header/Header";
 import { siteConfig } from "@/config/site";
 import { Toaster } from "@/components/ui/toaster";
+import VerificationToast from "@/components/ui/VerificationToast";
+import { cookies } from "next/headers";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -32,6 +34,11 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const cookieStore = cookies();
+  const needsVerification = cookieStore.get("needsVerification")?.value;
+
+  // let randomNum = Math.random();
+
   return (
     <html lang="en">
       <body
@@ -45,6 +52,7 @@ export default function RootLayout({
           <main className="min-w-full flex-1">{children}</main>
         </div>
         <Toaster />
+        <VerificationToast needsVerification={needsVerification} />
       </body>
     </html>
   );

@@ -4,7 +4,7 @@ import { getErrorMessage } from "@/lib/utils";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
 interface VerifyAccountData {
-  token: string | null;
+  token: string;
 }
 
 export async function verifyAccountAction(
