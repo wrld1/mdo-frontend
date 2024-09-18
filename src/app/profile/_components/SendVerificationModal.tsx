@@ -15,9 +15,9 @@ import { verifyUser } from "@/utils/functions.server";
 async function SendVerificationModal() {
   const { userId } = await verifyUser();
   let user;
-  // if (userId) {
-  //   user = await getUserAction(userId);
-  // }
+  if (userId) {
+    user = await getUserAction(userId);
+  }
   return (
     <Dialog>
       <DialogTrigger asChild>

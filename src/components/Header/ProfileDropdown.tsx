@@ -18,7 +18,7 @@ function ProfileDropdown() {
       <DropdownMenuTrigger asChild className="flex items-center gap-2">
         <Button variant="secondary">
           <span>Профіль</span>
-          <User className="text-primary" />
+          <User />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent>

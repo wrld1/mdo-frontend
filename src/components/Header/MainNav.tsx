@@ -55,7 +55,7 @@ const components: { title: string; href: string; description: string }[] = [
 
 export default function MainNav() {
   return (
-    <NavigationMenu>
+    <NavigationMenu className="hidden md:block">
       <NavigationMenuList>
         <NavigationMenuItem>
           <NavigationMenuTrigger>Getting started</NavigationMenuTrigger>

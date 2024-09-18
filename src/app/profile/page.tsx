@@ -3,6 +3,7 @@ import { verifyUser } from "@/utils/functions.server";
 
 export default async function ProfilePage() {
   const { userId } = await verifyUser();
+  console.log("userid", userId);
   let user;
   if (userId) {
     user = await getUserAction(userId);

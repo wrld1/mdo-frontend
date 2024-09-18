@@ -14,7 +14,6 @@ export async function GET(request: NextRequest) {
   }
 
   try {
-    console.log("call api");
     const response = await fetch(`${process.env.API_BASE_URL}/auth/refresh`, {
       method: "GET",
       headers: { cookie: `refreshToken=${refreshToken}` },
@@ -28,8 +27,6 @@ export async function GET(request: NextRequest) {
     const { accessToken } = await response.json();
 
     const payload = await decrypt(accessToken);
-
-    console.log(payload);
 
     const res = NextResponse.json({ accessToken });
 

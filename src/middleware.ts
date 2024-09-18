@@ -28,6 +28,8 @@ export async function middleware(req: NextRequest) {
 
       const payload = await decrypt(accessToken);
 
+      req.headers.set("Authorization", `Bearer ${accessToken}`);
+
       response.cookies.set("accessToken", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",

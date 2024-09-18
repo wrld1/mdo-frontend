@@ -13,7 +13,7 @@ export default async function Header() {
   return (
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
       <div className="container py-4 flex justify-between items-center text-primary">
-        <Link href="/" className="mr-6 hidden lg:flex gap-2 items-center">
+        <Link href="/" className="mr-6 hidden md:flex gap-2 items-center">
           <MapPinHouse className="h-8 w-8" />
           <span className="sr-only">{siteConfig.name}</span>
           <span className="inline-block font-bold">{siteConfig.name}</span>
