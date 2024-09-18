@@ -36,6 +36,7 @@ export async function signInAction(signInFormData: SignInFormData) {
     cookies().set("refreshToken", refreshToken, {
       httpOnly: true,
       expires: timestampToDate(refreshPayload?.exp as number),
+      sameSite: "lax",
     });
   } catch (error) {
     return {

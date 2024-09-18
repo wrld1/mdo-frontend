@@ -5,10 +5,10 @@ import Link from "next/link";
 import { siteConfig } from "@/config/site";
 import AuthDropdown from "./AuthDropdown";
 import ProfileDropdown from "./ProfileDropdown";
-import { getUser } from "@/utils/functions.server";
+import { verifyUser } from "@/utils/functions.server";
 
 export default async function Header() {
-  const { isAuth } = await getUser();
+  const { isAuth } = await verifyUser();
 
   return (
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">

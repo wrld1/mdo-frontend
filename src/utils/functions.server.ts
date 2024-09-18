@@ -1,10 +1,8 @@
 "use server";
 
-import { decrypt, updateAccessToken } from "@/lib/auth";
+import { decrypt } from "@/lib/auth";
 import { getErrorMessage } from "@/lib/utils";
 import { cookies } from "next/headers";
-
-import { cache } from "react";
 
 export async function fetchWithAutoErrorHandling(
   url: string,
@@ -31,19 +29,17 @@ export async function fetchWithAutoErrorHandling(
   return response;
 }
 
-export const getUser = async () => {
+export const verifyUser = async () => {
   try {
-    let cookie = cookies().get("accessToken")?.value;
-    let token = await decrypt(cookie);
+    const cookieStore = cookies();
+    let accessTokenCookie = cookieStore.get("accessToken")?.value;
 
-    if (!token) {
-      const newAccessToken = await updateAccessToken();
-
-      if (newAccessToken) {
-        token = await decrypt(newAccessToken);
-      }
+    if (!accessTokenCookie) {
+      return { isAuth: false, userId: null };
     }
-    const userId = (token?.uId as number) ?? null;
+
+    let token = await decrypt(accessTokenCookie);
+    const userId = token?.uId as number;
 
     if (!userId) {
       return { isAuth: false, userId: null };
@@ -52,6 +48,7 @@ export const getUser = async () => {
     return { isAuth: true, userId };
   } catch (error) {
     getErrorMessage(error);
+    console.log(getErrorMessage(error));
     return { isAuth: false, userId: null };
   }
 };

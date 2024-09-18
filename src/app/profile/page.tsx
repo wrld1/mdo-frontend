@@ -1,8 +1,8 @@
 import { getUserAction } from "@/actions/get-user-action";
-import { getUser } from "@/utils/functions.server";
+import { verifyUser } from "@/utils/functions.server";
 
 export default async function ProfilePage() {
-  const { userId } = await getUser();
+  const { userId } = await verifyUser();
   let user;
   if (userId) {
     user = await getUserAction(userId);

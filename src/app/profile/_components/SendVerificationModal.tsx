@@ -10,20 +10,20 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { getUser } from "@/utils/functions.server";
+import { verifyUser } from "@/utils/functions.server";
 
 async function SendVerificationModal() {
-  const { userId } = await getUser();
+  const { userId } = await verifyUser();
   let user;
-  if (userId) {
-    user = await getUserAction(userId);
-  }
+  // if (userId) {
+  //   user = await getUserAction(userId);
+  // }
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline" size="sm" disabled={user?.isVerified}>
+        {/* <Button variant="outline" size="sm" disabled={user?.isVerified}>
           {user?.isVerified ? "Пошту підтверджено" : "Підтвердіть пошту"}
-        </Button>
+        </Button> */}
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

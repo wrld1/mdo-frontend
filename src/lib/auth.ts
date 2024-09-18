@@ -26,44 +26,6 @@ export async function decrypt(
   }
 }
 
-export async function updateAccessToken() {
-  const refreshToken = cookies().get("refreshToken")?.value;
-
-  if (!refreshToken) {
-    return null;
-  }
-
-  try {
-    const response = await fetch(`${process.env.API_BASE_URL}/auth/refresh`, {
-      method: "POST",
-      credentials: "include",
-    });
-
-    if (!response.ok) {
-      return null;
-    }
-
-    const { accessToken } = await response.json();
-
-    console.log(accessToken);
-
-    const payload = await decrypt(accessToken);
-
-    cookies().set("accessToken", accessToken, {
-      httpOnly: true,
-      secure: true,
-      expires: payload?.exp,
-      sameSite: "lax",
-      path: "/",
-    });
-
-    return accessToken;
-  } catch (error) {
-    getErrorMessage(error);
-    return null;
-  }
-}
-
 export async function deleteTokens() {
   cookies().delete("accessToken");
   cookies().delete("refreshToken");

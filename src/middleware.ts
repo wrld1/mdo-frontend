@@ -1,46 +1,72 @@
 import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
-import { sendVerificationAction } from "./actions/send-verification-action";
-import { getUser } from "./utils/functions.server";
-import { getUserAction } from "./actions/get-user-action";
-import { revalidatePath } from "next/cache";
+import { verifyUser } from "./utils/functions.server";
+import { cookies } from "next/headers";
+import { timestampToDate } from "./lib/utils";
+import { decrypt } from "./lib/auth";
 
-export async function middleware(request: NextRequest) {
-  const { isAuth, userId } = await getUser();
+export async function middleware(req: NextRequest) {
+  const { isAuth, userId } = await verifyUser();
+  const refreshToken = cookies().get("refreshToken")?.value;
 
   const protectedRoutes = ["/dashboard", "/profile", "/settings"];
+  const isProtectedRoute = protectedRoutes.some((route) =>
+    req.nextUrl.pathname.startsWith(route)
+  );
 
-  if (
-    protectedRoutes.some((route) => request.nextUrl.pathname.startsWith(route))
-  ) {
-    if (!isAuth || !userId) {
-      return NextResponse.redirect(new URL("/sign-in", request.url));
+  if (!isAuth || !userId) {
+    const refreshResponse = await fetch(`${req.nextUrl.origin}/api/refresh`, {
+      method: "GET",
+      headers: {
+        Cookie: `refreshToken=${refreshToken}`,
+      },
+    });
+
+    if (refreshResponse.ok) {
+      const { accessToken } = await refreshResponse.json();
+      const response = NextResponse.next();
+
+      const payload = await decrypt(accessToken);
+
+      response.cookies.set("accessToken", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        expires: timestampToDate(payload?.exp as number),
+        sameSite: "lax",
+        path: "/",
+      });
+
+      return response;
+    } else {
+      if (isProtectedRoute) {
+        return NextResponse.redirect(new URL("/sign-in", req.url));
+      }
     }
+  }
 
-    // try {
-    //   const user = await getUserAction(userId);
-
-    //   if (!user.isVerified) {
-    //     await sendVerificationAction({ email: user.email });
-
-    //     const response = NextResponse.redirect(new URL("/", request.url));
-
-    //     response.cookies.set("needsVerification", "true", {
-    //       httpOnly: false,
-    //       sameSite: "strict",
-    //       maxAge: 60 * 5,
-    //     });
-
-    //     return response;
-    //   }
-    // } catch (error) {
-    //   console.error("Error in middleware:", error);
-    //   return NextResponse.redirect(new URL("/sign-in", request.url));
-    // }
+  if (isProtectedRoute && (!isAuth || !userId)) {
+    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
   return NextResponse.next();
 }
+
+// try {
+//   const user = await getUserAction(userId);
+//   if (!user.isVerified) {
+//     await sendVerificationAction({ email: user.email });
+//     const response = NextResponse.redirect(new URL("/", request.url));
+//     response.cookies.set("needsVerification", "true", {
+//       httpOnly: false,
+//       sameSite: "strict",
+//       maxAge: 60 * 5,
+//     });
+//     return response;
+//   }
+// } catch (error) {
+//   console.error("Error in middleware:", error);
+//   return NextResponse.redirect(new URL("/sign-in", request.url));
+// }
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
