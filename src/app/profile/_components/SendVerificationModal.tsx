@@ -21,9 +21,9 @@ async function SendVerificationModal() {
   return (
     <Dialog>
       <DialogTrigger asChild>
-        {/* <Button variant="outline" size="sm" disabled={user?.isVerified}>
+        <Button variant="outline" size="sm" disabled={user?.isVerified}>
           {user?.isVerified ? "Пошту підтверджено" : "Підтвердіть пошту"}
-        </Button> */}
+        </Button>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

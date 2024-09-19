@@ -4,6 +4,8 @@ import { verifyUser } from "./utils/functions.server";
 import { cookies } from "next/headers";
 import { timestampToDate } from "./lib/utils";
 import { decrypt } from "./lib/auth";
+import { getUserAction } from "./actions/get-user-action";
+import { sendVerificationAction } from "./actions/send-verification-action";
 
 export async function middleware(req: NextRequest) {
   const { isAuth, userId } = await verifyUser();
@@ -46,29 +48,30 @@ export async function middleware(req: NextRequest) {
     }
   }
 
+  if (isProtectedRoute && isAuth && userId) {
+    try {
+      const user = await getUserAction(userId);
+      if (!user.isVerified) {
+        await sendVerificationAction({ email: user.email });
+        const response = NextResponse.next();
+        response.cookies.set("showVerificationToast", "true", {
+          maxAge: 5000,
+          path: "/",
+        });
+        return response;
+      }
+    } catch (error) {
+      console.error("Error in middleware:", error);
+      return NextResponse.next();
+    }
+  }
+
   if (isProtectedRoute && (!isAuth || !userId)) {
     return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
   return NextResponse.next();
 }
-
-// try {
-//   const user = await getUserAction(userId);
-//   if (!user.isVerified) {
-//     await sendVerificationAction({ email: user.email });
-//     const response = NextResponse.redirect(new URL("/", request.url));
-//     response.cookies.set("needsVerification", "true", {
-//       httpOnly: false,
-//       sameSite: "strict",
-//       maxAge: 60 * 5,
-//     });
-//     return response;
-//   }
-// } catch (error) {
-//   console.error("Error in middleware:", error);
-//   return NextResponse.redirect(new URL("/sign-in", request.url));
-// }
 
 export const config = {
   matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
