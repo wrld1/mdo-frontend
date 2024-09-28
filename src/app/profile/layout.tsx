@@ -14,7 +14,7 @@ export default function ProfileLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="flex flex-col min-h-full ">
+    <div className="flex flex-col min-h-full flex-1 w-full">
       <header className="bg-muted py-6 px-4 md:px-6">
         <div className="container flex items-center gap-4">
           <div className="grid gap-1">

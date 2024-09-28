@@ -26,7 +26,7 @@ export async function signInAction(signInFormData: SignInFormData) {
     const { accessToken, refreshToken } = await response.json();
 
     const accessPayload = await decrypt(accessToken);
-    const refreshPayload = await decrypt(refreshToken, true);
+    const refreshPayload = await decrypt(refreshToken);
 
     cookies().set("accessToken", accessToken, {
       httpOnly: true,

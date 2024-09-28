@@ -5,7 +5,7 @@ import Link from "next/link";
 
 function SignInPage() {
   return (
-    <div className="container min-h-full flex items-center justify-center flex-col mt-[100px]">
+    <div className="container min-h-full flex items-center justify-center flex-col">
       <div className="space-y-4 text-center mb-6">
         <h1 className="text-3xl font-bold">Авторизація</h1>
         <p className="text-muted-foreground">Увійдіть в свій акаунт</p>

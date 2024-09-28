@@ -1,4 +1,5 @@
 import { getUserAction } from "@/actions/get-user-action";
+import { isUser } from "@/types/typeGuards/isUser";
 import { verifyUser } from "@/utils/functions.server";
 
 export default async function ProfilePage() {
@@ -8,16 +9,16 @@ export default async function ProfilePage() {
     user = await getUserAction(userId);
   }
 
-  console.log(user);
+  const userMail = isUser(user) ? user.email : "";
 
   return (
     <div className="space-y-8">
       <div className="grid gap-2">
-        <h2 className="text-lg font-semibold">Personal Information</h2>
+        <h2 className="text-lg font-semibold">Загальна інформація</h2>
         <div className="grid gap-2 text-sm text-muted-foreground">
           <div className="flex items-center justify-between">
             <span>Email</span>
-            <span>{user?.email}</span>
+            <span>{userMail}</span>
           </div>
           <div className="flex items-center justify-between">
             <span>Phone</span>

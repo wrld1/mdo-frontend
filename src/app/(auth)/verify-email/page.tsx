@@ -23,7 +23,7 @@ async function VerifyEmailPage({
 
   if (!token) {
     return (
-      <div className="container min-h-full flex items-center justify-center flex-col mt-[100px]">
+      <div className="container min-h-full flex items-center justify-center flex-col">
         <Card className="mx-auto mt-8 lg:w-1/2 flex flex-col justify-center bg-transparent">
           <CardHeader>
             <CardTitle>Підтвердження акаунту</CardTitle>

@@ -1,6 +1,7 @@
 "use server";
 
 import { getErrorMessage } from "@/lib/utils";
+import { User } from "@/types/interfaces/user";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
 export async function getUserAction(userId: number) {
@@ -16,7 +17,8 @@ export async function getUserAction(userId: number) {
       }
     );
 
-    return await response.json();
+    const user: User = await response.json();
+    return user;
   } catch (error) {
     return {
       error: getErrorMessage(error),

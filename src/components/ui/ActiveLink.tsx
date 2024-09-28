@@ -27,7 +27,7 @@ function ActiveLink({
       href={href}
       className={cn(
         className,
-        active && "bg-primary text-primary-foreground hover:bg-primary/80"
+        active && "bg-primary text-primary-foreground hover:bg-primary/95"
       )}
       prefetch={prefetch}
       {...props}

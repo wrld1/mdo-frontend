@@ -49,7 +49,9 @@ export default function RootLayout({
       >
         <div className="relative flex min-h-screen flex-col bg-background">
           <Header />
-          <main className="min-w-full flex-1">{children}</main>
+          <main className="min-w-full flex-1 flex flex-col items-center justify-center">
+            {children}
+          </main>
         </div>
         <Toaster />
         <VerificationToast />

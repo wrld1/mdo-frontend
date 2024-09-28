@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import BlurFade from "../magicui/blur-fade";
 import DotPattern from "../magicui/dot-pattern";
 import HeroCard from "./HeroCard";
+import Link from "next/link";
 
 export default function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -39,13 +40,13 @@ export default function HeroSection() {
           <BlurFade delay={0.25}>
             <div className="flex flex-wrap gap-3 mb-12">
               <Button className="w-[183px] h-[59px] text-base font-bold bg-black rounded-xl flex items-center justify-center">
-                Get Started
+                <Link href="/sign-up">Я мешканець</Link>
               </Button>
               <Button
                 variant="secondary"
-                className="w-[183px] h-[59px] text-base font-bold rounded-xl flex  items-center justify-center border-2 hover:bg-white"
+                className="h-[59px] text-base font-bold rounded-xl flex  items-center justify-center border-2 hover:bg-white"
               >
-                Explore
+                <Link href="/register-company">Зареєструвати компанію</Link>
               </Button>
             </div>
           </BlurFade>

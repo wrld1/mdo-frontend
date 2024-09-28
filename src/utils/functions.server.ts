@@ -48,7 +48,6 @@ export const verifyUser = async () => {
     return { isAuth: true, userId };
   } catch (error) {
     getErrorMessage(error);
-    console.log(getErrorMessage(error));
     return { isAuth: false, userId: null };
   }
 };

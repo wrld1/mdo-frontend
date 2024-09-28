@@ -6,17 +6,27 @@ import { timestampToDate } from "./lib/utils";
 import { decrypt } from "./lib/auth";
 import { getUserAction } from "./actions/get-user-action";
 import { sendVerificationAction } from "./actions/send-verification-action";
+import { isUser } from "./types/typeGuards/isUser";
 
 export async function middleware(req: NextRequest) {
   const { isAuth, userId } = await verifyUser();
   const refreshToken = cookies().get("refreshToken")?.value;
 
-  const protectedRoutes = ["/dashboard", "/profile", "/settings"];
+  const protectedRoutes = ["/dashboard", "/settings"];
   const isProtectedRoute = protectedRoutes.some((route) =>
     req.nextUrl.pathname.startsWith(route)
   );
 
-  if (!isAuth || !userId) {
+  const authRestrictedRoutes = ["/sign-in", "/sign-up", "/register-company"];
+  const isAuthRestrictedRoute = authRestrictedRoutes.some((route) =>
+    req.nextUrl.pathname.startsWith(route)
+  );
+
+  if (isAuth && isAuthRestrictedRoute) {
+    return NextResponse.redirect(new URL("/", req.url));
+  }
+
+  if (isProtectedRoute && (!isAuth || !userId)) {
     const refreshResponse = await fetch(`${req.nextUrl.origin}/api/refresh`, {
       method: "GET",
       headers: {
@@ -42,32 +52,25 @@ export async function middleware(req: NextRequest) {
 
       return response;
     } else {
-      if (isProtectedRoute) {
-        return NextResponse.redirect(new URL("/sign-in", req.url));
-      }
+      return NextResponse.redirect(new URL("/sign-in", req.url));
     }
   }
 
   if (isProtectedRoute && isAuth && userId) {
     try {
       const user = await getUserAction(userId);
-      if (!user.isVerified) {
+
+      if (isUser(user) && !user.isVerified) {
         await sendVerificationAction({ email: user.email });
-        const response = NextResponse.next();
-        response.cookies.set("showVerificationToast", "true", {
-          maxAge: 5000,
-          path: "/",
-        });
+        const response = NextResponse.redirect(
+          new URL("/verification-required", req.url)
+        );
         return response;
       }
     } catch (error) {
       console.error("Error in middleware:", error);
-      return NextResponse.next();
+      return NextResponse.redirect(new URL("/sign-in", req.url));
     }
-  }
-
-  if (isProtectedRoute && (!isAuth || !userId)) {
-    return NextResponse.redirect(new URL("/sign-in", req.url));
   }
 
   return NextResponse.next();
