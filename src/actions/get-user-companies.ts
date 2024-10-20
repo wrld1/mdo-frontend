@@ -1,12 +1,15 @@
 "use server";
 
 import { getErrorMessage } from "@/lib/utils";
+import { CompanyStatus, CompanyType } from "@/types/types/company";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
 interface Company {
   id: string;
   name: string;
-  type: "OSBB" | "ManagingCompany" | "CottageTown";
+  code: number;
+  type: CompanyType;
+  status: CompanyStatus;
   createdAt: string;
   updatedAt: string;
 }
@@ -31,7 +34,7 @@ export async function getUserCompanies() {
     );
 
     const userCompanies: PaginationResponse = await response.json();
-    return userCompanies;
+    return userCompanies.data;
   } catch (error) {
     return {
       error: getErrorMessage(error),

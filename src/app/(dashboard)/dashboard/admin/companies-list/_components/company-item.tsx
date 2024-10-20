@@ -1,8 +1,12 @@
+import { CompanyStatus, CompanyType } from "@/types/types/company";
+
 interface CompanyItemProps {
-  id: string | number;
+  id: string;
   name: string;
   createdAt: Date | string;
-  type: string;
+  type: CompanyType;
+  status: CompanyStatus;
+  code: number;
 }
 
 function CompanyItem({ id, name, createdAt, type }: CompanyItemProps) {

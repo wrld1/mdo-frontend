@@ -1,24 +1,38 @@
 import { getUserCompanies } from "@/actions/get-user-companies";
 import { Categories } from "./_components/categories";
-import { SearchInput } from "./_components/search-input";
-import { CompaniesList } from "./_components/companies-list";
+import { DataTable } from "./_components/data-table";
+import { columns } from "./_components/columns";
 
-async function CompaniesListPage() {
+interface CompaniesListPageProps {
+  searchParams: {
+    title: string;
+    companyStatus: string;
+  };
+}
+
+async function CompaniesListPage({ searchParams }: CompaniesListPageProps) {
+  const { companyStatus } = searchParams;
+
   const userCompanies = await getUserCompanies();
 
-  console.log("USER COMPANIES", userCompanies);
+  const filteredCompanies = Array.isArray(userCompanies)
+    ? userCompanies.filter((company: any) => {
+        if (!companyStatus || companyStatus === "ALL") {
+          return true;
+        }
+
+        return company.status === companyStatus;
+      })
+    : [];
 
   return (
     <>
-      <div className="px-6 pt-6 flex justify-center">
-        <SearchInput />
-      </div>
       <div className="p-6 space-y-4">
         <Categories />
         {userCompanies && "error" in userCompanies ? (
           <p>Сталася помилка: {userCompanies.error}</p>
         ) : (
-          <CompaniesList items={userCompanies} />
+          <DataTable columns={columns} data={filteredCompanies} />
         )}
       </div>
     </>

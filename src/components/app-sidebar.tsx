@@ -4,15 +4,15 @@ import * as React from "react";
 import {
   AudioWaveform,
   BookOpen,
-  Bot,
+  CircleGauge,
   Command,
+  FileText,
   Frame,
   GalleryVerticalEnd,
   Map,
   PieChart,
   Settings2,
   Shield,
-  SquareTerminal,
 } from "lucide-react";
 
 import { NavMain } from "@/components/nav-main";
@@ -31,19 +31,19 @@ import { NavAdmin } from "./nav-admin";
 const data = {
   teams: [
     {
-      name: "Acme Inc",
+      name: "ОСББ 1",
       logo: GalleryVerticalEnd,
-      plan: "Enterprise",
+      plan: "Менеджер",
     },
     {
-      name: "Acme Corp.",
+      name: "ОСББ 2",
       logo: AudioWaveform,
-      plan: "Startup",
+      plan: "Мешканець",
     },
     {
-      name: "Evil Corp.",
+      name: "ЖЕК",
       logo: Command,
-      plan: "Free",
+      plan: "Мешканець",
     },
   ],
   navAdmin: [
@@ -70,40 +70,56 @@ const data = {
   ],
   navMain: [
     {
-      title: "Playground",
+      title: "Лічильники",
       url: "#",
-      icon: SquareTerminal,
+      icon: CircleGauge,
       isActive: true,
       items: [
         {
-          title: "History",
+          title: "Показники лічильників",
           url: "#",
         },
         {
-          title: "Starred",
+          title: "Індивідуальні лічильники",
           url: "#",
         },
         {
-          title: "Settings",
+          title: "Загальнобудинкові лічильники",
           url: "#",
         },
       ],
     },
     {
-      title: "Models",
+      title: "Звіти",
       url: "#",
-      icon: Bot,
+      icon: FileText,
       items: [
         {
-          title: "Genesis",
+          title: "Звіт по статтях нарахувань",
           url: "#",
         },
         {
-          title: "Explorer",
+          title: "Фінансовий звіт",
           url: "#",
         },
         {
-          title: "Quantum",
+          title: "Оборотно-сальдова відомість",
+          url: "#",
+        },
+        {
+          title: "Акт звірки з власником",
+          url: "#",
+        },
+        {
+          title: "Звіт про надходження",
+          url: "#",
+        },
+        {
+          title: "Загальна відомість",
+          url: "#",
+        },
+        {
+          title: "Звіти до державних органів",
           url: "#",
         },
       ],

@@ -1,6 +1,7 @@
 "use client";
 
 import {
+  Building2,
   CircleCheck,
   CircleDashed,
   Hourglass,
@@ -9,6 +10,11 @@ import {
 import { CategoryItem } from "./category-item";
 
 const items = [
+  {
+    title: "Всі компанії",
+    icon: Building2,
+    value: "ALL",
+  },
   {
     title: "Обробляються",
     icon: CircleDashed,

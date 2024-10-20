@@ -16,10 +16,12 @@ export function CategoryItem({ label, icon: Icon, value }: CategoryItemProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
 
-  const currentCategoryId = searchParams.get("companyStatus");
+  const currentCompanyStatus = searchParams.get("companyStatus");
   const currentTitle = searchParams.get("title");
 
-  const isSelected = currentCategoryId === value;
+  const isSelected =
+    currentCompanyStatus === value ||
+    (!currentCompanyStatus && value === "ALL");
 
   const onClick = () => {
     const url = qs.stringifyUrl(

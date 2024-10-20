@@ -31,7 +31,9 @@ import { createCompanyAction } from "@/actions/create-company-action";
 
 const FormSchema = z
   .object({
-    companyCode: z.number().min(1, { message: "Код не може бути пустим" }),
+    companyCode: z.coerce
+      .number()
+      .min(1, { message: "Код не може бути пустим" }),
     companyType: z.string(),
     email: z.string().email({
       message: "Введіть корректну Email адресу",
