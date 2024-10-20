@@ -27,6 +27,11 @@ function ProfileDropdown() {
             Профіль
           </Link>
         </DropdownMenuItem>
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard" className="cursor-pointer">
+            Управління
+          </Link>
+        </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LogoutButton />

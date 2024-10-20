@@ -8,7 +8,6 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { isUser } from "@/types/typeGuards/isUser";
 import { verifyUser } from "@/utils/functions.server";
 import Link from "next/link";
 
@@ -19,8 +18,6 @@ export default async function VerificationRequiredPage() {
     user = await getUserAction(userId);
   }
 
-  const userMail = isUser(user) ? user.email : "Помилкова пошта";
-
   return (
     <div className="flex justify-center items-center h-full">
       <Card className="w-full">
@@ -29,7 +26,7 @@ export default async function VerificationRequiredPage() {
         </CardHeader>
         <CardContent>
           Як тільки ви підтвердите акаунт в листі що прийшов на пошту{" "}
-          <span className="font-bold text-blue-500">{userMail} </span>, ви
+          <span className="font-bold text-blue-500">{user?.email} </span>, ви
           зможете перейти на дану сторінку. <br /> Якщо лист не прийшов
           спробуйте надіслати його через{" "}
           <span className="font-bold">Профіль</span> -{" "}

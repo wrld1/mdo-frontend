@@ -20,7 +20,7 @@ export async function signUpAction(signUpFormData: SignUpFormData) {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ email, password, registrationType: "user" }),
+        body: JSON.stringify({ email, password }),
       }
     );
   } catch (error) {

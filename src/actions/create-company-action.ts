@@ -4,7 +4,7 @@ import { getErrorMessage } from "@/lib/utils";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
 interface CreateCompanyFormData {
-  companyName: string;
+  companyCode: number;
   companyType: string;
   email: string;
   password: string;
@@ -14,7 +14,7 @@ interface CreateCompanyFormData {
 export async function createCompanyAction(
   createCompanyFormData: CreateCompanyFormData
 ) {
-  const { companyName, companyType, email, password } = createCompanyFormData;
+  const { companyCode, companyType, email, password } = createCompanyFormData;
 
   try {
     const userResponse = await fetchWithAutoErrorHandling(
@@ -27,9 +27,10 @@ export async function createCompanyAction(
         body: JSON.stringify({
           email,
           password,
-          registrationType: "company",
-          companyName,
-          companyType,
+          company: {
+            code: companyCode,
+            type: companyType,
+          },
         }),
       }
     );

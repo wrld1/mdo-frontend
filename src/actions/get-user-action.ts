@@ -20,8 +20,7 @@ export async function getUserAction(userId: number) {
     const user: User = await response.json();
     return user;
   } catch (error) {
-    return {
-      error: getErrorMessage(error),
-    };
+    console.log("[GET_USER]", getErrorMessage(error));
+    return null;
   }
 }

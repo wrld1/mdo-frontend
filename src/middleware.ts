@@ -6,7 +6,6 @@ import { timestampToDate } from "./lib/utils";
 import { decrypt } from "./lib/auth";
 import { getUserAction } from "./actions/get-user-action";
 import { sendVerificationAction } from "./actions/send-verification-action";
-import { isUser } from "./types/typeGuards/isUser";
 
 export async function middleware(req: NextRequest) {
   const { isAuth, userId } = await verifyUser();
@@ -60,7 +59,7 @@ export async function middleware(req: NextRequest) {
     try {
       const user = await getUserAction(userId);
 
-      if (isUser(user) && !user.isVerified) {
+      if (user && !user.isVerified) {
         await sendVerificationAction({ email: user.email });
         const response = NextResponse.redirect(
           new URL("/verification-required", req.url)

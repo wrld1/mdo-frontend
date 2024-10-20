@@ -1,11 +1,10 @@
 import type { Metadata } from "next";
 import { Inter as FontSans } from "next/font/google";
-import "./globals.css";
+import "../globals.css";
 import { cn } from "@/lib/utils";
 import Header from "@/components/Header/Header";
 import { siteConfig } from "@/config/site";
 import { Toaster } from "@/components/ui/toaster";
-import { cookies } from "next/headers";
 import VerificationToast from "@/components/VerificationToast";
 
 const fontSans = FontSans({
@@ -34,9 +33,6 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const cookieStore = cookies();
-  const needsVerification = cookieStore.get("needsVerification")?.value;
-
   // let randomNum = Math.random();
 
   return (

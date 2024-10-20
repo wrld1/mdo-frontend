@@ -8,7 +8,7 @@ export const metadata: Metadata = {
   title: "Cool Site",
 };
 
-export default function ProfileLayout({
+export default async function ProfileLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;

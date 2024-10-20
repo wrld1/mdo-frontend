@@ -31,7 +31,7 @@ import { createCompanyAction } from "@/actions/create-company-action";
 
 const FormSchema = z
   .object({
-    companyName: z.string().min(1, { message: "Назва не може бути пустою" }),
+    companyCode: z.number().min(1, { message: "Код не може бути пустим" }),
     companyType: z.string(),
     email: z.string().email({
       message: "Введіть корректну Email адресу",
@@ -58,7 +58,6 @@ function RegisterCompanyForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      companyName: "",
       email: "",
       password: "",
       repeatPassword: "",
@@ -90,14 +89,14 @@ function RegisterCompanyForm() {
       <form className="w-2/3 space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
-          name="companyName"
+          name="companyCode"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Назва компанії</FormLabel>
+              <FormLabel>Код ЄДРПОУ</FormLabel>
               <FormControl>
                 <Input
-                  type="text"
-                  placeholder="Введіть назву компанії"
+                  type="number"
+                  placeholder="Введіть код компанії"
                   {...field}
                 />
               </FormControl>
