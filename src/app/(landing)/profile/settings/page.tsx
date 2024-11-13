@@ -5,10 +5,7 @@ import EmailRow from "./_components/EmailRow";
 
 export default async function ProfileSettings() {
   const { userId } = await verifyUser();
-  let user;
-  if (userId) {
-    user = await getUserAction(userId);
-  }
+  const user = userId ? await getUserAction(userId) : undefined;
 
   return (
     <div className="grid gap-2">

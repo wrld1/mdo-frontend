@@ -1,5 +1,6 @@
 "use client";
 
+import { deleteCompanyAction } from "@/actions/delete-company-action";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -147,6 +148,15 @@ export const columns: ColumnDef<Company>[] = [
                 Редагувати
               </DropdownMenuItem>
             </Link>
+            <DropdownMenuItem className="cursor-pointer ">
+              <Button
+                variant="destructive"
+                className="w-full"
+                onClick={async () => await deleteCompanyAction({ id })}
+              >
+                Видалити
+              </Button>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

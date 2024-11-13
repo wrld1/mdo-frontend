@@ -1,11 +1,10 @@
 "use client";
 
-import { Button } from "../ui/button";
 import { useState, useEffect } from "react";
 import BlurFade from "../magicui/blur-fade";
 import DotPattern from "../magicui/dot-pattern";
 import HeroCard from "./HeroCard";
-import Link from "next/link";
+import RegisterOptions from "./RegisterOptions";
 
 export default function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
@@ -29,7 +28,6 @@ export default function HeroSection() {
               Сучасна система обліку нарахувань
             </h1>
           </BlurFade>
-
           <BlurFade delay={0.2}>
             <p className="text-black text-lg sm:text-xl opacity-60 font-normal mb-8 max-w-[564px]">
               Система Osbb Management - бухгалтерський та абонентський облік в
@@ -37,19 +35,7 @@ export default function HeroSection() {
             </p>
           </BlurFade>
 
-          <BlurFade delay={0.25}>
-            <div className="flex flex-wrap gap-3 mb-12">
-              <Button className="w-[183px] h-[59px] text-base font-bold bg-black rounded-xl flex items-center justify-center">
-                <Link href="/sign-up">Я мешканець</Link>
-              </Button>
-              <Button
-                variant="secondary"
-                className="h-[59px] text-base font-bold rounded-xl flex  items-center justify-center border-2 hover:bg-white"
-              >
-                <Link href="/register-company">Зареєструвати компанію</Link>
-              </Button>
-            </div>
-          </BlurFade>
+          <RegisterOptions />
 
           <BlurFade delay={0.35}>
             <div className="flex flex-row items-center space-x-8">

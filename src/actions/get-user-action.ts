@@ -7,7 +7,7 @@ import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 export async function getUserAction(userId: number) {
   try {
     const response = await fetchWithAutoErrorHandling(
-      `${process.env.API_BASE_URL}/user/${userId}`,
+      `${process.env.API_BASE_URL}/users/${userId}`,
       {
         method: "GET",
         headers: {

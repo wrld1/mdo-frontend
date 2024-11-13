@@ -4,10 +4,7 @@ import { verifyUser } from "@/utils/functions.server";
 
 export default async function ProfilePage() {
   const { userId } = await verifyUser();
-  let user;
-  if (userId) {
-    user = await getUserAction(userId);
-  }
+  const user = userId ? await getUserAction(userId) : undefined;
 
   return (
     <div className="space-y-8">

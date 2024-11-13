@@ -13,10 +13,7 @@ import Link from "next/link";
 
 export default async function VerificationRequiredPage() {
   const { userId } = await verifyUser();
-  let user;
-  if (userId) {
-    user = await getUserAction(userId);
-  }
+  const user = userId ? await getUserAction(userId) : undefined;
 
   return (
     <div className="flex justify-center items-center h-full">
