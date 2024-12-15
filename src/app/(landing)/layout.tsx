@@ -6,6 +6,7 @@ import Header from "@/components/Header/Header";
 import { siteConfig } from "@/config/site";
 import { Toaster } from "@/components/ui/toaster";
 import VerificationToast from "@/components/VerificationToast";
+import Provider from "../_provider";
 
 const fontSans = FontSans({
   subsets: ["latin"],
@@ -43,12 +44,14 @@ export default function RootLayout({
           fontSans.variable
         )}
       >
-        <div className="relative flex min-h-screen flex-col bg-background">
-          <Header />
-          <main className="min-w-full flex-1 flex flex-col items-center justify-center">
-            {children}
-          </main>
-        </div>
+        <Provider>
+          <div className="relative flex min-h-screen flex-col bg-background">
+            <Header />
+            <main className="min-w-full flex-1 flex flex-col items-center justify-center">
+              {children}
+            </main>
+          </div>
+        </Provider>
         <Toaster />
         <VerificationToast />
       </body>

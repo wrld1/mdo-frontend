@@ -3,13 +3,11 @@
 import * as React from "react";
 import {
   ColumnDef,
-  ColumnFiltersState,
+  OnChangeFn,
+  PaginationState,
   SortingState,
   flexRender,
   getCoreRowModel,
-  getFilteredRowModel,
-  getPaginationRowModel,
-  getSortedRowModel,
   useReactTable,
 } from "@tanstack/react-table";
 
@@ -30,47 +28,57 @@ import { PlusCircle } from "lucide-react";
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
+  rowCount: number;
+  onPaginationChange: OnChangeFn<PaginationState>;
+  pagination: {
+    pageIndex: number;
+    pageSize: number;
+  };
+  onSortingChange: OnChangeFn<SortingState>;
+  sorting: {
+    id: string;
+    desc: boolean;
+  }[];
+  objectId: string;
 }
 
-export function DataTable<TData, TValue>({
+export function DwellingDataTable<TData, TValue>({
   columns,
   data,
+  onPaginationChange,
+  pagination,
+  rowCount,
+  onSortingChange,
+  sorting,
+  objectId,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = React.useState<SortingState>([]);
-  const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>(
-    []
-  );
-
   const table = useReactTable({
     data,
     columns,
+    manualPagination: true,
+    manualSorting: true,
+    onPaginationChange,
+    onSortingChange,
+    state: { pagination, sorting },
     getCoreRowModel: getCoreRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
-    onSortingChange: setSorting,
-    getSortedRowModel: getSortedRowModel(),
-    onColumnFiltersChange: setColumnFilters,
-    getFilteredRowModel: getFilteredRowModel(),
-    state: {
-      sorting,
-      columnFilters,
-    },
+    rowCount,
   });
 
   return (
-    <div>
+    <div className="w-full">
       <div className="flex items-center py-4 justify-between">
         <Input
-          placeholder="Фільтрація компаній..."
+          placeholder="Фільтрація об'єктів..."
           value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
             table.getColumn("name")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />
-        <Link href="/dashboard/teacher/create">
+        <Link href={`/dashboard/objects/${objectId}/create-dwelling`}>
           <Button>
             <PlusCircle className="h-4 w-4 mr-2" />
-            Нова компанія
+            Нова квартира
           </Button>
         </Link>
       </div>
@@ -81,7 +89,12 @@ export function DataTable<TData, TValue>({
               <TableRow key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
-                    <TableHead key={header.id}>
+                    <TableHead
+                      key={header.id}
+                      {...(header.column.getCanSort()
+                        ? { onClick: header.column.getToggleSortingHandler() }
+                        : {})}
+                    >
                       {header.isPlaceholder
                         ? null
                         : flexRender(
@@ -94,6 +107,7 @@ export function DataTable<TData, TValue>({
               </TableRow>
             ))}
           </TableHeader>
+
           <TableBody>
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
@@ -117,7 +131,7 @@ export function DataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Нічого не знайдено.
                 </TableCell>
               </TableRow>
             )}
@@ -145,3 +159,55 @@ export function DataTable<TData, TValue>({
     </div>
   );
 }
+
+type TableLibType = {
+  getState: () => any;
+  setPageIndex: (pageIndex: number) => void;
+  getCanPreviousPage: () => boolean;
+  previousPage: () => void;
+  getCanNextPage: () => boolean;
+  nextPage: () => void;
+  getPageCount: () => number;
+  setPageSize: (pageSize: number) => void;
+};
+
+const Pagination = ({ tableLib }: { tableLib: TableLibType }) => (
+  <footer className="pagination">
+    <button
+      disabled={!tableLib.getCanPreviousPage()}
+      onClick={() => tableLib.setPageIndex(0)}
+    >
+      ⏪
+    </button>
+    <button
+      disabled={!tableLib.getCanPreviousPage()}
+      onClick={tableLib.previousPage}
+    >
+      ◀️
+    </button>
+    <span>{`page ${
+      tableLib.getState().pagination.pageIndex + 1
+    } of ${tableLib.getPageCount()}`}</span>
+    <button disabled={!tableLib.getCanNextPage()} onClick={tableLib.nextPage}>
+      ▶️
+    </button>
+    <button
+      disabled={!tableLib.getCanNextPage()}
+      onClick={() => tableLib.setPageIndex(tableLib.getPageCount() - 1)}
+    >
+      ⏩
+    </button>
+    <span>Show: </span>
+    <select
+      value={tableLib.getState().pagination.pageSize}
+      onChange={(e) => tableLib.setPageSize(parseInt(e.target.value, 10))}
+    >
+      {[5, 10, 20].map((size) => (
+        <option key={size} value={size}>
+          {size}
+        </option>
+      ))}
+    </select>
+    <span> items per page</span>
+  </footer>
+);

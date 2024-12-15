@@ -1,7 +1,7 @@
 import { getUserCompanies } from "@/actions/get-user-companies";
 import { Categories } from "./_components/categories";
-import { DataTable } from "./_components/data-table";
-import { columns } from "./_components/columns";
+import { CompanyDataTable } from "./_components/company-data-table";
+import { columns } from "./_components/companyColumns";
 
 interface CompaniesListPageProps {
   searchParams: {
@@ -32,7 +32,7 @@ async function CompaniesListPage({ searchParams }: CompaniesListPageProps) {
         {userCompanies && "error" in userCompanies ? (
           <p>Сталася помилка: {userCompanies.error}</p>
         ) : (
-          <DataTable columns={columns} data={filteredCompanies} />
+          <CompanyDataTable columns={columns} data={filteredCompanies} />
         )}
       </div>
     </>

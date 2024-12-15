@@ -87,6 +87,10 @@ const data = {
           title: "Загальнобудинкові лічильники",
           url: "#",
         },
+        {
+          title: "Статті нарахувань",
+          url: "/dashboard/services-tariffs",
+        },
       ],
     },
     {
@@ -125,24 +129,20 @@ const data = {
       ],
     },
     {
-      title: "Documentation",
+      title: "Об'єкти",
       url: "#",
       icon: BookOpen,
       items: [
         {
-          title: "Introduction",
-          url: "#",
+          title: "Зареєстровані об'єкти",
+          url: "/dashboard/objects",
         },
         {
-          title: "Get Started",
-          url: "#",
+          title: "Підключення статей нарахувань",
+          url: "/dashboard/services-tariffs/create",
         },
         {
-          title: "Tutorials",
-          url: "#",
-        },
-        {
-          title: "Changelog",
+          title: "Показники лічильників",
           url: "#",
         },
       ],

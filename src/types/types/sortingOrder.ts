@@ -1,0 +1,1 @@
+type SortingOrder = "asc" | "desc";
