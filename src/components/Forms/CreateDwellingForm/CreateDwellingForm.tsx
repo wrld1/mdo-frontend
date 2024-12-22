@@ -105,11 +105,11 @@ export default function CreateDwellingForm({ objectId }: { objectId: string }) {
           name="entrance"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Номер поверху</FormLabel>
+              <FormLabel>Номер під&apos;їзду</FormLabel>
               <FormControl>
                 <Input placeholder="2" type="number" {...field} />
               </FormControl>
-              <FormDescription>Введіть номер під'їзду</FormDescription>
+              <FormDescription>Введіть номер під&apos;їзду</FormDescription>
               <FormMessage />
             </FormItem>
           )}

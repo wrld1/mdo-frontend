@@ -39,6 +39,7 @@ interface DataTableProps<TData, TValue> {
     id: string;
     desc: boolean;
   }[];
+  isLoading: boolean;
 }
 
 export function ObjectDataTable<TData, TValue>({
@@ -49,6 +50,7 @@ export function ObjectDataTable<TData, TValue>({
   rowCount,
   onSortingChange,
   sorting,
+  isLoading,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -61,6 +63,8 @@ export function ObjectDataTable<TData, TValue>({
     getCoreRowModel: getCoreRowModel(),
     rowCount,
   });
+
+  console.log(isLoading);
 
   return (
     <div className="w-full">
@@ -76,7 +80,7 @@ export function ObjectDataTable<TData, TValue>({
         <Link href="/dashboard/objects/create">
           <Button>
             <PlusCircle className="h-4 w-4 mr-2" />
-            Новий об'єкт
+            Новий об&apos;єкт
           </Button>
         </Link>
       </div>
@@ -107,7 +111,16 @@ export function ObjectDataTable<TData, TValue>({
           </TableHeader>
 
           <TableBody>
-            {table.getRowModel().rows?.length ? (
+            {isLoading ? (
+              <TableRow>
+                <TableCell
+                  colSpan={columns.length}
+                  className="h-24 text-center"
+                >
+                  Завантаження
+                </TableCell>
+              </TableRow>
+            ) : table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
                   key={row.id}
@@ -129,7 +142,7 @@ export function ObjectDataTable<TData, TValue>({
                   colSpan={columns.length}
                   className="h-24 text-center"
                 >
-                  No results.
+                  Нічого не знайдено
                 </TableCell>
               </TableRow>
             )}

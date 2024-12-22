@@ -74,7 +74,7 @@ export default function CreateObjectForm() {
           name="address"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Адреса об'єкта</FormLabel>
+              <FormLabel>Адреса об&apos;єкта</FormLabel>
               <FormControl>
                 <Input
                   placeholder="вул. Героїв Дніпра, 24"
@@ -82,7 +82,7 @@ export default function CreateObjectForm() {
                   {...field}
                 />
               </FormControl>
-              <FormDescription>Введіть адресу об'єкта</FormDescription>
+              <FormDescription>Введіть адресу об&apos;єкта</FormDescription>
               <FormMessage />
             </FormItem>
           )}
@@ -93,7 +93,7 @@ export default function CreateObjectForm() {
           name="type"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Тип об'єкта</FormLabel>
+              <FormLabel>Тип об&apos;єкта</FormLabel>
               <Select onValueChange={field.onChange} defaultValue={field.value}>
                 <FormControl>
                   <SelectTrigger>
@@ -106,7 +106,7 @@ export default function CreateObjectForm() {
                   </SelectItem>
                 </SelectContent>
               </Select>
-              <FormDescription>Оберіть тип об'єкта</FormDescription>
+              <FormDescription>Оберіть тип об&apos;єкта</FormDescription>
               <FormMessage />
             </FormItem>
           )}

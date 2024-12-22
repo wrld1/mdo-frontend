@@ -16,9 +16,9 @@ function ObjectsPage() {
     error,
   } = useGetObjects({ pagination: { offset, limit }, sort: { field, order } });
 
-  if (isLoading) {
-    return <div className="w-full text-center">Завантаження...</div>;
-  }
+  // if (isLoading) {
+  //   return <div className="w-full text-center">Завантаження...</div>;
+  // }
 
   if (error) {
     return <div>Error: {error.message}</div>;
@@ -27,13 +27,14 @@ function ObjectsPage() {
   return (
     <div className="p-6 space-y-4">
       <ObjectDataTable
-        data={objects.data}
+        data={objects?.data || []}
         columns={columns}
         onPaginationChange={onPaginationChange}
         onSortingChange={onSortingChange}
-        rowCount={objects.meta.total}
+        rowCount={objects?.meta.total || 0}
         pagination={pagination}
         sorting={sorting}
+        isLoading={isLoading}
       />
     </div>
   );
