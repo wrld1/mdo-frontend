@@ -14,7 +14,7 @@ import { Service } from "@/types/interfaces/service";
 async function ServicesTariffsPage() {
   const services: Service[] = await getServicesAction();
 
-  console.log("services", services);
+  console.log("service price", services);
 
   return (
     <div className="flex justify-between">
@@ -28,7 +28,7 @@ async function ServicesTariffsPage() {
           </CardHeader>
           <CardContent>
             {service.logo}
-            {/* Price: ${parseFloat(service.price).toFixed(2)} */}
+            Price: ${service.price}
           </CardContent>
           {/* <CardFooter className="flex justify-between">
             <Button variant="outline">Cancel</Button>

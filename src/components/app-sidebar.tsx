@@ -46,6 +46,7 @@ const data = {
       plan: "Мешканець",
     },
   ],
+
   navAdmin: [
     {
       title: "Модерація",
@@ -198,6 +199,8 @@ interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
 }
 
 export function AppSidebar({ user, ...props }: AppSidebarProps) {
+  console.log("user", user);
+
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>

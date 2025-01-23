@@ -22,6 +22,7 @@ import { getUserAction } from "@/actions/get-user-action";
 import { verifyUser } from "@/utils/functions.server";
 import { User } from "@/types/interfaces/user";
 import Provider from "../_provider";
+import { isErrorResponse } from "@/types/guards/isErrorResponse";
 
 export const metadata: Metadata = {
   title: "Панель управління | OSBB Project Management",
@@ -41,7 +42,11 @@ export default async function ProfileLayout({
   let user: User | null = null;
 
   if (userId) {
-    user = await getUserAction(userId);
+    const res = await getUserAction(userId);
+
+    if (!isErrorResponse(res)) {
+      user = res;
+    }
   }
 
   return (

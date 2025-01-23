@@ -1,13 +1,12 @@
 "use server";
 
 import { getErrorMessage } from "@/lib/utils";
-import { User } from "@/types/interfaces/user";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
-export async function getUserAction(userId: number) {
+export async function getOrdersAction() {
   try {
     const response = await fetchWithAutoErrorHandling(
-      `${process.env.API_BASE_URL}/users/${userId}`,
+      `${process.env.API_BASE_URL}/order`,
       {
         method: "GET",
         headers: {
@@ -17,10 +16,11 @@ export async function getUserAction(userId: number) {
       }
     );
 
-    const user: User = await response.json();
-    return user;
+    const orders = await response.json();
+
+    return orders;
   } catch (error) {
-    console.log("[GET_USER]", getErrorMessage(error));
+    console.log("[GET_ORDERS]", getErrorMessage(error));
     return {
       error: getErrorMessage(error),
     };

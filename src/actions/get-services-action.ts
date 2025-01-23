@@ -21,6 +21,8 @@ export async function getServicesAction(objectId?: string) {
     return services;
   } catch (error) {
     console.log("[GET_SERVICES]", getErrorMessage(error));
-    return null;
+    return {
+      error: getErrorMessage(error),
+    };
   }
 }

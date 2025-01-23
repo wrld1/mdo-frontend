@@ -6,16 +6,16 @@ import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 interface CreateServiceFormData {
   name: string;
   description: string;
-  price: string;
+  price: number;
   logo: string;
   objectId?: string;
 }
 
 export async function createServiceAction(
-  createObjectFormData: CreateServiceFormData
+  createServiceFormData: CreateServiceFormData
 ) {
-  console.log(createObjectFormData);
-  console.log(typeof createObjectFormData.price);
+  console.log(createServiceFormData);
+  console.log(typeof createServiceFormData.price);
   try {
     const serviceResponse = await fetchWithAutoErrorHandling(
       `${process.env.API_BASE_URL}/service`,
@@ -24,7 +24,7 @@ export async function createServiceAction(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(createObjectFormData),
+        body: JSON.stringify(createServiceFormData),
       }
     );
   } catch (error) {

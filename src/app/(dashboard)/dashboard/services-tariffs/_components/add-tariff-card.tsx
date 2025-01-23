@@ -33,8 +33,8 @@ import { useRouter } from "next/navigation";
 const formSchema = z.object({
   name: z.string().min(1, { message: "Обов'язкове поле" }),
   description: z.string().min(1, { message: "Обов'язкове поле" }),
-  // price: z.coerce.number().min(1, { message: "Обов'язкове поле" }),
-  price: z.string().min(1, { message: "Обов'язкове поле" }),
+  price: z.coerce.number().min(1, { message: "Обов'язкове поле" }),
+  // price: z.string().min(1, { message: "Обов'язкове поле" }),
   logo: z.string().min(1, { message: "Обов'язкове поле" }),
 });
 
