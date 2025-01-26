@@ -17,7 +17,7 @@ import { Input } from "@/components/ui/input";
 
 import { toast } from "@/components/ui/use-toast";
 import { useRouter } from "next/navigation";
-import { createDwellingAction } from "@/actions/create-dwelling-action";
+import { createDwellingAction } from "@/actions/dwelling/create-dwelling-action";
 
 const formSchema = z.object({
   number: z

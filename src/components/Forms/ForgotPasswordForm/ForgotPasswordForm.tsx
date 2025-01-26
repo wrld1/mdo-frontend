@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { sendResetLinkAction } from "@/actions/send-reset-link-action";
+import { sendResetLinkAction } from "@/actions/auth/send-reset-link-action";
 
 const FormSchema = z.object({
   email: z.string().email({

@@ -1,4 +1,4 @@
-import { verifyAccountAction } from "@/actions/verify-account-action";
+import { verifyAccountAction } from "@/actions/auth/verify-account-action";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import {

@@ -1,6 +1,6 @@
 "use client";
 
-import { logout } from "@/actions/logout-action";
+import { logout } from "@/actions/auth/logout-action";
 import { toast } from "./use-toast";
 import { Button } from "./button";
 

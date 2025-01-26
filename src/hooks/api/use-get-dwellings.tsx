@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getDwellingsAction,
   GetDwellingsActionProps,
-} from "@/actions/get-dwellings-action";
+} from "@/actions/dwelling/get-dwellings-action";
 
 export const useGetDwellings = ({
   pagination: { offset, limit },

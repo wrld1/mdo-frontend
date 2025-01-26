@@ -1,7 +1,6 @@
-import { getObjectAction } from "@/actions/get-object-action";
+import { getObjectAction } from "@/actions/object/get-object-action";
 import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import { DwellingDataTable } from "./_components/dwelling-data-table";
 import DwellingListTable from "./_components/dwelling-list-table";
 
 export default async function ObjectPage({

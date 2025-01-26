@@ -2,7 +2,7 @@ import { useQuery } from "@tanstack/react-query";
 import {
   getObjectsAction,
   GetObjectsActionProps,
-} from "@/actions/get-objects-action";
+} from "@/actions/object/get-objects-action";
 
 export const useGetObjects = ({
   pagination: { offset, limit },

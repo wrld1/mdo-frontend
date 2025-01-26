@@ -7,7 +7,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 
-import { getOrdersAction } from "@/actions/get-orders-action";
+import { getOrdersAction } from "@/actions/order/get-orders-action";
 import { Order } from "@/types/interfaces/order";
 
 interface PageProps {

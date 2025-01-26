@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { toast } from "@/components/ui/use-toast";
-import { createObjectAction } from "@/actions/create-object-action";
+import { createObjectAction } from "@/actions/object/create-object-action";
 import { ObjectType } from "@/types/types/object";
 import { useParams, useRouter } from "next/navigation";
 

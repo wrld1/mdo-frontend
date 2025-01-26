@@ -26,7 +26,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { createServiceAction } from "@/actions/create-service-action";
+import { createServiceAction } from "@/actions/service/create-service-action";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 

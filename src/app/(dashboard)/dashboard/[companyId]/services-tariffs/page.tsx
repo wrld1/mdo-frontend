@@ -8,7 +8,7 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 import AddTariffCard from "./_components/add-tariff-card";
-import { getServicesAction } from "@/actions/get-services-action";
+import { getServicesAction } from "@/actions/service/get-services-action";
 import { Service } from "@/types/interfaces/service";
 
 async function ServicesTariffsPage() {
