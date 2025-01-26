@@ -20,7 +20,7 @@ import { passwordValidation } from "@/lib/constants";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { resetPasswordAction } from "@/actions/reset-password-action";
+import { resetPasswordAction } from "@/actions/auth/reset-password-action";
 
 const FormSchema = z
   .object({

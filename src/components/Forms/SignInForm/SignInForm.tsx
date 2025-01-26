@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
-import { signInAction } from "@/actions/sign-in-action";
+import { signInAction } from "@/actions/auth/sign-in-action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";

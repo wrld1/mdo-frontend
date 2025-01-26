@@ -1,4 +1,4 @@
-import { getUserAction } from "@/actions/get-user-action";
+import { getUserAction } from "@/actions/user/get-user-action";
 
 import { verifyUser } from "@/utils/functions.server";
 

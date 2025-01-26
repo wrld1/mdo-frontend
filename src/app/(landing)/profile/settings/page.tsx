@@ -1,4 +1,4 @@
-import { getUserAction } from "@/actions/get-user-action";
+import { getUserAction } from "@/actions/user/get-user-action";
 import LogoutButton from "@/components/ui/LogoutButton";
 import { verifyUser } from "@/utils/functions.server";
 import EmailRow from "./_components/EmailRow";

@@ -24,6 +24,8 @@ function ObjectsPage() {
     return <div>Error: {error.message}</div>;
   }
 
+  console.log("objects", objects);
+
   return (
     <div className="p-6 space-y-4">
       <ObjectDataTable

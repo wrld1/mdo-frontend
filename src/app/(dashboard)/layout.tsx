@@ -1,5 +1,5 @@
 import { Metadata } from "next";
-import { AppSidebar } from "@/components/app-sidebar";
+import { AppSidebar } from "@/components/DashboardSidebar/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -18,11 +18,16 @@ import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
 import { Inter as FontSans } from "next/font/google";
 import "../globals.css";
-import { getUserAction } from "@/actions/get-user-action";
+import { getUserAction } from "@/actions/user/get-user-action";
 import { verifyUser } from "@/utils/functions.server";
-import { User } from "@/types/interfaces/user";
 import Provider from "../_provider";
-import { isErrorResponse } from "@/types/guards/isErrorResponse";
+import { isActionError } from "@/types/guards/isActionError";
+import { toast } from "@/components/ui/use-toast";
+import { UserResponse } from "@/types/interfaces/user";
+import { getCompany } from "@/actions/company/get-company-action";
+import { CompanyAccessLevel } from "@/types/types/company";
+import { CompanyWithAccess } from "@/types/interfaces/company";
+import { getCompanyAccess } from "@/utils/getCompanyAccess";
 
 export const metadata: Metadata = {
   title: "Панель управління | OSBB Project Management",
@@ -33,19 +38,50 @@ const fontSans = FontSans({
   variable: "--font-sans",
 });
 
+const fetchCompaniesWithAccess = async (
+  accessEntries: { id: string; accessLevel: CompanyAccessLevel }[]
+): Promise<CompanyWithAccess[]> => {
+  const companiesPromises = await Promise.all(
+    accessEntries.map(async ({ id, accessLevel }) => {
+      const companyResponse = await getCompany(id);
+      if (isActionError(companyResponse)) {
+        return null;
+      }
+      return {
+        company: companyResponse,
+        accessLevel,
+      };
+    })
+  );
+
+  return companiesPromises.filter(
+    (item): item is CompanyWithAccess => item !== null
+  );
+};
+
 export default async function ProfileLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
   const { userId } = await verifyUser();
-  let user: User | null = null;
+  let user: UserResponse | null = null;
+  let companiesWithAccess: CompanyWithAccess[] = [];
 
   if (userId) {
     const res = await getUserAction(userId);
 
-    if (!isErrorResponse(res)) {
+    if (isActionError(res)) {
+      toast({
+        variant: "destructive",
+        title: `Сталася помилка. ${res.error}`,
+      });
+    } else {
       user = res;
+      if (user?.acl?.length) {
+        const accessEntries = getCompanyAccess(user);
+        companiesWithAccess = await fetchCompaniesWithAccess(accessEntries);
+      }
     }
   }
 
@@ -59,7 +95,7 @@ export default async function ProfileLayout({
       >
         <Provider>
           <SidebarProvider>
-            <AppSidebar user={user} />
+            <AppSidebar user={user} companiesWithAccess={companiesWithAccess} />
             <SidebarInset>
               <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
                 <div className="flex items-center gap-2 px-4">

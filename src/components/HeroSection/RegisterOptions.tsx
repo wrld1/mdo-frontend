@@ -2,7 +2,7 @@
 
 import BlurFade from "../magicui/blur-fade";
 import { Button } from "../ui/button";
-import { getUserAction } from "@/actions/get-user-action";
+import { getUserAction } from "@/actions/user/get-user-action";
 import { verifyUser } from "@/utils/functions.server";
 import { useEffect, useState } from "react";
 import { User } from "@/types/interfaces/user";

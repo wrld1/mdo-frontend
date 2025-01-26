@@ -1,6 +1,6 @@
 "use client";
 
-import { sendVerificationAction } from "@/actions/send-verification-action";
+import { sendVerificationAction } from "@/actions/auth/send-verification-action";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/components/ui/use-toast";
 

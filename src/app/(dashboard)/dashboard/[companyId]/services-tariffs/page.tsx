@@ -14,8 +14,6 @@ import { Service } from "@/types/interfaces/service";
 async function ServicesTariffsPage() {
   const services: Service[] = await getServicesAction();
 
-  console.log("service price", services);
-
   return (
     <div className="flex justify-between">
       <AddTariffCard />

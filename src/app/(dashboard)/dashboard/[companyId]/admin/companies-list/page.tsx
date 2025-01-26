@@ -1,4 +1,4 @@
-import { getUserCompanies } from "@/actions/get-user-companies";
+import { getUserCompanies } from "@/actions/user/get-user-companies";
 import { Categories } from "./_components/categories";
 import { CompanyDataTable } from "./_components/company-data-table";
 import { columns } from "./_components/companyColumns";

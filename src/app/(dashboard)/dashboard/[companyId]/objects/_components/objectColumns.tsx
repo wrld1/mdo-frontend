@@ -1,6 +1,6 @@
 "use client";
 
-import { deleteCompanyAction } from "@/actions/delete-company-action";
+import { deleteCompanyAction } from "@/actions/company/delete-company-action";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,

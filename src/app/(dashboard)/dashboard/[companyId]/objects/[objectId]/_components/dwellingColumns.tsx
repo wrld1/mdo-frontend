@@ -1,130 +1,81 @@
 "use client";
 
-import { deleteCompanyAction } from "@/actions/delete-company-action";
-import { Badge } from "@/components/ui/badge";
+import { deleteCompanyAction } from "@/actions/company/delete-company-action";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Company } from "@/types/interfaces/company";
+import { Dwelling } from "@/types/interfaces/dwelling";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
 
-export const columns: ColumnDef<Company>[] = [
+export const dwellingColumns: ColumnDef<Dwelling>[] = [
   {
-    accessorKey: "name",
+    accessorKey: "number",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Назва
+          Номер кв.
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
+    cell: ({ row }) => (
+      <Link
+        href={`/dashboard/objects/${row.original.objectId}/dwelling/${row.original.id}`}
+        className="hover:underline"
+      >
+        {row.original.number}
+      </Link>
+    ),
   },
   {
-    accessorKey: "status",
+    accessorKey: "floor",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Статус
+          Поверх
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
-    cell: ({ row }) => {
-      const companyStatus = row.getValue("status") || "PENDING";
-
-      let badgeVariant = {
-        type: undefined as
-          | "default"
-          | "secondary"
-          | "outline"
-          | "destructive"
-          | null
-          | undefined,
-        badgeText: "",
-      };
-
-      switch (companyStatus) {
-        case "PROCESSED":
-          badgeVariant.type = "default";
-          badgeVariant.badgeText = "Оброблена";
-          break;
-        case "PENDING":
-          badgeVariant.type = "secondary";
-          badgeVariant.badgeText = "Обробляється";
-          break;
-        case "INACTIVE":
-          badgeVariant.type = "outline";
-          badgeVariant.badgeText = "Неактивна";
-          break;
-        case "BLOCKED":
-          badgeVariant.type = "destructive";
-          badgeVariant.badgeText = "Заблокована";
-          break;
-        default:
-          badgeVariant.type = "default";
-          badgeVariant.badgeText = "Оброблена";
-      }
-
-      return (
-        <Badge variant={badgeVariant.type}>{badgeVariant.badgeText}</Badge>
-      );
-    },
   },
   {
-    accessorKey: "code",
-    header: "Код ЄДРПОУ",
-  },
-  {
-    accessorKey: "type",
+    accessorKey: "id",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Тип
+          Особовий рахунок
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "entrance",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Створена
+          Під&lsquo;їзд
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
-    },
-    cell: ({ row }) => {
-      const dateStr: string = row.getValue("createdAt");
-      const date = new Date(dateStr);
-
-      const formattedDate = new Intl.DateTimeFormat("en-GB", {
-        day: "2-digit",
-        month: "2-digit",
-        year: "numeric",
-      }).format(date);
-
-      return <div>{formattedDate}</div>;
     },
   },
   {
@@ -147,7 +98,7 @@ export const columns: ColumnDef<Company>[] = [
                 Редагувати
               </DropdownMenuItem>
             </Link>
-            <DropdownMenuItem className="cursor-pointer ">
+            {/* <DropdownMenuItem className="cursor-pointer ">
               <Button
                 variant="destructive"
                 className="w-full"
@@ -155,7 +106,7 @@ export const columns: ColumnDef<Company>[] = [
               >
                 Видалити
               </Button>
-            </DropdownMenuItem>
+            </DropdownMenuItem> */}
           </DropdownMenuContent>
         </DropdownMenu>
       );

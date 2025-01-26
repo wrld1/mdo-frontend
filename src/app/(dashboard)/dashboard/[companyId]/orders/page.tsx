@@ -7,17 +7,31 @@ import {
   CardFooter,
 } from "@/components/ui/card";
 
-import { Order } from "@/types/interfaces/order";
 import { getOrdersAction } from "@/actions/get-orders-action";
+import { Order } from "@/types/interfaces/order";
 
-async function OrdersPage() {
-  const orders: Order[] = await getOrdersAction();
+interface PageProps {
+  params: {
+    companyId: string;
+  };
+}
+
+async function OrdersPage({ params }: PageProps) {
+  const { companyId } = params;
+
+  const orders: Order[] = await getOrdersAction({
+    companyId,
+    limit: 10,
+    offset: 0,
+    sortBy: "id",
+    sortOrder: "asc",
+  });
 
   console.log("orders", orders);
 
   return (
     <div className="flex justify-between">
-      {orders.map((order) => (
+      {orders?.map((order) => (
         <Card key={order.id} className="w-[350px]">
           <CardHeader>
             <CardTitle>{order.name}</CardTitle>

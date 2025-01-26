@@ -20,8 +20,8 @@ import { passwordValidation } from "@/lib/constants";
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
-import { resetPasswordAction } from "@/actions/reset-password-action";
-import { changePasswordAction } from "@/actions/change-password-action";
+import { resetPasswordAction } from "@/actions/auth/reset-password-action";
+import { changePasswordAction } from "@/actions/auth/change-password-action";
 
 const FormSchema = z.object({
   oldPassword: z.string(),

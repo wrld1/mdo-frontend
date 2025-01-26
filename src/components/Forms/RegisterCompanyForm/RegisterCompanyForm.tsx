@@ -27,7 +27,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { createCompanyAction } from "@/actions/create-company-action";
+import { createCompanyAction } from "@/actions/company/create-company-action";
 
 const FormSchema = z
   .object({

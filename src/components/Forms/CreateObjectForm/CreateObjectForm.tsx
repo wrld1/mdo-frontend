@@ -24,7 +24,7 @@ import {
 import { toast } from "@/components/ui/use-toast";
 import { createObjectAction } from "@/actions/create-object-action";
 import { ObjectType } from "@/types/types/object";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const formSchema = z.object({
   address: z.string(),
@@ -37,13 +37,17 @@ export default function CreateObjectForm() {
   });
 
   const router = useRouter();
+  const params = useParams();
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
+    const companyId = Array.isArray(params.companyId)
+      ? params.companyId[0]
+      : params.companyId;
+
     const modifiedValues = {
       address: values.address,
       type: values.type,
-      //TODO: Remove hardcoded value
-      companyId: "5486555a-0da1-490c-baca-4b9c34c31295",
+      companyId,
     };
 
     try {

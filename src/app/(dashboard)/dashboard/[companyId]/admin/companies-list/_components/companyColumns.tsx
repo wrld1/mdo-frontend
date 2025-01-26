@@ -1,81 +1,130 @@
 "use client";
 
-import { deleteCompanyAction } from "@/actions/delete-company-action";
+import { deleteCompanyAction } from "@/actions/company/delete-company-action";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Dwelling } from "@/types/interfaces/dwelling";
+import { Company } from "@/types/interfaces/company";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
 
-export const dwellingColumns: ColumnDef<Dwelling>[] = [
+export const columns: ColumnDef<Company>[] = [
   {
-    accessorKey: "number",
+    accessorKey: "name",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Номер кв.
-          <ArrowUpDown className="ml-2 h-4 w-4" />
-        </Button>
-      );
-    },
-    cell: ({ row }) => (
-      <Link
-        href={`/dashboard/objects/${row.original.objectId}/dwelling/${row.original.id}`}
-        className="hover:underline"
-      >
-        {row.original.number}
-      </Link>
-    ),
-  },
-  {
-    accessorKey: "floor",
-    header: ({ column }) => {
-      return (
-        <Button
-          variant="ghost"
-          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
-        >
-          Поверх
+          Назва
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "id",
+    accessorKey: "status",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Особовий рахунок
+          Статус
+          <ArrowUpDown className="ml-2 h-4 w-4" />
+        </Button>
+      );
+    },
+    cell: ({ row }) => {
+      const companyStatus = row.getValue("status") || "PENDING";
+
+      let badgeVariant = {
+        type: undefined as
+          | "default"
+          | "secondary"
+          | "outline"
+          | "destructive"
+          | null
+          | undefined,
+        badgeText: "",
+      };
+
+      switch (companyStatus) {
+        case "PROCESSED":
+          badgeVariant.type = "default";
+          badgeVariant.badgeText = "Оброблена";
+          break;
+        case "PENDING":
+          badgeVariant.type = "secondary";
+          badgeVariant.badgeText = "Обробляється";
+          break;
+        case "INACTIVE":
+          badgeVariant.type = "outline";
+          badgeVariant.badgeText = "Неактивна";
+          break;
+        case "BLOCKED":
+          badgeVariant.type = "destructive";
+          badgeVariant.badgeText = "Заблокована";
+          break;
+        default:
+          badgeVariant.type = "default";
+          badgeVariant.badgeText = "Оброблена";
+      }
+
+      return (
+        <Badge variant={badgeVariant.type}>{badgeVariant.badgeText}</Badge>
+      );
+    },
+  },
+  {
+    accessorKey: "code",
+    header: "Код ЄДРПОУ",
+  },
+  {
+    accessorKey: "type",
+    header: ({ column }) => {
+      return (
+        <Button
+          variant="ghost"
+          onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+        >
+          Тип
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
     },
   },
   {
-    accessorKey: "entrance",
+    accessorKey: "createdAt",
     header: ({ column }) => {
       return (
         <Button
           variant="ghost"
           onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
         >
-          Під'їзд
+          Створена
           <ArrowUpDown className="ml-2 h-4 w-4" />
         </Button>
       );
+    },
+    cell: ({ row }) => {
+      const dateStr: string = row.getValue("createdAt");
+      const date = new Date(dateStr);
+
+      const formattedDate = new Intl.DateTimeFormat("en-GB", {
+        day: "2-digit",
+        month: "2-digit",
+        year: "numeric",
+      }).format(date);
+
+      return <div>{formattedDate}</div>;
     },
   },
   {
@@ -98,7 +147,7 @@ export const dwellingColumns: ColumnDef<Dwelling>[] = [
                 Редагувати
               </DropdownMenuItem>
             </Link>
-            {/* <DropdownMenuItem className="cursor-pointer ">
+            <DropdownMenuItem className="cursor-pointer ">
               <Button
                 variant="destructive"
                 className="w-full"
@@ -106,7 +155,7 @@ export const dwellingColumns: ColumnDef<Dwelling>[] = [
               >
                 Видалити
               </Button>
-            </DropdownMenuItem> */}
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

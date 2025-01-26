@@ -34,6 +34,8 @@ export async function getObjectsAction({
       url += `?${queryParams.toString()}`;
     }
 
+    console.log("url in get object", url);
+
     const response = await fetchWithAutoErrorHandling(url, {
       method: "GET",
       headers: {
@@ -44,7 +46,7 @@ export async function getObjectsAction({
 
     const objects = await response.json();
 
-    // console.log("objects", objects);
+    console.log("objects in action", objects);
 
     return objects;
   } catch (error) {

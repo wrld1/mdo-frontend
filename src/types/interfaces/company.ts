@@ -1,4 +1,8 @@
-import { CompanyStatus, CompanyType } from "../types/company";
+import {
+  CompanyAccessLevel,
+  CompanyStatus,
+  CompanyType,
+} from "../types/company";
 
 export interface Company {
   id: string;
@@ -7,4 +11,9 @@ export interface Company {
   code: number;
   type: CompanyType;
   createdAt: Date | string;
+}
+
+export interface CompanyWithAccess {
+  company: Company;
+  accessLevel: CompanyAccessLevel;
 }
