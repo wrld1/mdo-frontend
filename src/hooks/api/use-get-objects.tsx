@@ -10,10 +10,18 @@ export const useGetObjects = ({
 }: GetObjectsActionProps) => {
   return useQuery({
     queryKey: ["get-objects", { offset, limit, field, order }],
-    queryFn: () =>
-      getObjectsAction({
+    queryFn: async () => {
+      const response = await getObjectsAction({
         pagination: { offset, limit },
         sort: { field, order },
-      }),
+      });
+
+      if ("error" in response) {
+        throw new Error(response.error);
+      }
+
+      return response;
+    },
+    retry: false,
   });
 };

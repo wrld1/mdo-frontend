@@ -24,6 +24,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
 import { PlusCircle } from "lucide-react";
+import { useParams } from "next/navigation";
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
@@ -64,7 +65,9 @@ export function ObjectDataTable<TData, TValue>({
     rowCount,
   });
 
-  console.log(isLoading);
+  const params = useParams();
+
+  const { companyId } = params;
 
   return (
     <div className="w-full">
@@ -77,7 +80,7 @@ export function ObjectDataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <Link href="/dashboard/objects/create">
+        <Link href={`/dashboard/${companyId}/objects/create`}>
           <Button>
             <PlusCircle className="h-4 w-4 mr-2" />
             Новий об&apos;єкт

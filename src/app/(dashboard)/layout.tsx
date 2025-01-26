@@ -20,7 +20,6 @@ import { Inter as FontSans } from "next/font/google";
 import "../globals.css";
 import { getUserAction } from "@/actions/user/get-user-action";
 import { verifyUser } from "@/utils/functions.server";
-import Provider from "../_provider";
 import { isActionError } from "@/types/guards/isActionError";
 import { toast } from "@/components/ui/use-toast";
 import { UserResponse } from "@/types/interfaces/user";
@@ -28,6 +27,7 @@ import { getCompany } from "@/actions/company/get-company-action";
 import { CompanyAccessLevel } from "@/types/types/company";
 import { CompanyWithAccess } from "@/types/interfaces/company";
 import { getCompanyAccess } from "@/utils/getCompanyAccess";
+import Provider from "../_provider";
 
 export const metadata: Metadata = {
   title: "Панель управління | OSBB Project Management",

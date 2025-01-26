@@ -13,10 +13,7 @@ export default async function CompanyPage({ params }: PageProps) {
   const company = await getCompany(companyId);
 
   if (isActionError(company)) {
-    toast({
-      variant: "destructive",
-      title: `Сталася помилка. ${company.error}`,
-    });
+    console.error(company.error);
   }
 
   return <>{!isActionError(company) && <div>companyID: {company.id}</div>}</>;

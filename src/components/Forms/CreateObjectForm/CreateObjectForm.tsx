@@ -58,7 +58,7 @@ export default function CreateObjectForm() {
         title: "Об'єкт створено успішно",
         description: "Your object has been successfully created.",
       });
-      router.push("/dashboard/objects");
+      router.push(`/dashboard/${companyId}/objects`);
     } catch (error) {
       toast({
         variant: "destructive",

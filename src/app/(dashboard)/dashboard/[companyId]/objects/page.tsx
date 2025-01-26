@@ -1,10 +1,10 @@
 "use client";
 
-import { ObjectDataTable } from "./_components/object-data-table";
 import { usePagination } from "@/hooks/use-pagination";
-import { useGetObjects } from "@/hooks/api/use-get-objects";
+import { ObjectDataTable } from "./_components/object-data-table";
 import { columns } from "./_components/objectColumns";
 import { useSorting } from "@/hooks/use-sorting";
+import { useGetObjects } from "@/hooks/api/use-get-objects";
 
 function ObjectsPage() {
   const { limit, onPaginationChange, offset, pagination } = usePagination();
