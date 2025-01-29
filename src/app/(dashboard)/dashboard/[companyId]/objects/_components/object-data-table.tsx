@@ -66,7 +66,6 @@ export function ObjectDataTable<TData, TValue>({
   });
 
   const params = useParams();
-
   const { companyId } = params;
 
   return (

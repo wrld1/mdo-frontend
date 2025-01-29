@@ -6,9 +6,26 @@ import { siteConfig } from "@/config/site";
 import AuthDropdown from "./AuthDropdown";
 import ProfileDropdown from "./ProfileDropdown";
 import { verifyUser } from "@/utils/functions.server";
+import { getUserAction } from "@/actions/user/get-user-action";
+import { UserResponse } from "@/types/interfaces/user";
+import { isActionError } from "@/types/guards/isActionError";
+import { getCompanyAccess } from "@/utils/getCompanyAccess";
 
 export default async function Header() {
-  const { isAuth } = await verifyUser();
+  const { isAuth, userId } = await verifyUser();
+  let user: UserResponse;
+  let companyId: string = "";
+
+  if (userId) {
+    const res = await getUserAction(userId);
+
+    if (!isActionError(res)) {
+      user = res;
+      if (user?.acl?.length) {
+        companyId = getCompanyAccess(user)[0].id;
+      }
+    }
+  }
 
   return (
     <header className="sticky top-0 z-50 w-full border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -24,7 +41,11 @@ export default async function Header() {
         <MobileNav />
         <MainNav />
         <div className="ml-3">
-          {isAuth ? <ProfileDropdown /> : <AuthDropdown />}
+          {isAuth ? (
+            <ProfileDropdown companyId={companyId} />
+          ) : (
+            <AuthDropdown />
+          )}
         </div>
       </div>
     </header>

@@ -6,11 +6,13 @@ import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 export interface GetDwellingsActionProps {
   pagination: { offset: number; limit: number };
   sort: { field: string; order: string };
+  objectId?: string;
 }
 
 export async function getDwellingsAction({
   pagination: { offset, limit },
   sort: { field, order },
+  objectId,
 }: GetDwellingsActionProps) {
   try {
     let url = `${process.env.API_BASE_URL}/dwelling`;
@@ -28,6 +30,10 @@ export async function getDwellingsAction({
     }
     if (order) {
       queryParams.append("sortOrder", order);
+    }
+
+    if (objectId) {
+      queryParams.append("objectId", objectId);
     }
 
     if (queryParams.toString()) {

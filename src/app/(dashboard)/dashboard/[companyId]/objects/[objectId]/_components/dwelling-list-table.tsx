@@ -5,6 +5,7 @@ import { usePagination } from "@/hooks/use-pagination";
 import { useSorting } from "@/hooks/use-sorting";
 import { DwellingDataTable } from "./dwelling-data-table";
 import { dwellingColumns } from "./dwellingColumns";
+import { useParams } from "next/navigation";
 
 export default function DwellingListTable({ objectId }: { objectId: string }) {
   const { limit, onPaginationChange, offset, pagination } = usePagination();
@@ -17,7 +18,13 @@ export default function DwellingListTable({ objectId }: { objectId: string }) {
   } = useGetDwellings({
     pagination: { offset, limit },
     sort: { field, order },
+    objectId,
   });
+
+  const params = useParams();
+  const companyId = Array.isArray(params.companyId)
+    ? params.companyId[0]
+    : params.companyId;
 
   if (isLoading) {
     return <div className="w-full text-center">Завантаження...</div>;
@@ -37,6 +44,7 @@ export default function DwellingListTable({ objectId }: { objectId: string }) {
       pagination={pagination}
       sorting={sorting}
       objectId={objectId}
+      companyId={companyId}
     />
   );
 }

@@ -1,6 +1,5 @@
 "use client";
 
-import { deleteCompanyAction } from "@/actions/company/delete-company-action";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -12,6 +11,23 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+
+const DwellingNumberCell = ({ row }: { row: any }) => {
+  const params = useParams();
+  const companyId = Array.isArray(params.companyId)
+    ? params.companyId[0]
+    : params.companyId;
+
+  return (
+    <Link
+      href={`/dashboard/${companyId}/objects/${row.original.objectId}/dwelling/${row.original.id}`}
+      className="hover:underline"
+    >
+      {row.original.number}
+    </Link>
+  );
+};
 
 export const dwellingColumns: ColumnDef<Dwelling>[] = [
   {
@@ -27,14 +43,7 @@ export const dwellingColumns: ColumnDef<Dwelling>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <Link
-        href={`/dashboard/objects/${row.original.objectId}/dwelling/${row.original.id}`}
-        className="hover:underline"
-      >
-        {row.original.number}
-      </Link>
-    ),
+    cell: ({ row }) => <DwellingNumberCell row={row} />,
   },
   {
     accessorKey: "floor",

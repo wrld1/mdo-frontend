@@ -6,11 +6,13 @@ import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 export interface GetObjectsActionProps {
   pagination: { offset: number; limit: number };
   sort: { field: string; order: string };
+  companyId?: string;
 }
 
 export async function getObjectsAction({
   pagination: { offset, limit },
   sort: { field, order },
+  companyId,
 }: GetObjectsActionProps) {
   try {
     let url = `${process.env.API_BASE_URL}/object`;
@@ -28,6 +30,10 @@ export async function getObjectsAction({
     }
     if (order) {
       queryParams.append("sortOrder", order);
+    }
+
+    if (companyId) {
+      queryParams.append("companyId", companyId);
     }
 
     if (queryParams.toString()) {

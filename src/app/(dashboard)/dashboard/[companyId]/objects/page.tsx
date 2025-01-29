@@ -5,8 +5,14 @@ import { ObjectDataTable } from "./_components/object-data-table";
 import { columns } from "./_components/objectColumns";
 import { useSorting } from "@/hooks/use-sorting";
 import { useGetObjects } from "@/hooks/api/use-get-objects";
+import { useParams } from "next/navigation";
 
 function ObjectsPage() {
+  const params = useParams();
+  const companyId = Array.isArray(params.companyId)
+    ? params.companyId[0]
+    : params.companyId;
+
   const { limit, onPaginationChange, offset, pagination } = usePagination();
   const { sorting, onSortingChange, field, order } = useSorting();
 
@@ -14,7 +20,11 @@ function ObjectsPage() {
     data: objects,
     isLoading,
     error,
-  } = useGetObjects({ pagination: { offset, limit }, sort: { field, order } });
+  } = useGetObjects({
+    pagination: { offset, limit },
+    sort: { field, order },
+    companyId,
+  });
 
   // if (isLoading) {
   //   return <div className="w-full text-center">Завантаження...</div>;
@@ -23,8 +33,6 @@ function ObjectsPage() {
   if (error) {
     return <div>Error: {error.message}</div>;
   }
-
-  console.log("objects", objects);
 
   return (
     <div className="p-6 space-y-4">

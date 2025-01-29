@@ -7,6 +7,7 @@ import {
 export const useGetDwellings = ({
   pagination: { offset, limit },
   sort: { field, order },
+  objectId,
 }: GetDwellingsActionProps) => {
   return useQuery({
     queryKey: ["get-dwellings", { offset, limit, field, order }],
@@ -14,6 +15,7 @@ export const useGetDwellings = ({
       getDwellingsAction({
         pagination: { offset, limit },
         sort: { field, order },
+        objectId,
       }),
   });
 };

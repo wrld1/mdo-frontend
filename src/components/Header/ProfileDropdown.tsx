@@ -1,5 +1,3 @@
-"use client";
-
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +10,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import LogoutButton from "../ui/LogoutButton";
 
-function ProfileDropdown() {
+function ProfileDropdown({ companyId }: { companyId: string }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="flex items-center gap-2">
@@ -28,7 +26,7 @@ function ProfileDropdown() {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href="/dashboard" className="cursor-pointer">
+          <Link href={`/dashboard/${companyId}`} className="cursor-pointer">
             Управління
           </Link>
         </DropdownMenuItem>

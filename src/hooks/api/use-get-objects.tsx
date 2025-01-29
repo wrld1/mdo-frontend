@@ -7,13 +7,15 @@ import {
 export const useGetObjects = ({
   pagination: { offset, limit },
   sort: { field, order },
+  companyId,
 }: GetObjectsActionProps) => {
   return useQuery({
-    queryKey: ["get-objects", { offset, limit, field, order }],
+    queryKey: ["get-objects", { offset, limit, field, order, companyId }],
     queryFn: async () => {
       const response = await getObjectsAction({
         pagination: { offset, limit },
         sort: { field, order },
+        companyId,
       });
 
       if ("error" in response) {

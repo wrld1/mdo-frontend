@@ -23,11 +23,10 @@ import { verifyUser } from "@/utils/functions.server";
 import { isActionError } from "@/types/guards/isActionError";
 import { toast } from "@/components/ui/use-toast";
 import { UserResponse } from "@/types/interfaces/user";
-import { getCompany } from "@/actions/company/get-company-action";
-import { CompanyAccessLevel } from "@/types/types/company";
 import { CompanyWithAccess } from "@/types/interfaces/company";
 import { getCompanyAccess } from "@/utils/getCompanyAccess";
 import Provider from "../_provider";
+import { fetchCompaniesWithAccess } from "@/utils/fetchCompaniesWithAccess";
 
 export const metadata: Metadata = {
   title: "Панель управління | OSBB Project Management",
@@ -37,27 +36,6 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
-
-const fetchCompaniesWithAccess = async (
-  accessEntries: { id: string; accessLevel: CompanyAccessLevel }[]
-): Promise<CompanyWithAccess[]> => {
-  const companiesPromises = await Promise.all(
-    accessEntries.map(async ({ id, accessLevel }) => {
-      const companyResponse = await getCompany(id);
-      if (isActionError(companyResponse)) {
-        return null;
-      }
-      return {
-        company: companyResponse,
-        accessLevel,
-      };
-    })
-  );
-
-  return companiesPromises.filter(
-    (item): item is CompanyWithAccess => item !== null
-  );
-};
 
 export default async function ProfileLayout({
   children,

@@ -12,6 +12,23 @@ import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+
+const AddressCell = ({ row }: { row: any }) => {
+  const params = useParams();
+  const companyId = Array.isArray(params.companyId)
+    ? params.companyId[0]
+    : params.companyId;
+
+  return (
+    <Link
+      href={`/dashboard/${companyId}/objects/${row.original.id}`}
+      className="hover:underline"
+    >
+      {row.original.address}
+    </Link>
+  );
+};
 
 export const columns: ColumnDef<Object>[] = [
   {
@@ -27,14 +44,7 @@ export const columns: ColumnDef<Object>[] = [
         </Button>
       );
     },
-    cell: ({ row }) => (
-      <Link
-        href={`/dashboard/objects/${row.original.id}`}
-        className="hover:underline"
-      >
-        {row.original.address}
-      </Link>
-    ),
+    cell: ({ row }) => <AddressCell row={row} />,
   },
   {
     accessorKey: "type",

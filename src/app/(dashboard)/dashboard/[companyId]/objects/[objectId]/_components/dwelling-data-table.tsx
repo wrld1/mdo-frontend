@@ -40,6 +40,7 @@ interface DataTableProps<TData, TValue> {
     desc: boolean;
   }[];
   objectId: string;
+  companyId: string;
 }
 
 export function DwellingDataTable<TData, TValue>({
@@ -51,6 +52,7 @@ export function DwellingDataTable<TData, TValue>({
   onSortingChange,
   sorting,
   objectId,
+  companyId,
 }: DataTableProps<TData, TValue>) {
   const table = useReactTable({
     data,
@@ -75,7 +77,9 @@ export function DwellingDataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-        <Link href={`/dashboard/objects/${objectId}/create-dwelling`}>
+        <Link
+          href={`/dashboard/${companyId}/objects/${objectId}/create-dwelling`}
+        >
           <Button>
             <PlusCircle className="h-4 w-4 mr-2" />
             Нова квартира
