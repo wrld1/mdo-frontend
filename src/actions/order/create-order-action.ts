@@ -1,20 +1,22 @@
 "use server";
 
 import { getErrorMessage } from "@/lib/utils";
+import { OrderType } from "@/types/interfaces/order";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
 interface CreateOrderFormData {
   name: string;
   description: string;
+  type: OrderType;
   objectId: string;
   dwellingId?: number;
   userId: number;
-  companyId: string;
   responsibleUserId?: number;
 }
 
-export async function createServiceAction(
-  createOrderFormData: CreateOrderFormData
+export async function createOrderAction(
+  createOrderFormData: CreateOrderFormData,
+  companyId: string
 ) {
   console.log(createOrderFormData);
   try {
@@ -25,7 +27,7 @@ export async function createServiceAction(
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(createOrderFormData),
+        body: JSON.stringify({ ...createOrderFormData, companyId }),
       }
     );
   } catch (error) {

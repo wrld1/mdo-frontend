@@ -9,6 +9,8 @@ import {
 
 import { getOrdersAction } from "@/actions/order/get-orders-action";
 import { Order } from "@/types/interfaces/order";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 interface PageProps {
   params: {
@@ -30,23 +32,30 @@ async function OrdersPage({ params }: PageProps) {
   console.log("orders", orders);
 
   return (
-    <div className="flex justify-between">
-      {orders?.map((order) => (
-        <Card key={order.id} className="w-[350px]">
-          <CardHeader>
-            <CardTitle>{order.name}</CardTitle>
-            <CardDescription>{order.description}</CardDescription>
-          </CardHeader>
-          <CardContent>
-            {/* {order.userId} */}
-            {/* Price: ${service.price} */}
-          </CardContent>
-          {/* <CardFooter className="flex justify-between">
+    <div className="flex flex-col">
+      <Button asChild className="mr-auto">
+        <Link href={`/dashboard/${companyId}/orders/create`}>
+          Створити нову заявку
+        </Link>
+      </Button>
+      <div className="flex flex-wrap">
+        {orders?.map((order) => (
+          <Card key={order.id} className="w-[350px]">
+            <CardHeader>
+              <CardTitle>{order.name}</CardTitle>
+              <CardDescription>{order.description}</CardDescription>
+            </CardHeader>
+            <CardContent>
+              {/* {order.userId} */}
+              {/* Price: ${service.price} */}
+            </CardContent>
+            {/* <CardFooter className="flex justify-between">
             <Button variant="outline">Cancel</Button>
             <Button>Deploy</Button>
           </CardFooter> */}
-        </Card>
-      ))}
+          </Card>
+        ))}
+      </div>
     </div>
   );
 }

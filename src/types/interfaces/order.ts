@@ -8,3 +8,5 @@ export interface Order {
   status: string;
   responsibleUser?: UserResponse;
 }
+
+export type OrderType = "ELECTRICITY" | "WATER" | "GAS" | "OTHER";
