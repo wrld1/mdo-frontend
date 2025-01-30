@@ -73,9 +73,9 @@ export function ObjectDataTable<TData, TValue>({
       <div className="flex items-center py-4 justify-between">
         <Input
           placeholder="Фільтрація об'єктів..."
-          value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+          value={(table.getColumn("address")?.getFilterValue() as string) ?? ""}
           onChange={(event) =>
-            table.getColumn("name")?.setFilterValue(event.target.value)
+            table.getColumn("address")?.setFilterValue(event.target.value)
           }
           className="max-w-sm"
         />

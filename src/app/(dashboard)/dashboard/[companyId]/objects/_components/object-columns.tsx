@@ -13,6 +13,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
 import Link from "next/link";
 import { useParams } from "next/navigation";
+import { UpdateObjectModal } from "../[objectId]/_components/update-object-modal";
 
 const AddressCell = ({ row }: { row: any }) => {
   const params = useParams();
@@ -74,12 +75,9 @@ export const columns: ColumnDef<Object>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <Link href={`/dashboard/teacher/courses/${id}`}>
-              <DropdownMenuItem className="cursor-pointer">
-                <Pencil className="h-4 w-4 mr-2 " />
-                Редагувати
-              </DropdownMenuItem>
-            </Link>
+            <div className="px-2 py-1.5">
+              <UpdateObjectModal objectId={id} />
+            </div>
             <DropdownMenuItem className="cursor-pointer ">
               <Button
                 variant="destructive"

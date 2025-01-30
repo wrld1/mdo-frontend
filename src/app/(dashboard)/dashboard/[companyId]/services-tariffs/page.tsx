@@ -15,7 +15,7 @@ async function ServicesTariffsPage() {
   const services: Service[] = await getServicesAction();
 
   return (
-    <div className="flex justify-between">
+    <div className="flex  gap-4 flex-wrap">
       <AddTariffCard />
 
       {services.map((service) => (

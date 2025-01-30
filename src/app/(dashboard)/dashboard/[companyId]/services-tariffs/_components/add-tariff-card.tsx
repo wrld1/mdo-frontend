@@ -67,7 +67,7 @@ export default function AddTariffCard() {
   }
 
   return (
-    <Card className="w-full max-w-xs p-3 flex flex-col items-center justify-center space-y-4">
+    <Card className="p-3 flex flex-col items-center justify-center space-y-4 w-[350px]">
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
           <Button variant="outline" className="w-20 h-20 rounded-full">

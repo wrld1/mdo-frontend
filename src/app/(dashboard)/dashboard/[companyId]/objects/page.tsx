@@ -2,7 +2,7 @@
 
 import { usePagination } from "@/hooks/use-pagination";
 import { ObjectDataTable } from "./_components/object-data-table";
-import { columns } from "./_components/objectColumns";
+import { columns } from "./_components/object-columns";
 import { useSorting } from "@/hooks/use-sorting";
 import { useGetObjects } from "@/hooks/api/use-get-objects";
 import { useParams } from "next/navigation";

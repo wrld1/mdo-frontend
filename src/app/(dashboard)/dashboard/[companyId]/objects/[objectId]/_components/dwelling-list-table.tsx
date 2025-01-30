@@ -4,7 +4,7 @@ import { useGetDwellings } from "@/hooks/api/use-get-dwellings";
 import { usePagination } from "@/hooks/use-pagination";
 import { useSorting } from "@/hooks/use-sorting";
 import { DwellingDataTable } from "./dwelling-data-table";
-import { dwellingColumns } from "./dwellingColumns";
+import { dwellingColumns } from "./dwelling-columns";
 import { useParams } from "next/navigation";
 
 export default function DwellingListTable({ objectId }: { objectId: string }) {

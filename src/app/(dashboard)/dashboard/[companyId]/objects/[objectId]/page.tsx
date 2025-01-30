@@ -1,7 +1,7 @@
 import { getObjectAction } from "@/actions/object/get-object-action";
-import { Button } from "@/components/ui/button";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import DwellingListTable from "./_components/dwelling-list-table";
+import { UpdateObjectModal } from "./_components/update-object-modal";
 
 export default async function ObjectPage({
   params,
@@ -20,7 +20,7 @@ export default async function ObjectPage({
               <span>Тип: {object.type}</span>
               <span>Унікальний номер: {object.id}</span>
             </div>
-            <Button>Редагувати</Button>
+            <UpdateObjectModal objectId={params.objectId} />
           </div>
         </CardHeader>
       </Card>
