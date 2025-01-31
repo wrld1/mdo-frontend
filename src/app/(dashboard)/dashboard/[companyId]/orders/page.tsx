@@ -32,22 +32,31 @@ async function OrdersPage({ params }: PageProps) {
   console.log("orders", orders);
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col gap-8">
       <Button asChild className="mr-auto">
         <Link href={`/dashboard/${companyId}/orders/create`}>
           Створити нову заявку
         </Link>
       </Button>
-      <div className="flex flex-wrap">
+      <div className="flex gap-4 flex-wrap">
         {orders?.map((order) => (
           <Card key={order.id} className="w-[350px]">
             <CardHeader>
-              <CardTitle>{order.name}</CardTitle>
-              <CardDescription>{order.description}</CardDescription>
+              <CardTitle className="text-xl">{order.name}</CardTitle>
+              <CardDescription className="text-lg">
+                Опис: {order.description}
+              </CardDescription>
             </CardHeader>
-            <CardContent>
-              {/* {order.userId} */}
-              {/* Price: ${service.price} */}
+            <CardContent className="flex flex-col gap-2">
+              <span className="inline-block p-2 bg-slate-200 rounded-md">
+                Об&apos;єкт: {order.object.address}
+              </span>
+              <p>
+                Заявка від{" "}
+                <span className="font-semibold"> {order.user.email}</span>
+              </p>
+              <p> Вартість: {order.price} грн</p>
+              <p> Тип: {order.type}</p>
             </CardContent>
             {/* <CardFooter className="flex justify-between">
             <Button variant="outline">Cancel</Button>
