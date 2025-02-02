@@ -34,6 +34,8 @@ export default function DwellingListTable({ objectId }: { objectId: string }) {
     return <div>Error: {error.message}</div>;
   }
 
+  console.log("dwellings data", dwellings.data);
+
   return (
     <DwellingDataTable
       data={dwellings.data}

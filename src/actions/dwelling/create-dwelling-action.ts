@@ -34,6 +34,7 @@ export async function createDwellingAction(
       }
     );
   } catch (error) {
+    console.log("[CREATE_DWELLING]", error);
     return {
       error: getErrorMessage(error),
     };

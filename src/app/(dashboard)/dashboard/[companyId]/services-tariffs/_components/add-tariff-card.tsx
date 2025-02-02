@@ -29,6 +29,14 @@ import { toast } from "@/components/ui/use-toast";
 import { createServiceAction } from "@/actions/service/create-service-action";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
+import { Object } from "@/types/interfaces/object";
 
 const formSchema = z.object({
   name: z.string().min(1, { message: "Обов'язкове поле" }),
@@ -36,9 +44,10 @@ const formSchema = z.object({
   price: z.coerce.number().min(1, { message: "Обов'язкове поле" }),
   // price: z.string().min(1, { message: "Обов'язкове поле" }),
   logo: z.string().min(1, { message: "Обов'язкове поле" }),
+  objectId: z.string(),
 });
 
-export default function AddTariffCard() {
+export default function AddTariffCard({ objects }: { objects: Object[] }) {
   const [open, setOpen] = useState(false);
   const router = useRouter();
 
@@ -117,6 +126,32 @@ export default function AddTariffCard() {
                         {...field}
                       />
                     </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+
+              <FormField
+                control={form.control}
+                name="objectId"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Об&apos;єкт</FormLabel>
+                    <Select
+                      onValueChange={field.onChange}
+                      defaultValue={field.value}
+                    >
+                      <SelectTrigger>
+                        <SelectValue placeholder="Оберіть об'єкт" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        {objects.map((object) => (
+                          <SelectItem key={object.id} value={object.id}>
+                            {object.address}
+                          </SelectItem>
+                        ))}
+                      </SelectContent>
+                    </Select>
                     <FormMessage />
                   </FormItem>
                 )}

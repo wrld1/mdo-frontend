@@ -10,13 +10,27 @@ import {
 import AddTariffCard from "./_components/add-tariff-card";
 import { getServicesAction } from "@/actions/service/get-services-action";
 import { Service } from "@/types/interfaces/service";
+import { getObjectsAction } from "@/actions/object/get-objects-action";
 
-async function ServicesTariffsPage() {
+interface PageProps {
+  params: {
+    companyId: string;
+  };
+}
+
+async function ServicesTariffsPage({ params }: PageProps) {
+  const { companyId } = params;
   const services: Service[] = await getServicesAction();
+
+  const objects = await getObjectsAction({
+    pagination: { offset: 0, limit: 100 },
+    sort: { field: "id", order: "asc" },
+    companyId,
+  });
 
   return (
     <div className="flex  gap-4 flex-wrap">
-      <AddTariffCard />
+      <AddTariffCard objects={objects.data} />
 
       {services.map((service) => (
         <Card key={service.id} className="w-[350px]">

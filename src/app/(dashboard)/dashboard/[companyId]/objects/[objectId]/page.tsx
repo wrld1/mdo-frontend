@@ -2,13 +2,14 @@ import { getObjectAction } from "@/actions/object/get-object-action";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import DwellingListTable from "./_components/dwelling-list-table";
 import { UpdateObjectModal } from "./_components/update-object-modal";
+import { Object } from "@/types/interfaces/object";
 
 export default async function ObjectPage({
   params,
 }: {
   params: { objectId: string };
 }) {
-  const object = await getObjectAction(params.objectId);
+  const object: Object = await getObjectAction(params.objectId);
 
   return (
     <div className="p-6 space-y-4 flex flex-col">

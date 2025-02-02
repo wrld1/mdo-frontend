@@ -16,7 +16,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 import { toast } from "@/components/ui/use-toast";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { createDwellingAction } from "@/actions/dwelling/create-dwelling-action";
 
 const formSchema = z.object({
@@ -45,7 +45,12 @@ export default function CreateDwellingForm({ objectId }: { objectId: string }) {
     resolver: zodResolver(formSchema),
   });
 
+  const params = useParams();
   const router = useRouter();
+
+  const companyId = Array.isArray(params.companyId)
+    ? params.companyId[0]
+    : params.companyId;
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
     try {
@@ -57,7 +62,7 @@ export default function CreateDwellingForm({ objectId }: { objectId: string }) {
       toast({
         title: "Квартиру додано успішно",
       });
-      router.push("/dashboard/objects");
+      router.push(`/dashboard/${companyId}/objects/${objectId}`);
     } catch (error) {
       toast({
         variant: "destructive",

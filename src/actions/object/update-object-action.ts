@@ -31,8 +31,9 @@ export async function updateObjectAction(
         }),
       }
     );
-    revalidatePath(`/dashboard/${companyId}/objects`);
-    revalidatePath(`/dashboard/${companyId}/objects/${objectId}`);
+    revalidatePath("/dashboard/[companyId]/objects");
+    // revalidatePath(`/dashboard/${companyId}/objects/${objectId}`);
+    revalidatePath("/dashboard/[companyId]/objects/[objectId]");
   } catch (error) {
     return {
       error: getErrorMessage(error),

@@ -50,7 +50,7 @@ export async function getDwellingsAction({
 
     const dwellings = await response.json();
 
-    // console.log("objects", objects);
+    console.log("dwellings", dwellings);
 
     return dwellings;
   } catch (error) {
