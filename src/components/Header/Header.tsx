@@ -22,7 +22,9 @@ export default async function Header() {
     if (!isActionError(res)) {
       user = res;
       if (user?.acl?.length) {
-        companyId = getCompanyAccess(user)[0].id;
+        console.log("getCompanyAceess", getCompanyAccess(user));
+        companyId =
+          getCompanyAccess(user).length > 0 ? getCompanyAccess(user)[0].id : "";
       }
     }
   }
@@ -41,11 +43,7 @@ export default async function Header() {
         <MobileNav />
         <MainNav />
         <div className="ml-3">
-          {isAuth ? (
-            <ProfileDropdown companyId={companyId} />
-          ) : (
-            <AuthDropdown />
-          )}
+          {isAuth ? <ProfileDropdown /> : <AuthDropdown />}
         </div>
       </div>
     </header>

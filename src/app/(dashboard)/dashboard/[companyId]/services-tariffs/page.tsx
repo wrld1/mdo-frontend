@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import {
   Card,
   CardHeader,
@@ -10,6 +9,7 @@ import {
 import AddTariffCard from "./_components/add-tariff-card";
 import { getServicesAction } from "@/actions/service/get-services-action";
 import { Service } from "@/types/interfaces/service";
+import { Object } from "@/types/interfaces/object";
 import { getObjectsAction } from "@/actions/object/get-objects-action";
 
 interface PageProps {
@@ -22,17 +22,23 @@ async function ServicesTariffsPage({ params }: PageProps) {
   const { companyId } = params;
   const services: Service[] = await getServicesAction();
 
+  //dobavit interface object
   const objects = await getObjectsAction({
     pagination: { offset: 0, limit: 100 },
     sort: { field: "id", order: "asc" },
     companyId,
   });
 
+  const companyObjectIds = objects.data.map((obj: { id: string }) => obj.id);
+  const filteredServices = services.filter(
+    (service) => service.objectId && companyObjectIds.includes(service.objectId)
+  );
+
   return (
     <div className="flex  gap-4 flex-wrap">
       <AddTariffCard objects={objects.data} />
 
-      {services.map((service) => (
+      {filteredServices.map((service) => (
         <Card key={service.id} className="w-[350px]">
           <CardHeader>
             <CardTitle>{service.name}</CardTitle>

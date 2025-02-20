@@ -10,7 +10,7 @@ import { Button } from "../ui/button";
 import Link from "next/link";
 import LogoutButton from "../ui/LogoutButton";
 
-function ProfileDropdown({ companyId }: { companyId: string }) {
+function ProfileDropdown() {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild className="flex items-center gap-2">
@@ -26,7 +26,7 @@ function ProfileDropdown({ companyId }: { companyId: string }) {
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild>
-          <Link href={`/dashboard/${companyId}`} className="cursor-pointer">
+          <Link href={`/dashboard`} className="cursor-pointer">
             Управління
           </Link>
         </DropdownMenuItem>

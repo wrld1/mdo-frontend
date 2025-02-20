@@ -39,10 +39,14 @@ export function AppSidebar({
   const sidebarData = generateSidebarData(companiesWithAccess, companyId);
   const isAdmin = hasAdminAccess(user);
 
+  if (!companyId) {
+    return null;
+  }
+
   return (
-    <Sidebar collapsible="icon" {...props}>
+    <Sidebar variant="floating" collapsible="icon" {...props}>
       <SidebarHeader>
-        <CompanySwitcher companies={sidebarData.companies} />
+        {companyId && <CompanySwitcher companies={sidebarData.companies} />}
       </SidebarHeader>
       <SidebarContent>
         {isAdmin && <NavAdmin items={sidebarData.navAdmin} />}
