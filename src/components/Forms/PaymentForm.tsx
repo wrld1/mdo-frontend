@@ -3,7 +3,7 @@
 import { Button } from "@/components/ui/button";
 import crypto from "crypto";
 
-interface InterKassaFormProps {
+interface PaymentFormProps {
   amount: string;
   currency: string;
   description: string;
@@ -20,12 +20,12 @@ function generateSignature(data: Record<string, string>, secretKey: string) {
     .digest("hex");
 }
 
-export function InterKassaForm({
+export function PaymentForm({
   amount,
   currency = "UAH",
   description,
   orderId,
-}: InterKassaFormProps) {
+}: PaymentFormProps) {
   const ik_co_id = process.env.NEXT_PUBLIC_INTERKASSA_CHECKOUT_ID;
   const secretKey = process.env.NEXT_PUBLIC_INTERKASSA_SECRET_KEY;
 

@@ -17,7 +17,7 @@ import { CompanySwitcher } from "./company-switcher";
 import { NavUser } from "./nav-user";
 import { generateSidebarData } from "./sidebar-items";
 import { hasAdminAccess } from "@/utils/hasAdminAccess";
-import { useParams } from "next/navigation";
+import { useParams, usePathname } from "next/navigation";
 import { NavLinks } from "./nav-links";
 
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
@@ -31,6 +31,7 @@ export function AppSidebar({
   ...props
 }: AppSidebarProps) {
   const params = useParams();
+  const pathname = usePathname();
 
   const companyId = Array.isArray(params.companyId)
     ? params.companyId[0]
@@ -38,8 +39,9 @@ export function AppSidebar({
 
   const sidebarData = generateSidebarData(companiesWithAccess, companyId);
   const isAdmin = hasAdminAccess(user);
+  const isAdminRoute = pathname?.includes("admin");
 
-  if (!companyId) {
+  if (!companyId && !isAdminRoute) {
     return null;
   }
 

@@ -1,4 +1,4 @@
-import { InterKassaForm } from "@/components/Forms/InterKassaForm";
+import { PaymentForm } from "@/components/Forms/PaymentForm";
 
 export default function PaymentPage() {
   const paymentData = {
@@ -12,7 +12,7 @@ export default function PaymentPage() {
     <div className="p-6">
       <h1 className="text-2xl font-bold mb-6">Оплата послуг</h1>
       <div className="max-w-md mx-auto">
-        <InterKassaForm {...paymentData} />
+        <PaymentForm {...paymentData} />
       </div>
     </div>
   );
