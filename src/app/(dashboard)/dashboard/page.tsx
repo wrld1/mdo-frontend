@@ -37,9 +37,9 @@ async function DashboardPage() {
       console.log("user", user);
       if (user?.acl?.length) {
         const accessEntries = getCompanyAccess(user);
-        console.log("accessEntries", accessEntries);
+        // console.log("accessEntries", accessEntries);
         companiesWithAccess = await fetchCompaniesWithAccess(accessEntries);
-        console.log("companiesWithAccess", companiesWithAccess);
+        // console.log("companiesWithAccess", companiesWithAccess);
       }
     }
   }

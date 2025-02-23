@@ -5,7 +5,7 @@ import { CompanyAccessLevel } from "@/types/types/company";
 export const getCompanyAccess = (user: UserResponse) => {
   const isAdmin = hasAdminAccess(user);
 
-  console.log("user acls ", user.acl);
+  // console.log("user acls ", user.acl);
 
   return user.acl
     .filter(
