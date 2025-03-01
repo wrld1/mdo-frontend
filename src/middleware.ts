@@ -59,7 +59,7 @@ export async function middleware(req: NextRequest) {
     try {
       const user = await getUserAction(userId);
 
-      if (user && !user.isVerified) {
+      if (user && "isVerified" in user && !user.isVerified) {
         await sendVerificationAction({ email: user.email });
         const response = NextResponse.redirect(
           new URL("/verification-required", req.url)

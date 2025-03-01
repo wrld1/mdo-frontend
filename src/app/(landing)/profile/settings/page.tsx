@@ -15,7 +15,7 @@ export default async function ProfileSettings() {
           <span>Пароль</span>
           <ChangePasswordModal />
         </div> */}
-        {user && (
+        {user && "isVerified" in user && "email" in user && (
           <EmailRow userIsVerified={user.isVerified} userEmail={user.email} />
         )}
 

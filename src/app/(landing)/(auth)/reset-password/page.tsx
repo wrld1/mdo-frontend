@@ -1,8 +1,5 @@
 import ResetPasswordForm from "@/components/Forms/ResetPasswordForm";
-import SignInForm from "@/components/Forms/SignInForm";
-import ForgotPasswordModal from "@/components/ui/ForgotPasswordModal";
-import { MoveRight } from "lucide-react";
-import Link from "next/link";
+import { Suspense } from "react";
 
 function ResetPasswordPage() {
   return (
@@ -11,7 +8,9 @@ function ResetPasswordPage() {
         <h1 className="text-3xl font-bold">Відновлення паролю</h1>
       </div>
       <div className="lg:w-1/2 flex items-center justify-center">
-        <ResetPasswordForm />
+        <Suspense fallback={<p>Loading...</p>}>
+          <ResetPasswordForm />
+        </Suspense>
       </div>
     </div>
   );

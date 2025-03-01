@@ -1,4 +1,5 @@
 import { getUserAction } from "@/actions/user/get-user-action";
+import { isActionError } from "@/types/guards/isActionError";
 
 import { verifyUser } from "@/utils/functions.server";
 
@@ -13,7 +14,7 @@ export default async function ProfilePage() {
         <div className="grid gap-2 text-sm text-muted-foreground">
           <div className="flex items-center justify-between">
             <span>Email</span>
-            <span>{user?.email}</span>
+            <span>{!isActionError(user) && user?.email}</span>
           </div>
           <div className="flex items-center justify-between">
             <span>Phone</span>

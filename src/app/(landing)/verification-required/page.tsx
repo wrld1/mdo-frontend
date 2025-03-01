@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -23,8 +22,10 @@ export default async function VerificationRequiredPage() {
         </CardHeader>
         <CardContent>
           Як тільки ви підтвердите акаунт в листі що прийшов на пошту{" "}
-          <span className="font-bold text-blue-500">{user?.email} </span>, ви
-          зможете перейти на дану сторінку. <br /> Якщо лист не прийшов
+          {user && "email" in user && (
+            <span className="font-bold text-blue-500">{user.email}</span>
+          )}
+          , ви зможете перейти на дану сторінку. <br /> Якщо лист не прийшов
           спробуйте надіслати його через{" "}
           <span className="font-bold">Профіль</span> -{" "}
           <span className="font-bold">Налаштування</span>
