@@ -5,18 +5,22 @@ import { Button } from "../ui/button";
 import { getUserAction } from "@/actions/user/get-user-action";
 import { verifyUser } from "@/utils/functions.server";
 import { useEffect, useState } from "react";
-import { User } from "@/types/interfaces/user";
+import { UserResponse } from "@/types/interfaces/user";
 import Link from "next/link";
 
 export default function RegisterOptions() {
-  const [user, setUser] = useState<User | null>(null);
+  const [user, setUser] = useState<UserResponse | null>(null);
 
   useEffect(() => {
     async function fetchData() {
       const { userId } = await verifyUser();
       if (userId) {
         const userData = await getUserAction(userId);
-        setUser(userData);
+        if ("error" in userData) {
+          console.error(userData.error);
+        } else {
+          setUser(userData);
+        }
       }
     }
     fetchData();

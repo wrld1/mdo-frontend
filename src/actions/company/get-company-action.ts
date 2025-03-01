@@ -2,7 +2,6 @@
 
 import { getErrorMessage } from "@/lib/utils";
 import { Company } from "@/types/interfaces/company";
-import { User } from "@/types/interfaces/user";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
 export async function getCompany(companyId: string) {
