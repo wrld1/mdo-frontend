@@ -27,6 +27,9 @@ export const metadata: Metadata = {
   //   apple: "/apple-touch-icon.png",
   // },
   // manifest: `${siteConfig.url}/site.webmanifest`,
+  other: {
+    "interkassa-verification": "60ebb65e6dc72608963206ee9f3188df",
+  },
 };
 
 export default function RootLayout({
