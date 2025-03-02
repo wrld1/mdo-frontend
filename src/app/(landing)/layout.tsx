@@ -28,7 +28,7 @@ export const metadata: Metadata = {
   // },
   // manifest: `${siteConfig.url}/site.webmanifest`,
   other: {
-    "interkassa-verification": "60ebb65e6dc72608963206ee9f3188df",
+    "interkassa-verification": "7be92fd6a3c5335122800d92d91f4e61",
   },
 };
 
