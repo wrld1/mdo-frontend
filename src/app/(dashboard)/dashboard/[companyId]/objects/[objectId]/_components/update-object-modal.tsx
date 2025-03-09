@@ -25,6 +25,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { updateObjectAction } from "@/actions/object/update-object-action";
 import { useParams } from "next/navigation";
 import { Pencil } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
 
 type FormData = {
   address: string;
@@ -44,6 +45,7 @@ export function UpdateObjectModal({ objectId }: { objectId: string }) {
   const companyId = Array.isArray(params.companyId)
     ? params.companyId[0]
     : params.companyId;
+  const queryClient = useQueryClient();
 
   const onSubmit = async (data: FormData) => {
     try {
@@ -55,6 +57,7 @@ export function UpdateObjectModal({ objectId }: { objectId: string }) {
         });
         setOpen(false);
         reset();
+        queryClient.invalidateQueries({ queryKey: ["get-objects"] });
       }
     } catch (error) {
       toast({

@@ -20,6 +20,7 @@ function ObjectsPage() {
     data: objects,
     isLoading,
     error,
+    refetch,
   } = useGetObjects({
     pagination: { offset, limit },
     sort: { field, order },
