@@ -9,7 +9,6 @@ import {
 import AddTariffCard from "./_components/add-tariff-card";
 import { getServicesAction } from "@/actions/service/get-services-action";
 import { Service } from "@/types/interfaces/service";
-import { Object } from "@/types/interfaces/object";
 import { getObjectsAction } from "@/actions/object/get-objects-action";
 
 interface PageProps {
@@ -36,7 +35,9 @@ async function ServicesTariffsPage({ params }: PageProps) {
 
   return (
     <div className="flex  gap-4 flex-wrap">
-      <AddTariffCard objects={objects.data} />
+      <Card className="p-3 flex flex-col items-center justify-center space-y-4 w-[350px]">
+        <AddTariffCard objects={objects.data} />
+      </Card>
 
       {filteredServices.map((service) => (
         <Card key={service.id} className="w-[350px]">

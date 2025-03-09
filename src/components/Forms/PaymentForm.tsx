@@ -11,13 +11,31 @@ interface PaymentFormProps {
 }
 
 function generateSignature(data: Record<string, string>, secretKey: string) {
-  const sortedKeys = Object.keys(data).sort();
-  const signString = sortedKeys.map((key) => data[key]).join(":");
+  console.log("Generating signature for:", data);
+  console.log("Using secret key:", secretKey);
 
-  return crypto
-    .createHash("md5")
-    .update(signString + ":" + secretKey)
-    .digest("hex");
+  // Step 1: Filter fields with the "ik_" prefix
+  const filteredData = Object.keys(data)
+    .filter((key) => key.startsWith("ik_")) // Only take ik_ fields
+    .sort() // Step 2: Sort keys alphabetically
+    .reduce((acc, key) => {
+      acc[key] = data[key]; // Preserve sorted order
+      return acc;
+    }, {} as Record<string, string>);
+
+  // Step 3: Concatenate values using ":"
+  const signString = Object.values(filteredData).join(":") + ":" + secretKey;
+
+  console.log("Concatenated string for signature:", signString);
+
+  // Step 4: Hash with SHA-256 and encode in Base64
+  const signature = crypto
+    .createHash("sha256")
+    .update(signString)
+    .digest("base64");
+
+  console.log("Generated signature:", signature);
+  return signature;
 }
 
 export function PaymentForm({
