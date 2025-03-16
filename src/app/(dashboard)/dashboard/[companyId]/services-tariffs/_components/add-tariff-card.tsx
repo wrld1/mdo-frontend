@@ -37,7 +37,9 @@ export default function AddTariffCard({
     <>
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          {!noIcon && (
+          {noIcon ? (
+            <p className="text-sm">Додати статтю нарахувань</p>
+          ) : (
             <Button variant="outline" className="w-20 h-20 rounded-full">
               <CirclePlus className={cn("w-8 h-8", className)} />
             </Button>
@@ -57,9 +59,11 @@ export default function AddTariffCard({
           />
         </DialogContent>
       </Dialog>
-      <p className="text-sm text-gray-500 dark:text-gray-400">
-        Додати статтю нарахувань
-      </p>
+      {!noIcon && (
+        <p className="text-sm text-gray-500 dark:text-gray-400">
+          Додати статтю нарахувань
+        </p>
+      )}
     </>
   );
 }

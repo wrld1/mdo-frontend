@@ -14,21 +14,16 @@ function generateSignature(data: Record<string, string>, secretKey: string) {
   console.log("Generating signature for:", data);
   console.log("Using secret key:", secretKey);
 
-  // Step 1: Filter fields with the "ik_" prefix
   const filteredData = Object.keys(data)
-    .filter((key) => key.startsWith("ik_")) // Only take ik_ fields
-    .sort() // Step 2: Sort keys alphabetically
+    .filter((key) => key.startsWith("ik_"))
+    .sort()
     .reduce((acc, key) => {
-      acc[key] = data[key]; // Preserve sorted order
+      acc[key] = data[key];
       return acc;
     }, {} as Record<string, string>);
 
-  // Step 3: Concatenate values using ":"
   const signString = Object.values(filteredData).join(":") + ":" + secretKey;
 
-  console.log("Concatenated string for signature:", signString);
-
-  // Step 4: Hash with SHA-256 and encode in Base64
   const signature = crypto
     .createHash("sha256")
     .update(signString)
@@ -62,6 +57,7 @@ export function PaymentForm({
       method="POST"
       action="https://sci.interkassa.com/"
       acceptCharset="UTF-8"
+      target="_blank"
     >
       {Object.entries(paymentData).map(([key, value]) => (
         <input key={key} type="hidden" name={key} value={value} />

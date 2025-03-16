@@ -36,7 +36,7 @@ export default async function ObjectPage({
         </CardHeader>
       </Card>
       <div className="flex gap-4">
-        <Button variant="secondary" className="flex items-center gap-2">
+        <Button variant="default" className="flex items-center gap-2">
           <AddTariffCard objects={objects.data} noIcon={true} />
         </Button>
       </div>
