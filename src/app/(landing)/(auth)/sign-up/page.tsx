@@ -1,6 +1,7 @@
 import SignUpForm from "@/components/Forms/SignUpForm";
 import Link from "next/link";
 import { MoveRight } from "lucide-react";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 
 function SignUpPage() {
   return (
@@ -12,7 +13,16 @@ function SignUpPage() {
         </p>
       </div>
       <div className="lg:w-1/2 flex items-center justify-center">
-        <SignUpForm />
+        <Tabs defaultValue="email" className="w-[400px]">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="email">Email</TabsTrigger>
+            <TabsTrigger value="phoneNumber">Номер телефону</TabsTrigger>
+          </TabsList>
+          <TabsContent value="email">
+            <SignUpForm />
+          </TabsContent>
+          <TabsContent value="phoneNumber"></TabsContent>
+        </Tabs>
       </div>
       <Link
         href="/sign-in"
