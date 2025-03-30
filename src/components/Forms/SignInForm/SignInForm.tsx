@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import {
   Form,
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -19,8 +20,10 @@ import { signInAction } from "@/actions/auth/sign-in-action";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
+import { phoneRegex } from "@/lib/constants";
 
-const FormSchema = z.object({
+
+const emailSchema = z.object({
   email: z.string().email({
     message: "Введіть корректну Email адресу",
   }),
@@ -29,13 +32,32 @@ const FormSchema = z.object({
   }),
 });
 
-function SignInForm() {
+const phoneSchema = z.object({
+  phoneNumber: z.string().regex(phoneRegex, {
+    message: "Введіть корректний номер телефону",
+  }),
+  password: z.string().nonempty({
+    message: "Пароль не може бути порожнім",
+  }),
+});
+
+const getFormSchema = (authType: "email" | "phone") => {
+  return authType === "email" ? emailSchema : phoneSchema;
+};
+
+interface SignInFormProps {
+  authType: "email" | "phone";
+}
+
+function SignInForm({ authType }: SignInFormProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
+
+  const FormSchema = getFormSchema(authType);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
+      ...(authType === "email" ? { email: "" } : { phoneNumber: "" }),
       password: "",
     },
   });
@@ -43,7 +65,12 @@ function SignInForm() {
   const router = useRouter();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const result = await signInAction(data);
+    const submitData = {
+      ...data,
+      authType,
+    };
+
+    const result = await signInAction(submitData);
 
     if (result?.error) {
       toast({
@@ -51,6 +78,13 @@ function SignInForm() {
         title: "Не вдалося увійти",
         description: result.error,
       });
+    } else if (authType === "phone" && result?.otpSent && result?.userId) {
+      toast({
+        title: "Код підтвердження надіслано",
+        description: "Введіть код, який ви отримали по SMS",
+      });
+      
+      router.push(`/verify-otp?userId=${result.userId}`);
     } else {
       toast({
         title: "Авторизація успішна",
@@ -62,20 +96,39 @@ function SignInForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="Введіть Email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+      {authType === "email" ? (
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="Введіть Email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Номер телефону</FormLabel>
+                <FormControl>
+                  <Input type="tel" placeholder="+380XXXXXXXXX" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Введіть номер телефону у форматі +380XXXXXXXXX
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="password"

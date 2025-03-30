@@ -19,9 +19,11 @@ function SignUpPage() {
             <TabsTrigger value="phoneNumber">Номер телефону</TabsTrigger>
           </TabsList>
           <TabsContent value="email">
-            <SignUpForm />
+            <SignUpForm authType="email" />
           </TabsContent>
-          <TabsContent value="phoneNumber"></TabsContent>
+          <TabsContent value="phoneNumber">
+            <SignUpForm authType="phone" />
+          </TabsContent>
         </Tabs>
       </div>
       <Link

@@ -18,38 +18,65 @@ import { Input } from "@/components/ui/input";
 import { toast } from "@/components/ui/use-toast";
 import { signUpAction } from "@/actions/auth/sign-up-action";
 import { useRouter } from "next/navigation";
-import { passwordValidation } from "@/lib/constants";
+import { passwordValidation, phoneRegex } from "@/lib/constants";
 import { EyeIcon, EyeOffIcon } from "lucide-react";
 import { useState } from "react";
 
-const FormSchema = z
+const passwordSchema = z
+  .string()
+  .min(8, { message: "Має містити щонайменше 8 символів" })
+  .regex(passwordValidation, {
+    message: "Некоректний пароль",
+  });
+
+const repeatPasswordSchema = z
+  .string()
+  .min(8, { message: "Має містити щонайменше 8 символів" });
+
+const emailSchema = z
   .object({
     email: z.string().email({
       message: "Введіть корректну Email адресу",
     }),
-    password: z
-      .string()
-      .min(8, { message: "Має містити щонайменше 8 символів" })
-      .regex(passwordValidation, {
-        message: "Некоректний пароль",
-      }),
-    repeatPassword: z
-      .string()
-      .min(8, { message: "Має містити щонайменше 8 символів" }),
+    password: passwordSchema,
+    repeatPassword: repeatPasswordSchema,
   })
   .refine((data) => data.password === data.repeatPassword, {
     path: ["repeatPassword"],
     message: "Паролі мають співпадати",
   });
 
-function SignUpForm() {
+const phoneSchema = z
+  .object({
+    phoneNumber: z.string().regex(phoneRegex, {
+      message: "Введіть корректний номер телефону",
+    }),
+    password: passwordSchema,
+    repeatPassword: repeatPasswordSchema,
+  })
+  .refine((data) => data.password === data.repeatPassword, {
+    path: ["repeatPassword"],
+    message: "Паролі мають співпадати",
+  });
+
+const getFormSchema = (authType: "email" | "phone") => {
+  return authType === "email" ? emailSchema : phoneSchema;
+};
+
+interface SignUpFormProps {
+  authType: "email" | "phone";
+}
+
+function SignUpForm({ authType }: SignUpFormProps) {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [showRepeatPassword, setShowRepeatPassword] = useState<boolean>(false);
+
+  const FormSchema = getFormSchema(authType);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
+      ...(authType === "email" ? { email: "" } : { phoneNumber: "" }),
       password: "",
       repeatPassword: "",
     },
@@ -58,7 +85,12 @@ function SignUpForm() {
   const router = useRouter();
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    const result = await signUpAction(data);
+    const submitData = {
+      ...data,
+      authType,
+    };
+
+    const result = await signUpAction(submitData);
 
     if (result?.error) {
       toast({
@@ -78,20 +110,38 @@ function SignUpForm() {
   return (
     <Form {...form}>
       <form className="space-y-6" onSubmit={form.handleSubmit(onSubmit)}>
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input type="email" placeholder="Введіть Email" {...field} />
-              </FormControl>
-
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+        {authType === "email" ? (
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Email</FormLabel>
+                <FormControl>
+                  <Input type="email" placeholder="Введіть Email" {...field} />
+                </FormControl>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        ) : (
+          <FormField
+            control={form.control}
+            name="phoneNumber"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Номер телефону</FormLabel>
+                <FormControl>
+                  <Input type="tel" placeholder="+380XXXXXXXXX" {...field} />
+                </FormControl>
+                <FormDescription>
+                  Введіть номер телефону у форматі +380XXXXXXXXX
+                </FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+        )}
         <FormField
           control={form.control}
           name="password"
