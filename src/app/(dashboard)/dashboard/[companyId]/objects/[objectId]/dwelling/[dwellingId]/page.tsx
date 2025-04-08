@@ -1,8 +1,7 @@
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
-import DwellingListTable from "../../_components/dwelling-list-table";
-import { UpdateObjectModal } from "../../_components/update-object-modal";
 import { getDwellingAction } from "@/actions/dwelling/get-dwelling-action";
 import { Dwelling } from "@/types/interfaces/dwelling";
+import { UpdateDwellingForm } from "@/components/Forms/UpdateDwellingForm";
 
 export default async function DwellingPage({
   params,
@@ -21,7 +20,7 @@ export default async function DwellingPage({
               <span>Поверх: {dwelling.floor}</span>
               <span>Особовий рахунок номер {dwelling.id}</span>
             </div>
-            {/* <UpdateObjectModal objectId={params.objectId} /> */}
+            <UpdateDwellingForm dwellingId={params.dwellingId} />
           </div>
         </CardHeader>
       </Card>
