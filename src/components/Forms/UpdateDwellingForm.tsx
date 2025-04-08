@@ -18,7 +18,7 @@ import { useToast } from "@/components/ui/use-toast";
 import { useParams } from "next/navigation";
 import { Pencil } from "lucide-react";
 import { useQueryClient } from "@tanstack/react-query";
-// import { updateDwellingAction } from "@/actions/dwelling/update-dwelling-action";
+import { updateDwellingAction } from "@/actions/dwelling/update-dwelling-action";
 
 type FormData = {
   number: number;
@@ -41,26 +41,26 @@ export function UpdateDwellingForm({ dwellingId }: { dwellingId: number }) {
     : params.objectId;
   const queryClient = useQueryClient();
 
-  //   const onSubmit = async (data: FormData) => {
-  //     try {
-  //       const result = await updateDwellingAction(data, dwellingId, objectId);
-  //       if (!result?.error) {
-  //         toast({
-  //           title: "Успішно",
-  //           description: "Приміщення успішно відредаговано",
-  //         });
-  //         setOpen(false);
-  //         reset();
-  //         queryClient.invalidateQueries({ queryKey: ["get-dwellings"] });
-  //       }
-  //     } catch (error) {
-  //       toast({
-  //         title: "Error",
-  //         description: "Не вдалося оновити приміщення. Спробуйте пізніше",
-  //         variant: "destructive",
-  //       });
-  //     }
-  //   };
+  const onSubmit = async (data: FormData) => {
+    try {
+      const result = await updateDwellingAction(data, dwellingId, objectId);
+      if (!result?.error) {
+        toast({
+          title: "Успішно",
+          description: "Приміщення успішно відредаговано",
+        });
+        setOpen(false);
+        reset();
+        queryClient.invalidateQueries({ queryKey: ["get-dwellings"] });
+      }
+    } catch (error) {
+      toast({
+        title: "Помилка",
+        description: "Не вдалося оновити приміщення. Спробуйте пізніше",
+        variant: "destructive",
+      });
+    }
+  };
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
@@ -77,7 +77,7 @@ export function UpdateDwellingForm({ dwellingId }: { dwellingId: number }) {
             Змініть властивості. Натисніть зберегти зміни коли ви готові.
           </DialogDescription>
         </DialogHeader>
-        <form>
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <Label htmlFor="number" className="text-right">
