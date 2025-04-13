@@ -31,7 +31,7 @@ export default async function DwellingPage({
     : [];
 
   return (
-    <div className="p-6 space-y-4 flex flex-col">
+    <div className="space-y-4 flex flex-col">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>Квартира номер {dwelling.number}</CardTitle>
@@ -51,7 +51,7 @@ export default async function DwellingPage({
         <CardHeader>
           <CardTitle>Підключені послуги</CardTitle>
         </CardHeader>
-        <CardContent>
+        <CardContent className="p-0">
           {services.length > 0 ? (
             <Table>
               <TableHeader>
