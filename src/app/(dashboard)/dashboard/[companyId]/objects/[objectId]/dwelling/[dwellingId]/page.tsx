@@ -13,7 +13,7 @@ import {
   TableCell,
   Table,
 } from "@/components/ui/table";
-import Image from "next/image";
+import Link from "next/link";
 
 export default async function DwellingPage({
   params,
@@ -21,6 +21,8 @@ export default async function DwellingPage({
   params: { dwellingId: number };
 }) {
   const dwelling: Dwelling = await getDwellingAction(params.dwellingId);
+
+  console.log("dwelling", dwelling);
 
   const servicesResult = await getServicesAction();
 
@@ -78,7 +80,7 @@ export default async function DwellingPage({
                       )} */}
                     </TableCell>
                     <TableCell className="font-medium">
-                      {service.name}
+                      <Link href={`/${service.id}`}>{service.name}</Link>
                     </TableCell>
                     <TableCell>{service.description}</TableCell>
                     <TableCell className="text-right">

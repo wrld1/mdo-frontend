@@ -29,7 +29,13 @@ import { verifyUser } from "@/utils/functions.server";
 const formSchema = z.object({
   name: z.string().min(1, "Назва обов'язкова"),
   description: z.string().min(1, "Опис обов'язковий"),
-  type: z.enum(["ELECTRICITY", "WATER", "GAS", "OTHER"] as const),
+  type: z.enum([
+    "ELECTRICITY",
+    "WATER",
+    "GAS",
+    "ORGANIZATION",
+    "OTHER",
+  ] as const),
   objectId: z.string().min(1, "Об'єкт обов'язковий"),
   //   dwellingId: z.number().optional(),
   responsibleUserId: z.number().optional(),
@@ -132,6 +138,7 @@ export default function CreateOrderForm({
                   <SelectItem value="ELECTRICITY">Електрика</SelectItem>
                   <SelectItem value="WATER">Вода</SelectItem>
                   <SelectItem value="GAS">Газ</SelectItem>
+                  <SelectItem value="ORGANIZATION">Організація</SelectItem>
                   <SelectItem value="OTHER">Інше</SelectItem>
                 </SelectContent>
               </Select>

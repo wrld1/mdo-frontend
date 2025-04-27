@@ -16,7 +16,12 @@ export interface Order {
   orderStatus: OrderStatus;
 }
 
-export type OrderType = "ELECTRICITY" | "WATER" | "GAS" | "OTHER";
+export type OrderType =
+  | "ELECTRICITY"
+  | "WATER"
+  | "GAS"
+  | "ORGANIZATION"
+  | "OTHER";
 export type OrderStatus =
   | "RECEIVED"
   | "IN_PROGRESS"

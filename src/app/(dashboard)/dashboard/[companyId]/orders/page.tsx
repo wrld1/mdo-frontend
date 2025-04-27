@@ -11,6 +11,8 @@ import { getOrdersAction } from "@/actions/order/get-orders-action";
 import { Order } from "@/types/interfaces/order";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { Loader2 } from "lucide-react";
+import { ConfirmButton } from "./_components/ConfirmButton";
 
 interface PageProps {
   params: {
@@ -57,6 +59,16 @@ async function OrdersPage({ params }: PageProps) {
               </p>
               <p> Вартість: {order.price} грн</p>
               <p> Тип: {order.type}</p>
+              {order.type === "ORGANIZATION" &&
+                order.orderStatus !== "FINISHED" && (
+                  <ConfirmButton orderId={order.id} />
+                )}
+              {order.type === "ORGANIZATION" &&
+                order.orderStatus === "FINISHED" && (
+                  <p className="text-green-600 font-semibold mt-2">
+                    Володіння підтверджено
+                  </p>
+                )}
             </CardContent>
             {/* <CardFooter className="flex justify-between">
             <Button variant="outline">Cancel</Button>
