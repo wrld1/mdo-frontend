@@ -14,23 +14,27 @@ import {
   Table,
 } from "@/components/ui/table";
 import Link from "next/link";
+import { getDwellingServicesAction } from "@/actions/dwelling-service/get-dwelling-services";
 
-export default async function DwellingPage({
-  params,
-}: {
-  params: { dwellingId: number };
-}) {
+interface PageProps {
+  params: {
+    dwellingId: number;
+    companyId: string;
+    objectId: string;
+  };
+}
+
+export default async function DwellingPage({ params }: PageProps) {
+  const { dwellingId, companyId, objectId } = params;
+
+  //return ?serviceus=true later
   const dwelling: Dwelling = await getDwellingAction(params.dwellingId);
 
-  console.log("dwelling", dwelling);
+  const dwellingServices = await getDwellingServicesAction(params.dwellingId);
 
-  const servicesResult = await getServicesAction();
+  console.log("dwellingServices", dwellingServices);
 
-  const services: Service[] = Array.isArray(servicesResult)
-    ? servicesResult.filter(
-        (service) => service.dwellingId === +params.dwellingId
-      )
-    : [];
+  // console.log("servicesResult", servicesResult);
 
   return (
     <div className="space-y-4 flex flex-col">
@@ -54,7 +58,7 @@ export default async function DwellingPage({
           <CardTitle>Підключені послуги</CardTitle>
         </CardHeader>
         <CardContent className="p-0">
-          {services.length > 0 ? (
+          {dwellingServices.length > 0 ? (
             <Table>
               <TableHeader>
                 <TableRow>
@@ -65,7 +69,7 @@ export default async function DwellingPage({
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {services.map((service) => (
+                {dwellingServices.map(({ service }: { service: Service }) => (
                   <TableRow key={service.id}>
                     <TableCell>
                       {/* {service.logo && (
@@ -80,7 +84,11 @@ export default async function DwellingPage({
                       )} */}
                     </TableCell>
                     <TableCell className="font-medium">
-                      <Link href={`/${service.id}`}>{service.name}</Link>
+                      <Link
+                        href={`/dashboard/${companyId}/objects/${objectId}/dwelling/${dwellingId}/${service.id}`}
+                      >
+                        {service.name}
+                      </Link>
                     </TableCell>
                     <TableCell>{service.description}</TableCell>
                     <TableCell className="text-right">
