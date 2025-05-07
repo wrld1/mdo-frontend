@@ -69,10 +69,11 @@ export default async function DwellingPage({ params }: PageProps) {
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {dwellingServices.map(({ service }: { service: Service }) => (
-                  <TableRow key={service.id}>
-                    <TableCell>
-                      {/* {service.logo && (
+                {dwellingServices.map(
+                  ({ id, service }: { id: number; service: Service }) => (
+                    <TableRow key={service.id}>
+                      <TableCell>
+                        {/* {service.logo && (
                         <div className="relative h-10 w-10">
                           <Image
                             src={service.logo}
@@ -82,20 +83,22 @@ export default async function DwellingPage({ params }: PageProps) {
                           />
                         </div>
                       )} */}
-                    </TableCell>
-                    <TableCell className="font-medium">
-                      <Link
-                        href={`/dashboard/${companyId}/objects/${objectId}/dwelling/${dwellingId}/${service.id}`}
-                      >
-                        {service.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>{service.description}</TableCell>
-                    <TableCell className="text-right">
-                      {service.price} грн
-                    </TableCell>
-                  </TableRow>
-                ))}
+                      </TableCell>
+                      <TableCell className="font-medium">
+                        <Link
+                          className="hover:underline"
+                          href={`/dashboard/${companyId}/objects/${objectId}/dwelling/${dwellingId}/${id}`}
+                        >
+                          {service.name}
+                        </Link>
+                      </TableCell>
+                      <TableCell>{service.description}</TableCell>
+                      <TableCell className="text-right">
+                        {service.price} грн
+                      </TableCell>
+                    </TableRow>
+                  )
+                )}
               </TableBody>
             </Table>
           ) : (
