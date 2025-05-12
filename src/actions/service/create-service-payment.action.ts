@@ -9,7 +9,7 @@ import { revalidatePath } from "next/cache";
 export interface CreateServicePaymentDto {
   startDate: string;
   endDate: string;
-  amount: number;
+  amount?: number;
   counter: number;
   status?: PaymentStatus;
 }

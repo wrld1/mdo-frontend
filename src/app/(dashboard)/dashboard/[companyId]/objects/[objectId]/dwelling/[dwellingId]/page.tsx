@@ -32,7 +32,7 @@ export default async function DwellingPage({ params }: PageProps) {
 
   const dwellingServices = await getDwellingServicesAction(params.dwellingId);
 
-  console.log("dwellingServices", dwellingServices);
+  // console.log("dwellingServices", dwellingServices);
 
   // console.log("servicesResult", servicesResult);
 

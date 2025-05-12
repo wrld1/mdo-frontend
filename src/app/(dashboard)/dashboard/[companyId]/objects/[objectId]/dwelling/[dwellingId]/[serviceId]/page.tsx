@@ -88,7 +88,7 @@ const generateExamplePayments = () => {
 
 const examplePayments = generateExamplePayments();
 
-console.log("examplePayments", examplePayments);
+// console.log("examplePayments", examplePayments);
 
 export default async function DwellingServicePage({
   params,
