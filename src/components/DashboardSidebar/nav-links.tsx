@@ -24,6 +24,7 @@ import {
   SidebarMenuItem,
   useSidebar,
 } from "@/components/ui/sidebar";
+import { Badge } from "../ui/badge";
 
 export function NavLinks({
   links,
@@ -32,6 +33,7 @@ export function NavLinks({
     name: string;
     url: string;
     icon: LucideIcon;
+    badgeValue?: string;
   }[];
 }) {
   const { isMobile } = useSidebar();
@@ -46,9 +48,12 @@ export function NavLinks({
               <a href={item.url}>
                 <item.icon />
                 <span>{item.name}</span>
+                {item.badgeValue && (
+                  <Badge className="ml-2">{item.badgeValue}</Badge>
+                )}
               </a>
             </SidebarMenuButton>
-            <DropdownMenu>
+            {/* <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <SidebarMenuAction showOnHover>
                   <MoreHorizontal />
@@ -74,15 +79,15 @@ export function NavLinks({
                   <span>Delete Project</span>
                 </DropdownMenuItem>
               </DropdownMenuContent>
-            </DropdownMenu>
+            </DropdownMenu> */}
           </SidebarMenuItem>
         ))}
-        <SidebarMenuItem>
+        {/* <SidebarMenuItem>
           <SidebarMenuButton className="text-sidebar-foreground/70">
             <MoreHorizontal className="text-sidebar-foreground/70" />
             <span>More</span>
           </SidebarMenuButton>
-        </SidebarMenuItem>
+        </SidebarMenuItem> */}
       </SidebarMenu>
     </SidebarGroup>
   );

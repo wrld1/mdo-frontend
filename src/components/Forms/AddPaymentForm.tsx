@@ -127,7 +127,7 @@ export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
                       id="dateRange"
                       variant={"outline"}
                       className={cn(
-                        "w-full justify-start text-left font-normal", // Full width
+                        "w-full justify-start text-left font-normal",
                         !field.value?.from && "text-muted-foreground"
                       )}
                     >

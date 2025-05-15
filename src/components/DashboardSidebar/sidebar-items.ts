@@ -163,6 +163,11 @@ export const generateSidebarData = (
           },
         ],
       },
+      {
+        title: "Заявки",
+        url: `/dashboard/${companyId}/orders`,
+        icon: Frame,
+      },
     ],
     navLinks: [
       {
