@@ -23,11 +23,13 @@ import { NavLinks } from "./nav-links";
 interface AppSidebarProps extends React.ComponentProps<typeof Sidebar> {
   user: UserResponse | null;
   companiesWithAccess: CompanyWithAccess[];
+  ordersCount?: number;
 }
 
 export function AppSidebar({
   user,
   companiesWithAccess,
+  ordersCount,
   ...props
 }: AppSidebarProps) {
   const params = useParams();
@@ -37,7 +39,11 @@ export function AppSidebar({
     ? params.companyId[0]
     : params.companyId;
 
-  const sidebarData = generateSidebarData(companiesWithAccess, companyId);
+  const sidebarData = generateSidebarData(
+    companiesWithAccess,
+    companyId,
+    ordersCount
+  );
   const isAdmin = hasAdminAccess(user);
   const isAdminRoute = pathname?.includes("admin");
 

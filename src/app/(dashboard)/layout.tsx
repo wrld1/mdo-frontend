@@ -27,6 +27,7 @@ import { CompanyWithAccess } from "@/types/interfaces/company";
 import { getCompanyAccess } from "@/utils/getCompanyAccess";
 import Provider from "../_provider";
 import { fetchCompaniesWithAccess } from "@/utils/fetchCompaniesWithAccess";
+import AppSidebarWrapper from "@/components/DashboardSidebar/app-sidebar-wrapper";
 
 export const metadata: Metadata = {
   title: "Панель управління | OSBB Project Management",
@@ -39,8 +40,10 @@ const fontSans = FontSans({
 
 export default async function ProfileLayout({
   children,
+  params,
 }: Readonly<{
   children: React.ReactNode;
+  params: { companyId: string };
 }>) {
   const { userId } = await verifyUser();
   let user: UserResponse | null = null;
@@ -73,7 +76,11 @@ export default async function ProfileLayout({
       >
         <Provider>
           <SidebarProvider>
-            <AppSidebar user={user} companiesWithAccess={companiesWithAccess} />
+            <AppSidebarWrapper
+              user={user}
+              companiesWithAccess={companiesWithAccess}
+              companyId={params.companyId}
+            />
             <SidebarInset>
               <header className="flex h-16 shrink-0 items-center gap-2 transition-[width,height] ease-linear group-has-[[data-collapsible=icon]]/sidebar-wrapper:h-12">
                 <div className="flex items-center gap-2 px-4">

@@ -1,5 +1,3 @@
-"use client";
-
 import {
   Folder,
   Forward,
@@ -36,8 +34,6 @@ export function NavLinks({
     badgeValue?: string;
   }[];
 }) {
-  const { isMobile } = useSidebar();
-
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
       <SidebarGroupLabel>Посилання</SidebarGroupLabel>

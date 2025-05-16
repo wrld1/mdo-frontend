@@ -1,0 +1,29 @@
+import { getOrdersAction } from "@/actions/order/get-orders-action";
+import { AppSidebar } from "./app-sidebar";
+import { UserResponse } from "@/types/interfaces/user";
+import { CompanyWithAccess } from "@/types/interfaces/company";
+
+interface AppSidebarServerProps {
+  user: UserResponse | null;
+  companiesWithAccess: CompanyWithAccess[];
+  companyId: string;
+}
+
+export default async function AppSidebarWrapper({
+  user,
+  companiesWithAccess,
+  companyId,
+}: AppSidebarServerProps) {
+  const orders = await getOrdersAction({ companyId });
+  console.log("orders", orders);
+
+  const ordersCount = Array.isArray(orders) ? orders.length : 0;
+
+  return (
+    <AppSidebar
+      user={user}
+      companiesWithAccess={companiesWithAccess}
+      ordersCount={ordersCount}
+    />
+  );
+}

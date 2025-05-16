@@ -36,6 +36,7 @@ interface NavLink {
   name: string;
   url: string;
   icon: LucideIcon;
+  badgeValue?: string;
 }
 
 interface SidebarData {
@@ -47,7 +48,8 @@ interface SidebarData {
 
 export const generateSidebarData = (
   companiesWithAccess: CompanyWithAccess[],
-  companyId: string
+  companyId: string,
+  ordersCount?: number
 ): SidebarData => {
   return {
     companies: companiesWithAccess.map((company) => ({
@@ -174,6 +176,8 @@ export const generateSidebarData = (
         name: "Заявки",
         url: `/dashboard/${companyId}/orders`,
         icon: Frame,
+        badgeValue:
+          ordersCount && ordersCount > 0 ? String(ordersCount) : undefined,
       },
       // {
       //   name: "Sales & Marketing",
