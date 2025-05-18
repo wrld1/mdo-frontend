@@ -95,7 +95,7 @@ export const generateSidebarData = (
         items: [
           {
             title: "Показники лічильників",
-            url: "#",
+            url: `/dashboard/${companyId}/services-tariffs/import-data`,
           },
           {
             title: "Індивідуальні лічильники",
@@ -161,14 +161,9 @@ export const generateSidebarData = (
           },
           {
             title: "Показники лічильників",
-            url: "#",
+            url: `#`,
           },
         ],
-      },
-      {
-        title: "Заявки",
-        url: `/dashboard/${companyId}/orders`,
-        icon: Frame,
       },
     ],
     navLinks: [
