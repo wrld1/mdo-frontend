@@ -1,4 +1,4 @@
-import { Object } from "./object";
+import { ObjectResponse } from "./object";
 
 export interface Service {
   id: number;
@@ -8,5 +8,5 @@ export interface Service {
   logo: string;
   objectId?: string;
   dwellingId?: number;
-  object: Object;
+  object: ObjectResponse;
 }

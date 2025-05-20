@@ -2,10 +2,10 @@ import { getObjectAction } from "@/actions/object/get-object-action";
 import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import DwellingListTable from "./_components/dwelling-list-table";
 import { UpdateObjectModal } from "./_components/update-object-modal";
-import { Object } from "@/types/interfaces/object";
 import { Button } from "@/components/ui/button";
 import AddTariffCard from "../../services-tariffs/_components/add-tariff-card";
 import { getObjectsAction } from "@/actions/object/get-objects-action";
+import { ObjectResponse } from "@/types/interfaces/object";
 
 export default async function ObjectPage({
   params,
@@ -13,7 +13,7 @@ export default async function ObjectPage({
   params: { objectId: string; companyId: string };
 }) {
   const { companyId } = params;
-  const object: Object = await getObjectAction(params.objectId);
+  const object: ObjectResponse = await getObjectAction(params.objectId);
 
   const objects = await getObjectsAction({
     pagination: { offset: 0, limit: 100 },

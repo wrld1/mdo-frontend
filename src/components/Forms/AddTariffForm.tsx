@@ -23,7 +23,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { toast } from "@/components/ui/use-toast";
 import { createServiceAction } from "@/actions/service/create-service-action";
-import { Object } from "@/types/interfaces/object";
+import { ObjectResponse } from "@/types/interfaces/object";
 import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
@@ -35,7 +35,7 @@ const formSchema = z.object({
 });
 
 interface AddTariffFormProps {
-  objects: Object[];
+  objects: ObjectResponse[];
   onSuccess?: () => void;
   onCancel?: () => void;
 }

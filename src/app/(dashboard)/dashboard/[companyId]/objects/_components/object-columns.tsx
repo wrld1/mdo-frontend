@@ -7,7 +7,7 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
-import { Object } from "@/types/interfaces/object";
+import { ObjectResponse } from "@/types/interfaces/object";
 import { DropdownMenuTrigger } from "@radix-ui/react-dropdown-menu";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowUpDown, MoreHorizontal, Pencil } from "lucide-react";
@@ -31,7 +31,7 @@ const AddressCell = ({ row }: { row: any }) => {
   );
 };
 
-export const columns: ColumnDef<Object>[] = [
+export const columns: ColumnDef<ObjectResponse>[] = [
   {
     accessorKey: "address",
     header: ({ column }) => {

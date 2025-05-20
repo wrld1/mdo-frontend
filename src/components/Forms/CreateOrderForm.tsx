@@ -23,7 +23,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Textarea } from "@/components/ui/textarea";
-import { Object } from "@/types/interfaces/object";
+import { ObjectResponse } from "@/types/interfaces/object";
 import { verifyUser } from "@/utils/functions.server";
 
 const formSchema = z.object({
@@ -42,7 +42,7 @@ const formSchema = z.object({
 });
 
 interface CreateOrderFormProps {
-  objects: Object[];
+  objects: ObjectResponse[];
   companyId: string;
 }
 

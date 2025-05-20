@@ -12,12 +12,12 @@ import {
   DialogTitle,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Object } from "@/types/interfaces/object";
+import { ObjectResponse } from "@/types/interfaces/object";
 import AddTariffForm from "@/components/Forms/AddTariffForm";
 import { cn } from "@/lib/utils";
 
 interface AddTariffCardProps {
-  objects: Object[];
+  objects: ObjectResponse[];
   className?: string;
   noIcon?: boolean;
 }

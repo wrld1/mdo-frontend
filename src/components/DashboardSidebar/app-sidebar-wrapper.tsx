@@ -15,7 +15,6 @@ export default async function AppSidebarWrapper({
   companyId,
 }: AppSidebarServerProps) {
   const orders = await getOrdersAction({ companyId });
-  console.log("orders", orders);
 
   const ordersCount = Array.isArray(orders) ? orders.length : 0;
 

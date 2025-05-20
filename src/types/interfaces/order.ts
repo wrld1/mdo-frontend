@@ -1,12 +1,12 @@
 import { Dwelling } from "./dwelling";
-import { Object } from "./object";
+import { ObjectResponse } from "./object";
 import { UserResponse } from "./user";
 
 export interface Order {
   id: string;
   name: string;
   description: string;
-  object: Object;
+  object: ObjectResponse;
   dwelling?: Dwelling;
   createdAt: Date;
   type: OrderType;
