@@ -6,9 +6,10 @@ import { timestampToDate } from "./lib/utils";
 import { decrypt } from "./lib/auth";
 import { getUserAction } from "./actions/user/get-user-action";
 import { sendVerificationAction } from "./actions/auth/send-verification-action";
+import { isActionError } from "./types/guards/isActionError";
 
 export async function middleware(req: NextRequest) {
-  const { isAuth, userId } = await verifyUser();
+  const { isAuth, userId, isVerified } = await verifyUser();
   const refreshToken = cookies().get("refreshToken")?.value;
 
   const protectedRoutes = ["/dashboard", "/settings"];
@@ -55,11 +56,11 @@ export async function middleware(req: NextRequest) {
     }
   }
 
-  if (isProtectedRoute && isAuth && userId) {
+  if (isProtectedRoute && !isVerified && isAuth && userId) {
     try {
       const user = await getUserAction(userId);
 
-      if (user && "isVerified" in user && !user.isVerified) {
+      if (!isActionError(user)) {
         await sendVerificationAction({ email: user.email });
         const response = NextResponse.redirect(
           new URL("/verification-required", req.url)

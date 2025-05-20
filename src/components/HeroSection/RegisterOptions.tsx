@@ -1,35 +1,8 @@
-"use client";
-
-import BlurFade from "../magicui/blur-fade";
 import { Button } from "../ui/button";
-import { getUserAction } from "@/actions/user/get-user-action";
-import { verifyUser } from "@/utils/functions.server";
-import { useEffect, useState } from "react";
-import { UserResponse } from "@/types/interfaces/user";
 import Link from "next/link";
+import BlurFade from "../magicui/blur-fade";
 
-export default function RegisterOptions() {
-  const [user, setUser] = useState<UserResponse | null>(null);
-
-  useEffect(() => {
-    async function fetchData() {
-      const { userId } = await verifyUser();
-      if (userId) {
-        const userData = await getUserAction(userId);
-        if ("error" in userData) {
-          console.error(userData.error);
-        } else {
-          setUser(userData);
-        }
-      }
-    }
-    fetchData();
-  }, []);
-
-  if (user) {
-    return null;
-  }
-
+function RegisterOptions() {
   return (
     <BlurFade delay={0.25}>
       <div className="flex flex-wrap gap-3 mb-12">
@@ -46,3 +19,5 @@ export default function RegisterOptions() {
     </BlurFade>
   );
 }
+
+export default RegisterOptions;

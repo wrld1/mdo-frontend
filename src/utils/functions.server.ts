@@ -39,13 +39,18 @@ export const verifyUser = async () => {
     }
 
     let token = await decrypt(accessTokenCookie);
+
+    if (!token) {
+      return { isAuth: false, userId: null };
+    }
+
     const userId = token?.uId as number;
 
     if (!userId) {
       return { isAuth: false, userId: null };
     }
 
-    return { isAuth: true, userId };
+    return { isAuth: true, userId, isVerified: token.isVerified };
   } catch (error) {
     getErrorMessage(error);
     return { isAuth: false, userId: null };

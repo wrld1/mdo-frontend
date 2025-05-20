@@ -5,13 +5,26 @@ import BlurFade from "../magicui/blur-fade";
 import DotPattern from "../magicui/dot-pattern";
 import HeroCard from "./HeroCard";
 import RegisterOptions from "./RegisterOptions";
+import { verifyUser } from "@/utils/functions.server";
 
 export default function HeroSection() {
   const [isVisible, setIsVisible] = useState(false);
+  const [auth, setAuth] = useState(false);
 
   useEffect(() => {
     const timer = setTimeout(() => setIsVisible(true), 100);
     return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const { isAuth } = await verifyUser();
+
+      if (isAuth) {
+        setAuth(true);
+      }
+    }
+    fetchData();
   }, []);
 
   return (
@@ -35,7 +48,7 @@ export default function HeroSection() {
             </p>
           </BlurFade>
 
-          <RegisterOptions />
+          {!auth && <RegisterOptions />}
 
           <BlurFade delay={0.35}>
             <div className="flex flex-row items-center space-x-8">
