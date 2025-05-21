@@ -1,7 +1,7 @@
 export interface ServicePayment {
   id: number;
-  startDate: string;
-  endDate: string;
+  month: number;
+  year: number;
   amount: number;
   counter: number;
   status: string;

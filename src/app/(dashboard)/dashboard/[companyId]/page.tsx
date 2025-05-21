@@ -13,6 +13,8 @@ import {
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { BentoCard, BentoGrid } from "@/components/magicui/bento-grid";
+import OrderCard from "./orders/_components/OrderCard";
+import { Badge } from "@/components/ui/badge";
 
 interface PageProps {
   params: {
@@ -93,33 +95,6 @@ export default async function CompanyPage({ params }: PageProps) {
       ),
     },
     {
-      Icon: ListOrdered,
-      name: "Огляд Заявок",
-      description: `В роботі: ${ordersInProgressCount}, Виконані: ${ordersCompletedCount}. ${
-        latestOrder
-          ? `Остання: ${latestOrder.name.substring(0, 25)}...`
-          : "Нових заявок немає."
-      }`,
-      href: `/dashboard/${companyId}/orders`,
-      cta: "Всі заявки",
-      className: "lg:col-span-2", // Give more space for orders
-      background: (
-        <div className="absolute inset-0 p-6 flex flex-col justify-center items-center bg-gradient-to-br from-green-50 via-teal-50 to-cyan-50 dark:from-green-900/30 dark:via-teal-900/30 dark:to-cyan-900/30 opacity-60">
-          {latestOrder && (
-            <div className="w-full p-3 border rounded-md bg-background/70 dark:bg-background/50 shadow-sm text-center">
-              <p className="font-semibold text-sm text-primary">
-                Остання заявка
-              </p>
-              <p className="truncate text-sm">{latestOrder.name}</p>
-              <p className="text-xs text-muted-foreground">
-                Статус: {latestOrder.orderStatus}
-              </p>
-            </div>
-          )}
-        </div>
-      ),
-    },
-    {
       Icon: Clock,
       name: `${currentTime}`,
       description: `${currentDate}`,
@@ -130,6 +105,55 @@ export default async function CompanyPage({ params }: PageProps) {
         </div>
       ),
     },
+    {
+      Icon: ListOrdered,
+      name: "Огляд Заявок",
+      description: `В роботі: ${ordersInProgressCount}, Виконані: ${ordersCompletedCount}. ${
+        latestOrder
+          ? `Остання: ${latestOrder.name.substring(0, 25)}...`
+          : "Нових заявок немає."
+      }`,
+      href: `/dashboard/${companyId}/orders`,
+      cta: "Всі заявки",
+      className: "lg:col-span-1",
+      background: (
+        <div className="absolute inset-0 p-6 flex flex-col justify-center items-center bg-gradient-to-br from-green-50 via-teal-50 to-cyan-50 dark:from-green-900/30 dark:via-teal-900/30 dark:to-cyan-900/30 opacity-60">
+          {latestOrder ? (
+            <OrderCard
+              title={latestOrder.name}
+              description={
+                latestOrder.description.substring(0, 60) +
+                (latestOrder.description.length > 60 ? "..." : "")
+              }
+              objectName={latestOrder.object.address}
+              userNickname={latestOrder.user.email}
+              price={`${latestOrder.price} грн`}
+              orderType={latestOrder.type}
+              showDefaultButton={false}
+              customActionSlot={
+                <div className="text-center w-full">
+                  <Badge
+                    variant={
+                      latestOrder.orderStatus === "FINISHED"
+                        ? "default"
+                        : "secondary"
+                    }
+                  >
+                    {latestOrder.orderStatus}
+                  </Badge>
+                </div>
+              }
+            />
+          ) : (
+            <div className="text-center p-4 text-muted-foreground">
+              <ListOrdered className="w-10 h-10 sm:w-12 sm:h-12 mx-auto opacity-50" />
+              <p className="mt-2 text-xs sm:text-sm">Нових заявок немає</p>
+            </div>
+          )}
+        </div>
+      ),
+    },
+
     {
       Icon: LinkIcon,
       name: "Швидкі Посилання",

@@ -97,8 +97,6 @@ export default async function DwellingServicePage({
 
   const dwellingService = await getDwellingServiceByIdAction(dwellingServiceId);
 
-  console.log("dwellingService", dwellingService);
-
   return (
     <div className="space-y-6">
       <Card>

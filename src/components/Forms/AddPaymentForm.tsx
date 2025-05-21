@@ -31,29 +31,12 @@ import {
   addPaymentAction,
   CreateServicePaymentDto,
 } from "@/actions/service/create-service-payment.action";
+import { MonthPicker } from "../ui/monthpicker";
 
 const paymentFormSchema = z.object({
-  dateRange: z
-    .object({
-      from: z.date({ required_error: "Дата початку періоду обов'язкова" }),
-      to: z.date({ required_error: "Дата кінця періоду обов'язкова" }),
-    })
-    .refine((data) => data.from && data.to, {
-      message: "Необхідно обрати повний період (початок та кінець).",
-      path: ["from"],
-    })
-    .refine(
-      (data) => {
-        if (data.from && data.to) {
-          return data.from <= data.to;
-        }
-        return true;
-      },
-      {
-        message: "Дата початку не може бути пізніше дати завершення.",
-        path: ["from"],
-      }
-    ),
+  selectedMonth: z.date({
+    required_error: "Необхідно обрати місяць та рік.",
+  }),
   counter: z.coerce
     .number()
     .nonnegative("Показник лічильника не може бути негативним"),
@@ -71,28 +54,25 @@ export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
   const form = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentFormSchema),
     defaultValues: {
-      dateRange: {
-        from: new Date(),
-        to: addMonths(new Date(), 1),
-      },
+      selectedMonth: new Date(),
       counter: 0,
     },
   });
 
   const onSubmit = (values: PaymentFormValues) => {
     startTransition(async () => {
-      if (!values.dateRange.from || !values.dateRange.to) {
+      if (!values.selectedMonth) {
         toast({
           variant: "destructive",
-          title: "Помилка: Неповний період дат.",
+          title: "Помилка: Місяць не обрано.",
         });
         return;
       }
 
       const payload: CreateServicePaymentDto = {
         counter: values.counter,
-        startDate: values.dateRange.from.toISOString(),
-        endDate: values.dateRange.to.toISOString(),
+        month: values.selectedMonth.getMonth(),
+        year: values.selectedMonth.getFullYear(),
       };
       const result = await addPaymentAction(dwellingServiceId, payload);
       if ("error" in result) {
@@ -101,7 +81,10 @@ export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
           title: `Помилка створення платежу: ${result.error}`,
         });
       } else {
-        toast({ variant: "default", title: "Платіж успішно додано!" });
+        toast({
+          variant: "default",
+          title: result.message,
+        });
         form.reset();
       }
     });
@@ -116,10 +99,10 @@ export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
         <h3 className="text-lg font-medium">Додати новий платіж</h3>
         <FormField
           control={form.control}
-          name="dateRange"
+          name="selectedMonth"
           render={({ field }) => (
             <FormItem className="flex flex-col">
-              <FormLabel>Період платежу</FormLabel>
+              <FormLabel>Місяць та Рік платежу</FormLabel>
               <Popover>
                 <PopoverTrigger asChild>
                   <FormControl>
@@ -128,33 +111,24 @@ export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
                       variant={"outline"}
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !field.value?.from && "text-muted-foreground"
+                        !field.value && "text-muted-foreground"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
-                      {field.value?.from ? (
-                        field.value.to ? (
-                          <>
-                            {format(field.value.from, "LLL dd, y")} -{" "}
-                            {format(field.value.to, "LLL dd, y")}
-                          </>
-                        ) : (
-                          format(field.value.from, "LLL dd, y")
-                        )
+                      {field.value ? (
+                        format(field.value, "MMMM yyyy")
                       ) : (
-                        <span>Оберіть період</span>
+                        <span>Оберіть місяць</span>
                       )}
                     </Button>
                   </FormControl>
                 </PopoverTrigger>
                 <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    initialFocus
-                    mode="range"
-                    defaultMonth={field.value?.from}
-                    selected={field.value}
-                    onSelect={field.onChange}
-                    numberOfMonths={2}
+                  <MonthPicker
+                    selectedMonth={field.value}
+                    onMonthSelect={(date) => {
+                      field.onChange(date);
+                    }}
                   />
                 </PopoverContent>
               </Popover>
