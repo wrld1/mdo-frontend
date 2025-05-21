@@ -35,7 +35,7 @@ export function ConfirmButton({ orderId }: ConfirmOwnershipButtonProps) {
   };
 
   return (
-    <Button className="mt-2" onClick={handleClick} disabled={isLoading}>
+    <Button onClick={handleClick} disabled={isLoading}>
       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
       Підтвердити володіння
     </Button>

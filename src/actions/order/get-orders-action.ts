@@ -1,6 +1,7 @@
 "use server";
 
 import { getErrorMessage } from "@/lib/utils";
+import { Order } from "@/types/interfaces/order";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
 interface GetOrdersParams {
@@ -36,7 +37,7 @@ export async function getOrdersAction(params: GetOrdersParams) {
       }
     );
 
-    const orders = await response.json();
+    const orders: Order[] = await response.json();
 
     return orders;
   } catch (error) {

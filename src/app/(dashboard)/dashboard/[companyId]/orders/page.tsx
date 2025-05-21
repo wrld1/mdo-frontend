@@ -13,6 +13,8 @@ import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { ConfirmButton } from "./_components/ConfirmButton";
+import OrderCard from "./_components/OrderCard";
+import { isActionError } from "@/types/guards/isActionError";
 
 interface PageProps {
   params: {
@@ -23,13 +25,23 @@ interface PageProps {
 async function OrdersPage({ params }: PageProps) {
   const { companyId } = params;
 
-  const ordersData: Order[] = await getOrdersAction({
+  const ordersRes = await getOrdersAction({
     companyId,
     limit: 10,
     offset: 0,
     sortBy: "createdAt",
     sortOrder: "desc",
   });
+
+  if (isActionError(ordersRes)) {
+    return (
+      <div className="flex items-center justify-center h-full">
+        <p className="text-red-500">Error: {ordersRes.error}</p>
+      </div>
+    );
+  }
+
+  const ordersData = ordersRes;
 
   const activeOrders = ordersData.filter(
     (order) => order.orderStatus !== "FINISHED"
@@ -51,34 +63,28 @@ async function OrdersPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Заявки в роботі</h2>
           <div className="flex gap-4 flex-wrap">
             {activeOrders.map((order) => (
-              <Card key={order.id} className="w-[350px]">
-                <CardHeader>
-                  <CardTitle className="text-xl">{order.name}</CardTitle>
-                  <CardDescription className="text-lg">
-                    Опис: {order.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                  <span className="inline-block p-2 bg-slate-200 rounded-md">
-                    Об&apos;єкт: {order.object.address}
-                  </span>
-                  <p>
-                    Заявка від{" "}
-                    <span className="font-semibold"> {order.user.email}</span>
-                  </p>
-                  <p> Вартість: {order.price} грн</p>
-                  <p> Тип: {order.type}</p>
-                  {order.type === "ORGANIZATION" &&
-                    order.orderStatus !== "FINISHED" && (
+              <div key={order.id} className="w-full max-w-md">
+                <OrderCard
+                  title={order.name}
+                  description={order.description}
+                  objectName={order.object.address}
+                  userNickname={order.user.email}
+                  price={`${order.price} грн`}
+                  orderType={order.type}
+                  customActionSlot={
+                    order.type === "ORGANIZATION" &&
+                    order.orderStatus !== "FINISHED" ? (
                       <ConfirmButton orderId={order.id} />
-                    )}
-                  {/* This condition might be redundant here as these are active orders */}
-                </CardContent>
-                {/* <CardFooter className="flex justify-between">
-                <Button variant="outline">Cancel</Button>
-                <Button>Deploy</Button>
-              </CardFooter> */}
-              </Card>
+                    ) : undefined
+                  }
+                  showDefaultButton={
+                    !(
+                      order.type === "ORGANIZATION" &&
+                      order.orderStatus !== "FINISHED"
+                    ) && false
+                  }
+                />
+              </div>
             ))}
           </div>
         </div>
@@ -89,35 +95,25 @@ async function OrdersPage({ params }: PageProps) {
           <h2 className="text-2xl font-semibold mb-4">Виконані заявки</h2>
           <div className="flex gap-4 flex-wrap">
             {finishedOrders.map((order) => (
-              <Card key={order.id} className="w-[350px]">
-                <CardHeader>
-                  <CardTitle className="text-xl">{order.name}</CardTitle>
-                  <CardDescription className="text-lg">
-                    Опис: {order.description}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="flex flex-col gap-2">
-                  <span className="inline-block p-2 bg-slate-200 rounded-md">
-                    Об&apos;єкт: {order.object.address}
-                  </span>
-                  <p>
-                    Заявка від{" "}
-                    <span className="font-semibold"> {order.user.email}</span>
-                  </p>
-                  <p> Вартість: {order.price} грн</p>
-                  <p> Тип: {order.type}</p>
-                  {order.type === "ORGANIZATION" &&
-                    order.orderStatus === "FINISHED" && ( // This condition is specific to finished orders
-                      <p className="text-green-600 font-semibold mt-2">
+              <div key={order.id} className="w-full max-w-md">
+                <OrderCard
+                  title={order.name}
+                  description={order.description}
+                  objectName={order.object.address}
+                  userNickname={order.user.email}
+                  price={`${order.price} грн`}
+                  orderType={order.type}
+                  showDefaultButton={false}
+                  customActionSlot={
+                    order.type === "ORGANIZATION" &&
+                    order.orderStatus === "FINISHED" ? (
+                      <p className="text-green-600 font-semibold text-base text-center py-2">
                         Володіння підтверджено
                       </p>
-                    )}
-                </CardContent>
-                {/* <CardFooter className="flex justify-between">
-                <Button variant="outline">Cancel</Button>
-                <Button>Deploy</Button>
-              </CardFooter> */}
-              </Card>
+                    ) : undefined
+                  }
+                />
+              </div>
             ))}
           </div>
         </div>

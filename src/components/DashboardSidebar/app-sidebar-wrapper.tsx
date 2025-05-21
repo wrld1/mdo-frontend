@@ -16,7 +16,13 @@ export default async function AppSidebarWrapper({
 }: AppSidebarServerProps) {
   const orders = await getOrdersAction({ companyId });
 
-  const ordersCount = Array.isArray(orders) ? orders.length : 0;
+  const ordersCount = Array.isArray(orders)
+    ? orders.filter(
+        (order) =>
+          order.orderStatus === "RECEIVED" ||
+          order.orderStatus === "IN_PROGRESS"
+      ).length
+    : 0;
 
   return (
     <AppSidebar
