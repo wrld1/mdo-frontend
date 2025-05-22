@@ -2,6 +2,7 @@ import { AddPaymentForm } from "@/components/Forms/AddPaymentForm";
 import { HistoryChart } from "./_components/HistoryChart";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { getDwellingServiceByIdAction } from "@/actions/dwelling-service/get-dwelling-service";
+import { ServicePayment } from "@/types/interfaces/service-payment";
 
 interface DwellingServicePageProps {
   params: {
@@ -18,6 +19,14 @@ export default async function DwellingServicePage({
   const dwellingServiceId = parseInt(params.serviceId, 10);
 
   const dwellingService = await getDwellingServiceByIdAction(dwellingServiceId);
+
+  if (!dwellingService || "error" in dwellingService) {
+    return <div>Error loading service details.</div>;
+  }
+
+  const payments: ServicePayment[] = Array.isArray(dwellingService.payments)
+    ? dwellingService.payments
+    : [];
 
   console.log("payments", dwellingService.payments);
 
@@ -36,7 +45,10 @@ export default async function DwellingServicePage({
           <HistoryChart payments={dwellingService.payments} />
         </div>
         <div className="w-1-2 flex-1">
-          <AddPaymentForm dwellingServiceId={dwellingServiceId} />
+          <AddPaymentForm
+            dwellingServiceId={dwellingServiceId}
+            existingPayments={payments}
+          />
         </div>
       </div>
     </div>

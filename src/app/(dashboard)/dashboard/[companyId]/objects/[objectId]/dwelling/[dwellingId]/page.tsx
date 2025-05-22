@@ -62,7 +62,7 @@ export default async function DwellingPage({ params }: PageProps) {
             <Table>
               <TableHeader>
                 <TableRow>
-                  <TableHead className="w-[80px]"></TableHead>
+                  {/* <TableHead className="w-[80px]"></TableHead> */}
                   <TableHead>Назва</TableHead>
                   <TableHead>Опис</TableHead>
                   <TableHead className="text-right">Ціна</TableHead>
@@ -72,8 +72,8 @@ export default async function DwellingPage({ params }: PageProps) {
                 {dwellingServices.map(
                   ({ id, service }: { id: number; service: Service }) => (
                     <TableRow key={service.id}>
-                      <TableCell>
-                        {/* {service.logo && (
+                      {/* <TableCell>
+                        {service.logo && (
                         <div className="relative h-10 w-10">
                           <Image
                             src={service.logo}
@@ -82,8 +82,8 @@ export default async function DwellingPage({ params }: PageProps) {
                             className="rounded-md object-contain"
                           />
                         </div>
-                      )} */}
-                      </TableCell>
+                      )}
+                      </TableCell> */}
                       <TableCell className="font-medium">
                         <Link
                           className="hover:underline"

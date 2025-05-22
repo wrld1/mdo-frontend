@@ -1,6 +1,6 @@
 "use client";
 
-import { useTransition } from "react";
+import { useEffect, useMemo, useTransition } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -14,17 +14,14 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-
 import { toast } from "@/components/ui/use-toast";
 import { Loader2, Calendar as CalendarIcon } from "lucide-react";
-import { DateRange } from "react-day-picker";
-import { Calendar } from "@/components/ui/calendar";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
 } from "@/components/ui/popover";
-import { format, addMonths } from "date-fns";
+import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
 import {
@@ -32,6 +29,7 @@ import {
   CreateServicePaymentDto,
 } from "@/actions/service/create-service-payment.action";
 import { MonthPicker } from "../ui/monthpicker";
+import { ServicePayment } from "@/types/interfaces/service-payment";
 
 const paymentFormSchema = z.object({
   selectedMonth: z.date({
@@ -46,9 +44,13 @@ type PaymentFormValues = z.infer<typeof paymentFormSchema>;
 
 interface AddPaymentFormProps {
   dwellingServiceId: number;
+  existingPayments: ServicePayment[];
 }
 
-export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
+export function AddPaymentForm({
+  dwellingServiceId,
+  existingPayments,
+}: AddPaymentFormProps) {
   const [isPending, startTransition] = useTransition();
 
   const form = useForm<PaymentFormValues>({
@@ -59,7 +61,48 @@ export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
     },
   });
 
+  const paidMonthsDates = useMemo(() => {
+    return existingPayments.map(
+      (payment) => new Date(payment.year, payment.month - 1)
+    );
+  }, [existingPayments]);
+
+  const selectedMonthValue = form.watch("selectedMonth");
+
+  const isCurrentMonthPaid = useMemo(() => {
+    if (!selectedMonthValue) return false;
+    return paidMonthsDates.some(
+      (paidDate) =>
+        paidDate.getFullYear() === selectedMonthValue.getFullYear() &&
+        paidDate.getMonth() === selectedMonthValue.getMonth()
+    );
+  }, [selectedMonthValue, paidMonthsDates]);
+
+  useEffect(() => {
+    if (isCurrentMonthPaid) {
+      form.setError("selectedMonth", {
+        type: "manual",
+        message: "Платіж за цей місяць вже існує.",
+      });
+    } else {
+      form.clearErrors("selectedMonth");
+    }
+  }, [isCurrentMonthPaid, form, selectedMonthValue]);
+
   const onSubmit = (values: PaymentFormValues) => {
+    if (isCurrentMonthPaid) {
+      toast({
+        variant: "destructive",
+        title: "Помилка: Платіж вже існує",
+        description: "Платіж за обраний місяць та рік вже було додано.",
+      });
+      form.setError("selectedMonth", {
+        type: "manual",
+        message: "Платіж за цей місяць вже існує.",
+      });
+      return;
+    }
+
     startTransition(async () => {
       if (!values.selectedMonth) {
         toast({
@@ -107,11 +150,12 @@ export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
                 <PopoverTrigger asChild>
                   <FormControl>
                     <Button
-                      id="dateRange"
                       variant={"outline"}
                       className={cn(
                         "w-full justify-start text-left font-normal",
-                        !field.value && "text-muted-foreground"
+                        !field.value && "text-muted-foreground",
+                        form.formState.errors.selectedMonth &&
+                          "border-destructive"
                       )}
                     >
                       <CalendarIcon className="mr-2 h-4 w-4" />
@@ -129,6 +173,9 @@ export function AddPaymentForm({ dwellingServiceId }: AddPaymentFormProps) {
                     onMonthSelect={(date) => {
                       field.onChange(date);
                     }}
+                    disabledDates={paidMonthsDates}
+                    minDate={new Date(new Date().getFullYear() - 15, 0)}
+                    maxDate={new Date(new Date().getFullYear() + 1, 11)}
                   />
                 </PopoverContent>
               </Popover>

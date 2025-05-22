@@ -188,7 +188,7 @@ export function HistoryChart({ payments, currentYearProp }: HistoryChartProps) {
       <CardHeader>
         <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
           <div>
-            <CardTitle>Історія платежів</CardTitle>
+            <CardTitle className="mb-2">Історія платежів</CardTitle>
             <CardDescription>
               Порівняння сум за {currentYear} рік
               {selectedComparisonYear
