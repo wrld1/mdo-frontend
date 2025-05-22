@@ -2,26 +2,21 @@
 
 import { getErrorMessage } from "@/lib/utils";
 import {
-  AddPaymentsRequestDtoInternal,
-  AddPaymentSuccessResponse,
+  AddPaymentRequest,
   CreateServicePaymentDto,
+  AddPaymentsResponse,
 } from "@/types/interfaces/service-payment";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
 
 export async function addPaymentAction(
   dwellingServiceId: number,
   payload: CreateServicePaymentDto
-): Promise<AddPaymentSuccessResponse | { error: string }> {
+): Promise<AddPaymentsResponse | { error: string }> {
   console.log("[ADD_PAYMENT_ACTION] Payload:", payload);
 
-  const backendPaymentPayload: CreateServicePaymentDto = {
-    ...payload,
-    month: payload.month + 1,
-  };
-
-  const requestBody: AddPaymentsRequestDtoInternal = {
+  const requestBody: AddPaymentRequest = {
     dwellingServiceId: dwellingServiceId,
-    payments: [backendPaymentPayload],
+    payment: payload,
   };
 
   try {
@@ -39,7 +34,9 @@ export async function addPaymentAction(
 
     const result = await response.json();
 
-    return result as AddPaymentSuccessResponse;
+    console.log("[ADD_PAYMENT_ACTION] Result:", result);
+
+    return result;
   } catch (error) {
     const errorMessage = getErrorMessage(error);
     console.error("[ADD_PAYMENT_ACTION]", errorMessage);

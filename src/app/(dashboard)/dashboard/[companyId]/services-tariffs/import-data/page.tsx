@@ -1,7 +1,6 @@
 "use client";
 
 import { useState, useTransition, ChangeEvent } from "react";
-import *_ from "lodash"; // For potential utility if needed, or remove if not used
 import * as XLSX from "xlsx";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -131,11 +130,19 @@ export default function DataImportPage() {
                   }.`
                 );
               }
-               if (isNaN(Number(row.dwellingId))) {
-                throw new Error(`Рядок ${index + 2}: Некоректне значення dwellingId: ${row.dwellingId}.`);
+              if (isNaN(Number(row.dwellingId))) {
+                throw new Error(
+                  `Рядок ${index + 2}: Некоректне значення dwellingId: ${
+                    row.dwellingId
+                  }.`
+                );
               }
               if (isNaN(Number(row.serviceId))) {
-                throw new Error(`Рядок ${index + 2}: Некоректне значення serviceId: ${row.serviceId}.`);
+                throw new Error(
+                  `Рядок ${index + 2}: Некоректне значення serviceId: ${
+                    row.serviceId
+                  }.`
+                );
               }
               if (isNaN(counter)) {
                 throw new Error(
@@ -144,9 +151,21 @@ export default function DataImportPage() {
                   }.`
                 );
               }
-              const amountValue = row.amount !== undefined && row.amount !== null && row.amount !== "" ? Number(row.amount) : undefined;
-              if (row.amount !== undefined && row.amount !== null && row.amount !== "" && isNaN(amountValue!)) {
-                 throw new Error(`Рядок ${index + 2}: Некоректне значення суми: ${row.amount}.`);
+              const amountValue =
+                row.amount !== undefined &&
+                row.amount !== null &&
+                row.amount !== ""
+                  ? Number(row.amount)
+                  : undefined;
+              if (
+                row.amount !== undefined &&
+                row.amount !== null &&
+                row.amount !== "" &&
+                isNaN(amountValue!)
+              ) {
+                throw new Error(
+                  `Рядок ${index + 2}: Некоректне значення суми: ${row.amount}.`
+                );
               }
 
               return {
@@ -215,12 +234,13 @@ export default function DataImportPage() {
       payment: {
         month: item.month,
         year: item.year,
-        amount: item.amount, 
+        amount: item.amount,
         counter: item.counter,
         status: item.status || PaymentStatus.PENDING,
       } as CreateServicePaymentDto,
     }));
 
+    console.log("Payment requests to be sent:", paymentRequests);
     const result = await uploadPayments(paymentRequests);
     setIsProcessing(false);
 
@@ -239,7 +259,7 @@ export default function DataImportPage() {
         duration: 7000,
       });
 
-      const individualErrors = backendResponse.results.filter(r => r.error);
+      const individualErrors = backendResponse.results.filter((r) => r.error);
       if (individualErrors.length > 0) {
         toast({
           title: `Завершено з помилками по окремим записам (${individualErrors.length})`,
@@ -247,7 +267,10 @@ export default function DataImportPage() {
           variant: "destructive",
           duration: 10000,
         });
-        console.error("Деталі помилок обробки окремих платежів:", individualErrors);
+        console.error(
+          "Деталі помилок обробки окремих платежів:",
+          individualErrors
+        );
       }
     }
   };
@@ -325,7 +348,9 @@ export default function DataImportPage() {
                 </div>
                 <Button
                   onClick={handleProcessPayments}
-                  disabled={isProcessing || isParsing || paymentsData.length === 0}
+                  disabled={
+                    isProcessing || isParsing || paymentsData.length === 0
+                  }
                   className="mt-4"
                 >
                   {isProcessing ? (

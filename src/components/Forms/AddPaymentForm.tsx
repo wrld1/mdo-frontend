@@ -30,6 +30,7 @@ import {
   CreateServicePaymentDto,
   ServicePayment,
 } from "@/types/interfaces/service-payment";
+import { useRouter } from "next/navigation";
 
 const paymentFormSchema = z.object({
   selectedMonth: z.date({
@@ -52,6 +53,7 @@ export function AddPaymentForm({
   existingPayments,
 }: AddPaymentFormProps) {
   const [isPending, startTransition] = useTransition();
+  const router = useRouter();
 
   const form = useForm<PaymentFormValues>({
     resolver: zodResolver(paymentFormSchema),
@@ -114,14 +116,15 @@ export function AddPaymentForm({
 
       const payload: CreateServicePaymentDto = {
         counter: values.counter,
-        month: values.selectedMonth.getMonth(),
+        month: values.selectedMonth.getMonth() + 1,
         year: values.selectedMonth.getFullYear(),
       };
       const result = await addPaymentAction(dwellingServiceId, payload);
       if ("error" in result) {
         toast({
           variant: "destructive",
-          title: `Помилка створення платежу: ${result.error}`,
+          title: "Помилка створення платежу",
+          description: result.error,
         });
       } else {
         toast({
@@ -129,6 +132,7 @@ export function AddPaymentForm({
           title: result.message,
         });
         form.reset();
+        router.refresh();
       }
     });
   };

@@ -22,7 +22,7 @@ export default async function ObjectPage({
   });
 
   return (
-    <div className="p-6 space-y-4 flex flex-col">
+    <div className="space-y-4 flex flex-col">
       <Card className="w-full">
         <CardHeader>
           <CardTitle>{object.address}</CardTitle>
