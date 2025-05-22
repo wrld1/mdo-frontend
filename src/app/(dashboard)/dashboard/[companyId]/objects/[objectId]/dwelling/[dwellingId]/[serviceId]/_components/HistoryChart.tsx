@@ -1,6 +1,5 @@
 "use client";
 
-import { TrendingUp } from "lucide-react";
 import { Bar, BarChart, CartesianGrid, XAxis, YAxis } from "recharts";
 
 import {
@@ -15,13 +14,20 @@ import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
 } from "@/components/ui/chart";
 import { ServicePayment } from "@/types/interfaces/service-payment";
+import { useEffect, useMemo, useState } from "react";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 interface HistoryChartProps {
   payments: ServicePayment[];
-  currentYear?: number;
+  currentYearProp?: number;
 }
 
 const monthNames = [
@@ -41,30 +47,31 @@ const monthNames = [
 
 const processPaymentDataForChart = (
   payments: ServicePayment[],
-  targetYear: number
+  displayYear: number,
+  comparisonYear?: number
 ) => {
-  const lastYear = targetYear - 1;
   const monthlyData = Array(12)
     .fill(null)
     .map((_, i) => ({
       month: monthNames[i],
       currentYearAmount: 0,
       currentYearCounter: 0,
-      lastYearAmount: 0,
-      lastYearCounter: 0,
+      comparisonYearAmount: 0,
+      comparisonYearCounter: 0,
     }));
 
   payments.forEach((payment) => {
-    const paymentDate = new Date(payment.startDate);
-    const year = paymentDate.getFullYear();
-    const monthIndex = paymentDate.getMonth(); // 0-11
+    const year = payment.year;
+    const monthIndex = payment.month - 1;
 
-    if (year === targetYear) {
-      monthlyData[monthIndex].currentYearAmount += payment.amount;
-      monthlyData[monthIndex].currentYearCounter += payment.counter;
-    } else if (year === lastYear) {
-      monthlyData[monthIndex].lastYearAmount += payment.amount;
-      monthlyData[monthIndex].lastYearCounter += payment.counter;
+    if (monthIndex >= 0 && monthIndex < 12) {
+      if (year === displayYear) {
+        monthlyData[monthIndex].currentYearAmount += payment.amount;
+        monthlyData[monthIndex].currentYearCounter += payment.counter;
+      } else if (comparisonYear !== undefined && year === comparisonYear) {
+        monthlyData[monthIndex].comparisonYearAmount += payment.amount;
+        monthlyData[monthIndex].comparisonYearCounter += payment.counter;
+      }
     }
   });
   return monthlyData;
@@ -75,23 +82,53 @@ const chartConfig = {
     label: "Поточний рік (Сума)",
     color: "hsl(var(--chart-1))",
   },
-  lastYearAmount: {
-    label: "Минулий рік (Сума)",
+  comparisonYearAmount: {
+    label: "Рік порівняння (Сума)",
     color: "hsl(var(--chart-2))",
   },
   currentYearCounter: {
     label: "Поточний рік (Лічильник)",
   },
-  lastYearCounter: {
-    label: "Минулий рік (Лічильник)",
+  comparisonYearCounter: {
+    label: "Рік порівняння (Лічильник)",
   },
 } satisfies ChartConfig;
 
-export function HistoryChart({
-  payments,
-  currentYear = new Date().getFullYear(),
-}: HistoryChartProps) {
-  const chartData = processPaymentDataForChart(payments, currentYear);
+export function HistoryChart({ payments, currentYearProp }: HistoryChartProps) {
+  const currentYear = currentYearProp || new Date().getFullYear();
+  // const chartData = processPaymentDataForChart(payments, currentYearProp);
+  const [selectedComparisonYear, setSelectedComparisonYear] = useState<
+    number | undefined
+  >(undefined);
+
+  const availableYearsForComparison = useMemo(() => {
+    const years = new Set<number>();
+    payments.forEach((p) => years.add(p.year));
+    return Array.from(years)
+      .filter((year) => year !== currentYear)
+      .sort((a, b) => b - a);
+  }, [payments, currentYear]);
+
+  useEffect(() => {
+    if (availableYearsForComparison.length > 0) {
+      const previousYear = currentYear - 1;
+      if (availableYearsForComparison.includes(previousYear)) {
+        setSelectedComparisonYear(previousYear);
+      } else {
+        setSelectedComparisonYear(availableYearsForComparison[0]);
+      }
+    } else {
+      setSelectedComparisonYear(undefined);
+    }
+  }, [availableYearsForComparison, currentYear]);
+
+  const chartData = useMemo(() => {
+    return processPaymentDataForChart(
+      payments,
+      currentYear,
+      selectedComparisonYear
+    );
+  }, [payments, currentYear, selectedComparisonYear]);
 
   const CustomTooltipContent = ({ active, payload, label }: any) => {
     if (active && payload && payload.length) {
@@ -99,34 +136,45 @@ export function HistoryChart({
       return (
         <div className="p-2 text-xs bg-background border rounded-md shadow-lg">
           <p className="font-bold text-sm mb-1">{label}</p>
-          {payload.map((entry: any) => (
-            <div
-              key={entry.dataKey}
-              style={{ color: entry.color }}
-              className="flex justify-between items-center"
-            >
-              <span>
-                {chartConfig[entry.dataKey as keyof typeof chartConfig]
-                  ?.label || entry.name}
-                :
-              </span>
-              <span className="font-semibold ml-2">{entry.value} грн</span>
-            </div>
-          ))}
+          {payload.map((entry: any) => {
+            let entryLabel =
+              chartConfig[entry.dataKey as keyof typeof chartConfig]?.label ||
+              entry.name;
+            if (entry.dataKey === "currentYearAmount") {
+              entryLabel = `${currentYear} (Сума)`;
+            } else if (
+              entry.dataKey === "comparisonYearAmount" &&
+              selectedComparisonYear
+            ) {
+              entryLabel = `${selectedComparisonYear} (Сума)`;
+            }
+
+            return (
+              <div
+                key={entry.dataKey}
+                style={{ color: entry.color }}
+                className="flex justify-between items-center"
+              >
+                <span>{entryLabel}:</span>
+                <span className="font-semibold ml-2">{entry.value} грн</span>
+              </div>
+            );
+          })}
           {data.currentYearCounter > 0 && (
             <p
               style={{ color: chartConfig.currentYearAmount.color }}
               className="text-xs mt-1"
             >
-              Лічильник (Поточний): {data.currentYearCounter.toFixed(2)}
+              Лічильник ({currentYear}): {data.currentYearCounter.toFixed(2)}
             </p>
           )}
-          {data.lastYearCounter > 0 && (
+          {selectedComparisonYear && data.comparisonYearCounter > 0 && (
             <p
-              style={{ color: chartConfig.lastYearAmount.color }}
+              style={{ color: chartConfig.comparisonYearAmount.color }}
               className="text-xs mt-1"
             >
-              Лічильник (Минулий): {data.lastYearCounter.toFixed(2)}
+              Лічильник ({selectedComparisonYear}):{" "}
+              {data.comparisonYearCounter.toFixed(2)}
             </p>
           )}
         </div>
@@ -138,10 +186,36 @@ export function HistoryChart({
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Історія платежів</CardTitle>
-        <CardDescription>
-          Порівняння сум за {currentYear} та {currentYear - 1} роки
-        </CardDescription>
+        <div className="flex flex-col sm:flex-row justify-between sm:items-center gap-2">
+          <div>
+            <CardTitle>Історія платежів</CardTitle>
+            <CardDescription>
+              Порівняння сум за {currentYear} рік
+              {selectedComparisonYear
+                ? ` та ${selectedComparisonYear} рік`
+                : ""}
+            </CardDescription>
+          </div>
+          {availableYearsForComparison.length > 0 && (
+            <Select
+              value={selectedComparisonYear?.toString()}
+              onValueChange={(value) =>
+                setSelectedComparisonYear(parseInt(value, 10))
+              }
+            >
+              <SelectTrigger className="w-full sm:w-[180px]">
+                <SelectValue placeholder="Обрати рік порівняння" />
+              </SelectTrigger>
+              <SelectContent>
+                {availableYearsForComparison.map((year) => (
+                  <SelectItem key={year} value={year.toString()}>
+                    {year}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          )}
+        </div>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig} className="min-h-[300px] w-full">
@@ -163,11 +237,13 @@ export function HistoryChart({
               width={80}
             />
             <ChartTooltip cursor={true} content={<CustomTooltipContent />} />
-            <Bar
-              dataKey="lastYearAmount"
-              fill="var(--color-lastYearAmount)"
-              radius={[4, 4, 0, 0]}
-            />
+            {selectedComparisonYear && (
+              <Bar
+                dataKey="comparisonYearAmount"
+                fill="var(--color-comparisonYearAmount)"
+                radius={[4, 4, 0, 0]}
+              />
+            )}
             <Bar
               dataKey="currentYearAmount"
               fill="var(--color-currentYearAmount)"
