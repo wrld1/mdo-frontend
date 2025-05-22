@@ -22,9 +22,11 @@ export type OrderType =
   | "GAS"
   | "ORGANIZATION"
   | "OTHER";
-export type OrderStatus =
-  | "RECEIVED"
-  | "IN_PROGRESS"
-  | "FINISHED"
-  | "BLOCKED"
-  | "INVALID";
+
+export enum OrderStatus {
+  RECEIVED = "RECEIVED",
+  IN_PROGRESS = "IN_PROGRESS",
+  FINISHED = "FINISHED",
+  BLOCKED = "BLOCKED",
+  INVALID = "INVALID",
+}

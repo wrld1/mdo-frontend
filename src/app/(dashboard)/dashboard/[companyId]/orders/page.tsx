@@ -8,13 +8,15 @@ import {
 } from "@/components/ui/card";
 
 import { getOrdersAction } from "@/actions/order/get-orders-action";
-import { Order } from "@/types/interfaces/order";
+import { Order, OrderStatus } from "@/types/interfaces/order";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { Loader2 } from "lucide-react";
 import { ConfirmButton } from "./_components/ConfirmButton";
 import OrderCard from "./_components/OrderCard";
 import { isActionError } from "@/types/guards/isActionError";
+import { updateOrderAction } from "@/actions/order/update-order-action";
+import { toast } from "@/components/ui/use-toast";
 
 interface PageProps {
   params: {
@@ -27,7 +29,7 @@ async function OrdersPage({ params }: PageProps) {
 
   const ordersRes = await getOrdersAction({
     companyId,
-    limit: 10,
+    limit: 20,
     offset: 0,
     sortBy: "createdAt",
     sortOrder: "desc",
@@ -36,19 +38,75 @@ async function OrdersPage({ params }: PageProps) {
   if (isActionError(ordersRes)) {
     return (
       <div className="flex items-center justify-center h-full">
-        <p className="text-red-500">Error: {ordersRes.error}</p>
+        <p className="text-red-500">Помилка: {ordersRes.error}</p>
       </div>
     );
   }
 
   const ordersData = ordersRes;
 
+  const newOrders = ordersData.filter(
+    (order) => order.orderStatus === OrderStatus.RECEIVED
+  );
   const activeOrders = ordersData.filter(
-    (order) => order.orderStatus !== "FINISHED"
+    (order) => order.orderStatus === OrderStatus.IN_PROGRESS
   );
   const finishedOrders = ordersData.filter(
-    (order) => order.orderStatus === "FINISHED"
+    (order) => order.orderStatus === OrderStatus.FINISHED
   );
+
+  const handleTakeOrderAndUpdateStatus = async (
+    orderId: string,
+    orderTitle: string
+  ) => {
+    const result = await updateOrderAction(orderId, {
+      orderStatus: OrderStatus.IN_PROGRESS,
+    });
+
+    if (isActionError(result)) {
+      toast({
+        variant: "destructive",
+        title: "Помилка",
+        description: result.error || "Не вдалося взяти заявку в роботу.",
+      });
+    } else {
+      toast({
+        title: "Заявку взято в роботу",
+        description: `Заявка "${orderTitle}" тепер в процесі виконання.`,
+      });
+    }
+  };
+
+  const renderOrderCard = (order: Order) => {
+    const isOrganizationOrder = order.type === "ORGANIZATION";
+    const isFinished = order.orderStatus === OrderStatus.FINISHED;
+
+    let customActionSlotForCard: React.ReactNode = undefined;
+
+    if (isFinished) {
+      if (isOrganizationOrder) {
+        customActionSlotForCard = (
+          <p className="text-green-600 font-semibold text-base text-center py-2">
+            Володіння підтверджено
+          </p>
+        );
+      } else {
+        customActionSlotForCard = (
+          <p className="text-gray-600 font-semibold text-base text-center py-2">
+            Заявку виконано
+          </p>
+        );
+      }
+    } else if (isOrganizationOrder) {
+      customActionSlotForCard = <ConfirmButton orderId={order.id} />;
+    }
+
+    return (
+      <div key={order.id} className="w-full max-w-md">
+        <OrderCard order={order} customActionSlot={customActionSlotForCard} />
+      </div>
+    );
+  };
 
   return (
     <div className="flex flex-col gap-8">
@@ -58,63 +116,29 @@ async function OrdersPage({ params }: PageProps) {
         </Link>
       </Button>
 
+      {newOrders.length > 0 && (
+        <div>
+          <h2 className="text-2xl font-semibold mb-4">Нові заявки</h2>
+          <div className="flex gap-4 flex-wrap">
+            {newOrders.map(renderOrderCard)}
+          </div>
+        </div>
+      )}
+
       {activeOrders.length > 0 && (
         <div>
           <h2 className="text-2xl font-semibold mb-4">Заявки в роботі</h2>
           <div className="flex gap-4 flex-wrap">
-            {activeOrders.map((order) => (
-              <div key={order.id} className="w-full max-w-md">
-                <OrderCard
-                  title={order.name}
-                  description={order.description}
-                  objectName={order.object.address}
-                  userNickname={order.user.email}
-                  price={`${order.price} грн`}
-                  orderType={order.type}
-                  customActionSlot={
-                    order.type === "ORGANIZATION" &&
-                    order.orderStatus !== "FINISHED" ? (
-                      <ConfirmButton orderId={order.id} />
-                    ) : undefined
-                  }
-                  showDefaultButton={
-                    !(
-                      order.type === "ORGANIZATION" &&
-                      order.orderStatus !== "FINISHED"
-                    ) && false
-                  }
-                />
-              </div>
-            ))}
+            {activeOrders.map(renderOrderCard)}
           </div>
         </div>
       )}
 
       {finishedOrders.length > 0 && (
-        <div className="mt-8">
+        <div>
           <h2 className="text-2xl font-semibold mb-4">Виконані заявки</h2>
           <div className="flex gap-4 flex-wrap">
-            {finishedOrders.map((order) => (
-              <div key={order.id} className="w-full max-w-md">
-                <OrderCard
-                  title={order.name}
-                  description={order.description}
-                  objectName={order.object.address}
-                  userNickname={order.user.email}
-                  price={`${order.price} грн`}
-                  orderType={order.type}
-                  showDefaultButton={false}
-                  customActionSlot={
-                    order.type === "ORGANIZATION" &&
-                    order.orderStatus === "FINISHED" ? (
-                      <p className="text-green-600 font-semibold text-base text-center py-2">
-                        Володіння підтверджено
-                      </p>
-                    ) : undefined
-                  }
-                />
-              </div>
-            ))}
+            {finishedOrders.map(renderOrderCard)}
           </div>
         </div>
       )}

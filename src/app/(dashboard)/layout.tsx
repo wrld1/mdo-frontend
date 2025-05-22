@@ -1,5 +1,4 @@
 import { Metadata } from "next";
-import { AppSidebar } from "@/components/DashboardSidebar/app-sidebar";
 import {
   Breadcrumb,
   BreadcrumbList,
@@ -28,6 +27,9 @@ import { getCompanyAccess } from "@/utils/getCompanyAccess";
 import Provider from "../_provider";
 import { fetchCompaniesWithAccess } from "@/utils/fetchCompaniesWithAccess";
 import AppSidebarWrapper from "@/components/DashboardSidebar/app-sidebar-wrapper";
+import React from "react";
+import Link from "next/link";
+import { headers } from "next/headers";
 
 export const metadata: Metadata = {
   title: "Панель управління | OSBB Project Management",
@@ -37,6 +39,84 @@ const fontSans = FontSans({
   subsets: ["latin"],
   variable: "--font-sans",
 });
+
+interface BreadcrumbPart {
+  href: string;
+  label: string;
+}
+
+const generateBreadcrumbs = (
+  pathname: string,
+  companyIdParam: string // companyIdParam is expected to be present for these paths
+): BreadcrumbPart[] => {
+  const pathSegments = pathname.split("/").filter(Boolean);
+  const breadcrumbs: BreadcrumbPart[] = [];
+  let currentHref = "";
+
+  const staticLabels: Record<string, string> = {
+    objects: "Об'єкти",
+    dwelling: "Помешкання",
+    "services-tariffs": "Послуги та тарифи",
+    "import-data": "Імпорт даних",
+    profile: "Профіль",
+    settings: "Налаштування",
+    // Add more static segments and their Ukrainian translations
+  };
+
+  // Find the index of the companyId segment. Typically 1 if pathSegments[0] is 'dashboard'.
+  const companyIdSegmentIndex = pathSegments.indexOf(companyIdParam);
+
+  pathSegments.forEach((segment, index) => {
+    currentHref += `/${segment}`;
+    let label: string;
+
+    // Skip 'dashboard' segment and the companyId segment itself from being added to breadcrumbs
+    if (
+      segment.toLowerCase() === "dashboard" ||
+      (companyIdSegmentIndex !== -1 && index === companyIdSegmentIndex)
+    ) {
+      return; // Continue to build currentHref but don't add this segment to breadcrumbs
+    }
+
+    // Determine label for segments that will be displayed
+    if (staticLabels[segment]) {
+      label = staticLabels[segment];
+    } else if (
+      index === 3 && // objectId segment (original index based on full path)
+      pathSegments[0]?.toLowerCase() === "dashboard" &&
+      pathSegments[1] === companyIdParam &&
+      pathSegments[2] === "objects"
+    ) {
+      label = `Об'єкт`; // Generic term, or `Об'єкт (${segment.substring(0, 6)}...)`
+    } else if (
+      index === 5 && // dwellingId segment (original index)
+      pathSegments[0]?.toLowerCase() === "dashboard" &&
+      pathSegments[1] === companyIdParam &&
+      pathSegments[2] === "objects" &&
+      pathSegments[4] === "dwelling" &&
+      !isNaN(parseInt(segment))
+    ) {
+      label = `Помешкання ${segment}`;
+    } else if (
+      index === 6 && // serviceId segment (original index)
+      pathSegments[0]?.toLowerCase() === "dashboard" &&
+      pathSegments[1] === companyIdParam &&
+      pathSegments[2] === "objects" &&
+      pathSegments[4] === "dwelling" &&
+      !isNaN(parseInt(pathSegments[index - 1])) &&
+      !isNaN(parseInt(segment))
+    ) {
+      label = `Послуга ${segment}`;
+    } else {
+      // Default for unknown dynamic segments: capitalize the segment itself
+      label = segment.charAt(0).toUpperCase() + segment.slice(1);
+    }
+
+    breadcrumbs.push({ href: currentHref, label });
+  });
+
+  return breadcrumbs;
+};
 
 export default async function ProfileLayout({
   children,
@@ -66,6 +146,18 @@ export default async function ProfileLayout({
     }
   }
 
+  const nextUrlHeader = headers().get("next-url");
+  // Ensure a base URL for new URL() if next-url is relative, or handle if it's absolute
+  const pathname = nextUrlHeader
+    ? new URL(nextUrlHeader, "http://localhost").pathname
+    : "";
+
+  console.log("pathname", pathname);
+
+  const breadcrumbItems = generateBreadcrumbs(pathname, params.companyId);
+
+  console.log("breadcrumbItems", breadcrumbItems);
+
   return (
     <html lang="en">
       <body
@@ -88,15 +180,22 @@ export default async function ProfileLayout({
                   <Separator orientation="vertical" className="mr-2 h-4" />
                   <Breadcrumb>
                     <BreadcrumbList>
-                      <BreadcrumbItem className="hidden md:block">
-                        <BreadcrumbLink href="#">
-                          Building Your Application
-                        </BreadcrumbLink>
-                      </BreadcrumbItem>
-                      <BreadcrumbSeparator className="hidden md:block" />
-                      <BreadcrumbItem>
-                        <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                      </BreadcrumbItem>
+                      {breadcrumbItems.map((item, index) => (
+                        <React.Fragment key={item.href}>
+                          <BreadcrumbItem>
+                            {index === breadcrumbItems.length - 1 ? (
+                              <BreadcrumbPage>{item.label}</BreadcrumbPage>
+                            ) : (
+                              <BreadcrumbLink asChild>
+                                <Link href={item.href}>{item.label}</Link>
+                              </BreadcrumbLink>
+                            )}
+                          </BreadcrumbItem>
+                          {index < breadcrumbItems.length - 1 && (
+                            <BreadcrumbSeparator />
+                          )}
+                        </React.Fragment>
+                      ))}
                     </BreadcrumbList>
                   </Breadcrumb>
                 </div>

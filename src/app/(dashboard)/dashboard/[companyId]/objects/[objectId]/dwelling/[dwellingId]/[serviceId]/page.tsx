@@ -1,8 +1,8 @@
-import { AddPaymentForm } from "@/components/Forms/AddPaymentForm";
 import { HistoryChart } from "./_components/HistoryChart";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { getDwellingServiceByIdAction } from "@/actions/dwelling-service/get-dwelling-service";
 import { ServicePayment } from "@/types/interfaces/service-payment";
+import { AddPaymentForm } from "@/components/Forms/AddPaymentForm";
 
 interface DwellingServicePageProps {
   params: {

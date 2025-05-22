@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { updateOrderAction } from "@/actions/order/update-order-action";
 import { Loader2 } from "lucide-react";
 import { toast } from "@/components/ui/use-toast";
+import { OrderStatus } from "@/types/interfaces/order";
 
 interface ConfirmOwnershipButtonProps {
   orderId: string;
@@ -16,7 +17,7 @@ export function ConfirmButton({ orderId }: ConfirmOwnershipButtonProps) {
   const handleClick = async () => {
     setIsLoading(true);
     const result = await updateOrderAction(orderId, {
-      orderStatus: "FINISHED",
+      orderStatus: OrderStatus.FINISHED,
     });
 
     if ("error" in result) {
@@ -35,7 +36,7 @@ export function ConfirmButton({ orderId }: ConfirmOwnershipButtonProps) {
   };
 
   return (
-    <Button onClick={handleClick} disabled={isLoading}>
+    <Button onClick={handleClick} disabled={isLoading} className="w-full">
       {isLoading ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : null}
       Підтвердити володіння
     </Button>

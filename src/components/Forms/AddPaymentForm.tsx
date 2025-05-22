@@ -24,12 +24,12 @@ import {
 import { format } from "date-fns";
 import { cn } from "@/lib/utils";
 
-import {
-  addPaymentAction,
-  CreateServicePaymentDto,
-} from "@/actions/service/create-service-payment.action";
+import { addPaymentAction } from "@/actions/service/create-service-payment.action";
 import { MonthPicker } from "../ui/monthpicker";
-import { ServicePayment } from "@/types/interfaces/service-payment";
+import {
+  CreateServicePaymentDto,
+  ServicePayment,
+} from "@/types/interfaces/service-payment";
 
 const paymentFormSchema = z.object({
   selectedMonth: z.date({

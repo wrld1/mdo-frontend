@@ -1,29 +1,12 @@
-// filepath: c:\Users\kir26\Desktop\mdo\mdo-frontend\src\actions\dwelling-service\add-payment-action.ts
 "use server";
 
 import { getErrorMessage } from "@/lib/utils";
-import { PaymentStatus } from "@/types/enums/paymentStatus";
+import {
+  AddPaymentsRequestDtoInternal,
+  AddPaymentSuccessResponse,
+  CreateServicePaymentDto,
+} from "@/types/interfaces/service-payment";
 import { fetchWithAutoErrorHandling } from "@/utils/functions.server";
-
-export interface CreateServicePaymentDto {
-  month: number;
-  year: number;
-  amount?: number;
-  counter: number;
-  status?: PaymentStatus;
-}
-
-interface AddPaymentsRequestDtoInternal {
-  dwellingServiceId?: number;
-  dwellingId?: number;
-  serviceId?: number;
-  payments: CreateServicePaymentDto[];
-}
-
-export interface AddPaymentSuccessResponse {
-  message: string;
-  count: number;
-}
 
 export async function addPaymentAction(
   dwellingServiceId: number,

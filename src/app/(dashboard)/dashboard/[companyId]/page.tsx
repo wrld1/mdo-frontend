@@ -1,7 +1,7 @@
 import { getCompany } from "@/actions/company/get-company-action";
 import { isActionError } from "@/types/guards/isActionError";
 import { getOrdersAction } from "@/actions/order/get-orders-action";
-import { Order } from "@/types/interfaces/order";
+import { Order, OrderStatus } from "@/types/interfaces/order";
 import {
   Users,
   ListOrdered,
@@ -72,10 +72,12 @@ export default async function CompanyPage({ params }: PageProps) {
   });
   const recentOrders = !isActionError(ordersResult) ? ordersResult : [];
   const ordersInProgressCount = recentOrders.filter(
-    (o: Order) => o.orderStatus !== "FINISHED" && o.orderStatus !== "BLOCKED"
+    (o: Order) =>
+      o.orderStatus !== OrderStatus.FINISHED &&
+      o.orderStatus !== OrderStatus.BLOCKED
   ).length;
   const ordersCompletedCount = recentOrders.filter(
-    (o: Order) => o.orderStatus === "FINISHED"
+    (o: Order) => o.orderStatus === OrderStatus.FINISHED
   ).length;
   const latestOrder = recentOrders.length > 0 ? recentOrders[0] : null;
 
@@ -120,23 +122,18 @@ export default async function CompanyPage({ params }: PageProps) {
         <div className="absolute inset-0 p-6 flex flex-col justify-center items-center bg-gradient-to-br from-green-50 via-teal-50 to-cyan-50 dark:from-green-900/30 dark:via-teal-900/30 dark:to-cyan-900/30 opacity-60">
           {latestOrder ? (
             <OrderCard
-              title={latestOrder.name}
-              description={
-                latestOrder.description.substring(0, 60) +
-                (latestOrder.description.length > 60 ? "..." : "")
-              }
-              objectName={latestOrder.object.address}
-              userNickname={latestOrder.user.email}
-              price={`${latestOrder.price} грн`}
-              orderType={latestOrder.type}
-              showDefaultButton={false}
+              order={latestOrder}
               customActionSlot={
                 <div className="text-center w-full">
                   <Badge
                     variant={
-                      latestOrder.orderStatus === "FINISHED"
+                      latestOrder.orderStatus === OrderStatus.FINISHED
                         ? "default"
-                        : "secondary"
+                        : latestOrder.orderStatus === OrderStatus.IN_PROGRESS
+                        ? "secondary"
+                        : latestOrder.orderStatus === OrderStatus.RECEIVED
+                        ? "outline"
+                        : "destructive"
                     }
                   >
                     {latestOrder.orderStatus}

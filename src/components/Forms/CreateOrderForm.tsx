@@ -25,6 +25,7 @@ import {
 import { Textarea } from "@/components/ui/textarea";
 import { ObjectResponse } from "@/types/interfaces/object";
 import { verifyUser } from "@/utils/functions.server";
+import { useRouter } from "next/navigation";
 
 const formSchema = z.object({
   name: z.string().min(1, "Назва обов'язкова"),
@@ -37,7 +38,6 @@ const formSchema = z.object({
     "OTHER",
   ] as const),
   objectId: z.string().min(1, "Об'єкт обов'язковий"),
-  //   dwellingId: z.number().optional(),
   responsibleUserId: z.number().optional(),
 });
 
@@ -50,10 +50,7 @@ export default function CreateOrderForm({
   objects,
   companyId,
 }: CreateOrderFormProps) {
-  //   const params = useParams();
-  //   const companyId = Array.isArray(params.companyId)
-  //     ? params.companyId[0]
-  //     : params.companyId;
+  const router = useRouter();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -81,6 +78,7 @@ export default function CreateOrderForm({
       } else {
         toast({ variant: "default", title: "Заявку успішно створено" });
         form.reset();
+        router.push(`/dashboard/${companyId}/orders`);
       }
     } catch (error) {
       console.error("Сталася помилка", error);
