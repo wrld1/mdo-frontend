@@ -105,10 +105,7 @@ export const generateSidebarData = (
             title: "Загальнобудинкові лічильники",
             url: "#",
           },
-          {
-            title: "Статті нарахувань",
-            url: `/dashboard/${companyId}/services-tariffs`,
-          },
+    
         ],
       },
       {
@@ -162,6 +159,10 @@ export const generateSidebarData = (
           {
             title: "Показники лічильників",
             url: `#`,
+          },
+                {
+            title: "Статті нарахувань",
+            url: `/dashboard/${companyId}/services-tariffs`,
           },
         ],
       },
